@@ -1,14 +1,14 @@
-import { getProfiles } from '../../../lib/mongo/profiles';
+import { getProfiles } from '../../../../lib/mongo/profiles';
 
 const handler = async (req, res) => {
   if (req.method === 'GET') {
     try {
-      const { profile, error } = await getProfiles();
+      const { profiles, error } = await getProfiles();
       if (error) throw new Error(error);
 
       return res.status(200).json({
         status: 'success',
-        data: profile,
+        data: profiles,
       });
     } catch (error) {
       return res.status(500).json({ error: error.message });
