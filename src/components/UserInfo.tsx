@@ -9,6 +9,8 @@ export default function UserInfo() {
   const { status, data: session } = useSession();
 
   if (status === 'authenticated') {
+    console.log(session?.user);
+
     let userImage = session?.user?.image;
     let name = session?.user?.name;
     if (name) {
@@ -20,8 +22,8 @@ export default function UserInfo() {
 
     if (userImage) {
       return (
-        <div>
-          <div className="flex">
+        <div className="shadow-xl p-8 rounded-md flex flex-col gap-3">
+          <div className="flex items-center">
             <Image
               className="rounded-full"
               src={userImage}
@@ -29,7 +31,7 @@ export default function UserInfo() {
               height={60}
               alt="Profile Image"
             />{' '}
-            <span className="font-bold">{name}'s Settings</span>
+            <span className="font-bold pl-4">{name}</span>
           </div>
           <div>
             Name: <span className="font-bold">{name}</span>
