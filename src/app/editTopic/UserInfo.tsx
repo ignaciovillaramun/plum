@@ -9,8 +9,6 @@ export default function UserInfo() {
   const { status, data: session } = useSession();
 
   if (status === 'authenticated') {
-    console.log(session?.user);
-
     let userImage = session?.user?.image;
     let name = session?.user?.name;
     if (name) {
