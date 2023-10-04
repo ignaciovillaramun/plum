@@ -2,7 +2,7 @@
 'use client';
 
 import Image from 'next/image';
-import SignInBtn from '@/components/SignInBtn';
+import SignInBtn from './SignInBtn';
 import { useSession } from 'next-auth/react';
 
 export default function UserInfo() {
