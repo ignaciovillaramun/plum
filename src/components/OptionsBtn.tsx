@@ -1,15 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function OptionsBtn(props: { topicId: any }) {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
-  const toggleOptions = () => {
-    setIsOpen(!isOpen);
-  };
 
   const removeTopic = async () => {
     const confirmed = confirm('Are you sure?');
@@ -26,6 +23,26 @@ export default function OptionsBtn(props: { topicId: any }) {
     }
   };
 
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      const optionsMenu = document.querySelector('.options-menu');
+
+      if (optionsMenu && !optionsMenu.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const toggleOptions = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <div className="relative inline-block text-left">
       <button
@@ -36,7 +53,7 @@ export default function OptionsBtn(props: { topicId: any }) {
         <span className="text-2xl">&#8942;</span>
       </button>
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg z-10">
+        <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg z-10 options-menu">
           <ul className="py-2">
             <li>
               <Link href={`/editTopic/${props.topicId}`}>

@@ -17,11 +17,9 @@ export default function TopicForm({}) {
     const selectedFile = e.target.files && e.target.files[0];
     if (selectedFile) {
       setImage(selectedFile);
-      console.log(e);
       const reader = new FileReader();
       reader.readAsDataURL(selectedFile);
       reader.onload = () => {
-        console.log(reader.result);
         setImage64(reader.result);
       };
     }
