@@ -5,15 +5,7 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import { redirect } from 'next/navigation';
 
-export interface TopicFormProps {
-  onSubmit: (topic: {
-    title: string;
-    topic: string;
-    image: File | null;
-  }) => void;
-}
-
-export default function TopicForm({ onSubmit }: TopicFormProps) {
+export default function TopicForm({}) {
   const [title, setTitle] = useState('');
   const [topic, setTopic] = useState('');
   const [image, setImage] = useState<any | null>(null);
@@ -49,14 +41,24 @@ export default function TopicForm({ onSubmit }: TopicFormProps) {
       return;
     }
 
-    const newTopic = {
-      title: title.trim(),
-      topic: topic.trim(),
-      image: imageBase64,
-    };
+    try {
+      const res = await fetch('http://localhost:3000/api/topics', {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify({ title, topic, image: imageBase64 }),
+      });
 
-    // Call the onSubmit callback function to submit the new topic
-    onSubmit(newTopic);
+      if (res.ok) {
+        // redirect('/');
+        console.log('hello');
+      } else {
+        throw new Error('Fail to create a topic');
+      }
+    } catch (error) {
+      console.log(error);
+    }
 
     // Clear the form inputs
     setTitle('');
@@ -118,7 +120,7 @@ export default function TopicForm({ onSubmit }: TopicFormProps) {
             className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="image"
             type="file"
-            accept="image/*"
+            accept="image/*" // Specify that only image files are allowed
             onChange={handleImageUpload}
           />
         </div>
@@ -129,8 +131,8 @@ export default function TopicForm({ onSubmit }: TopicFormProps) {
               <Image
                 src={URL.createObjectURL(image)}
                 alt="Selected"
-                width={20}
-                height={20}
+                width={80}
+                height={80}
                 className="mt-2"
               />
             </div>

@@ -4,7 +4,7 @@ import Topic from '../../../../models/topic';
 
 export async function POST(req) {
   const { title, topic, image } = await req.json();
-  console.log(title, topic, image);
+  console.log(title, topic, 'image');
   await connectMongoDB();
   await Topic.create({ title, topic, image });
   return NextResponse.json({ message: 'Topic Created' }, { status: 201 });

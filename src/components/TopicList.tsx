@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import OptionsBtn from './OptionsBtn';
 import React, { useEffect, useState, Key, ReactNode } from 'react';
+import Link from 'next/link';
 
 const getTopics = async () => {
   try {
@@ -50,13 +51,17 @@ export default function TopicList() {
               className="bg-white shadow-md rounded-lg my-4 w-60"
             >
               <div className="relative h-36 overflow-hidden rounded-t-lg">
-                <Image
-                  src={topic.image}
-                  layout="fill"
-                  objectFit="cover"
-                  objectPosition="center top"
-                  alt="Dashboard"
-                />
+                <Link href={`/courses/${topic._id}`}>
+                  <div className="relative h-36 overflow-hidden rounded-t-lg">
+                    <Image
+                      src={topic.image}
+                      layout="fill"
+                      objectFit="cover"
+                      objectPosition="center top"
+                      alt="Dashboard"
+                    />
+                  </div>
+                </Link>
                 <div className="absolute top-2 right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center">
                   <OptionsBtn topicId={topic._id} />
                 </div>
