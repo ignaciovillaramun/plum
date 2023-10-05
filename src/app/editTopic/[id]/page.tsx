@@ -1,35 +1,55 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import EditTopicForm from '@/components/EditTopicForm';
+import { useEffect, useState } from 'react';
+
+// Define a type for the topic data
+type TopicData = {
+  title: any;
+  topic: any;
+  image: any;
+};
+
+const getTopicById = async (id: string) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/topics/${id}`, {
+      cache: 'no-store',
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to fetch topic');
+    }
+    return res.json();
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export default function EditTopicPage() {
-  const searchParams = useSearchParams();
-  const topicId = searchParams?.get('topicId');
-  console.log(topicId);
+  const searchParams = usePathname();
+  const id = searchParams?.split('/').pop();
+  const [data, setData] = useState<TopicData | null>(null);
 
-  const handleEditClick = () => {
-    if (topicId === null || topicId === undefined) {
-      // Navigate to the edit page with the extracted topic ID
-      // searchParams?.push(`/editTopic/${topicId}`);
+  useEffect(() => {
+    async function fetchData() {
+      const { topic } = await getTopicById(id || '');
+      if (topic) {
+        setData(topic);
+      }
     }
-  };
+
+    if (id) {
+      fetchData();
+    }
+  }, [id]);
+
+  // const { topic } = data || {};
+  const { title, topic: topicValue, image } = data || {};
 
   return (
     <>
-      <EditTopicForm
-        onSubmit={(topic) => {
-          // Handle form submission (update the topic)
-          // You can use the 'topic' data here
-        }}
-      />
-      <button
-        type="button"
-        className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-        onClick={handleEditClick}
-      >
-        Edit
-      </button>
+      <EditTopicForm id={id} title={title} topic={topicValue} image={image} />
     </>
   );
 }

@@ -42,6 +42,7 @@ export default function TopicList() {
           (topic: {
             title: ReactNode;
             topic: ReactNode;
+            image: any;
             _id: Key | null | undefined;
           }) => (
             <div
@@ -50,7 +51,7 @@ export default function TopicList() {
             >
               <div className="relative h-36 overflow-hidden rounded-t-lg">
                 <Image
-                  src="/dashboard.jpg"
+                  src={topic.image}
                   layout="fill"
                   objectFit="cover"
                   objectPosition="center top"

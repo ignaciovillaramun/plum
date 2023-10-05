@@ -2,13 +2,28 @@
 
 import Link from 'next/link';
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function OptionsBtn(props: { topicId: any }) {
   const [isOpen, setIsOpen] = useState(false);
-  console.log(props.topicId);
-
+  const router = useRouter();
   const toggleOptions = () => {
     setIsOpen(!isOpen);
+  };
+
+  const removeTopic = async () => {
+    const confirmed = confirm('Are you sure?');
+
+    if (confirmed) {
+      const res = await fetch(`api/topics?id=${props.topicId}`, {
+        method: 'DELETE',
+      });
+
+      if (res.ok) {
+        // not working
+        router.refresh();
+      }
+    }
   };
 
   return (
@@ -28,9 +43,6 @@ export default function OptionsBtn(props: { topicId: any }) {
                 <button
                   type="button"
                   className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                  onClick={() => {
-                    console.log('Edit clicked');
-                  }}
                 >
                   Edit
                 </button>
@@ -38,12 +50,9 @@ export default function OptionsBtn(props: { topicId: any }) {
             </li>
             <li>
               <button
+                onClick={removeTopic}
                 type="button"
                 className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                onClick={() => {
-                  // Handle remove action
-                  console.log('Remove clicked');
-                }}
               >
                 Remove
               </button>
