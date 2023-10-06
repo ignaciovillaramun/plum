@@ -1,7 +1,5 @@
 'use client';
 
-// src/components/UserProvider.tsx
-
 import React, {
   createContext,
   useContext,
@@ -31,7 +29,6 @@ type UserProviderProps = {
 
 export function UserProvider({ children }: UserProviderProps) {
   const [userId, setUserId] = useState<string | null>(() => {
-    // Initialize userId from localStorage if available (client-side only)
     if (typeof window !== 'undefined') {
       return localStorage.getItem('userId') || null;
     }
@@ -39,9 +36,8 @@ export function UserProvider({ children }: UserProviderProps) {
   });
 
   useEffect(() => {
-    // Use useEffect to update localStorage whenever userId changes
     if (typeof window !== 'undefined') {
-      localStorage.setItem('userId', userId || ''); // Store as an empty string if null
+      localStorage.setItem('userId', userId || '');
     }
   }, [userId]);
 

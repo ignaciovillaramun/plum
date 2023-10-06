@@ -33,6 +33,7 @@ const fetchData = async (setDataFunction: any) => {
 export default function TopicList() {
   const [topics, setProfiles] = useState([]);
   const [userId, setUserId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetchData(setProfiles);
@@ -41,6 +42,20 @@ export default function TopicList() {
       setUserId(storedUserId);
     }
   }, []);
+
+  useEffect(() => {
+    if (Array.isArray(topics) && topics.length > 0) {
+      setIsLoading(false);
+    }
+  }, [topics]);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+      </div>
+    );
+  }
 
   if (Array.isArray(topics) && topics.length > 0) {
     return (
