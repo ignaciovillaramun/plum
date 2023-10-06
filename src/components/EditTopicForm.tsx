@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function EditTopicForm(props: {
   id: any;
@@ -14,6 +15,8 @@ export default function EditTopicForm(props: {
   const [newImage, setNewImage] = useState(props.image);
   const [newImageBase64, setImage64] = useState<any | null>(null);
   const [selectedImage, setSelectedImage] = useState<any | null>(null);
+
+  const router = useRouter();
 
   useEffect(() => {
     setNewTitle(props.title);
@@ -49,9 +52,9 @@ export default function EditTopicForm(props: {
       });
 
       if (!res.ok) {
-        // redirect('/');
         throw new Error('Fail to update a topic');
       } else {
+        router.push('/dashboard');
         // Redirect to Dashboard not working
         console.log('hello');
       }

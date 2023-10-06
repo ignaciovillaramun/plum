@@ -2,7 +2,7 @@
 
 import { Key, ReactNode } from 'react';
 import React, { useEffect, useState } from 'react';
-import UserInfo from '../editTopic/UserInfo';
+import UserInfo from '@/components/UserInfo';
 
 // async function fetchProfiles() {
 //   try {

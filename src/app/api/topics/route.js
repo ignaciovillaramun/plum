@@ -3,10 +3,10 @@ import { connectMongoDB } from '../../../../lib/mongo/index';
 import Topic from '../../../../models/topic';
 
 export async function POST(req) {
-  const { title, topic, image } = await req.json();
-  console.log(title, topic, 'image');
+  const { title, topic, image, userId } = await req.json();
+  console.log(title, topic, 'image', userId);
   await connectMongoDB();
-  await Topic.create({ title, topic, image });
+  await Topic.create({ title, topic, image, userId });
   return NextResponse.json({ message: 'Topic Created' }, { status: 201 });
 }
 

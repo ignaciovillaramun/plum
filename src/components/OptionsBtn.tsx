@@ -4,7 +4,11 @@ import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-export default function OptionsBtn(props: { topicId: any }) {
+export default function OptionsBtn(props: {
+  topicId: any;
+  fetchData: (props: any) => (event: any) => void;
+  profiles: any;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
@@ -17,8 +21,7 @@ export default function OptionsBtn(props: { topicId: any }) {
       });
 
       if (res.ok) {
-        // not working
-        router.refresh();
+        props.fetchData(props.profiles);
       }
     }
   };

@@ -3,7 +3,8 @@
 import Alert from '@/components/Alert';
 import Image from 'next/image';
 import React, { useState } from 'react';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useUser } from '@/components/UserProvider';
 
 export default function TopicForm({}) {
   const [title, setTitle] = useState('');
@@ -12,6 +13,10 @@ export default function TopicForm({}) {
   const [imageBase64, setImage64] = useState<any | null>(null);
   const [showAlert, setShowAlert] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const { userId } = useUser();
+  console.log(userId);
+
+  const router = useRouter();
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files && e.target.files[0];
@@ -45,12 +50,11 @@ export default function TopicForm({}) {
         headers: {
           'Content-type': 'application/json',
         },
-        body: JSON.stringify({ title, topic, image: imageBase64 }),
+        body: JSON.stringify({ title, topic, image: imageBase64, userId }),
       });
 
       if (res.ok) {
-        // redirect('/');
-        console.log('hello');
+        router.push('/dashboard');
       } else {
         throw new Error('Fail to create a topic');
       }
