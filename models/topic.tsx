@@ -5,8 +5,8 @@ const topicSchema = new Schema(
     title: String,
     topic: String,
     image: String,
-    userId: {
-      type: mongoose.Schema.ObjectId,
+    user: {
+      type: mongoose.Types.ObjectId,
       ref: 'User',
       required: [true, 'User must belong to a user'],
     },

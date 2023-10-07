@@ -13,8 +13,8 @@ export default function TopicForm({}) {
   const [imageBase64, setImage64] = useState<any | null>(null);
   const [showAlert, setShowAlert] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const { userId } = useUser();
-  console.log(userId);
+  const { user } = useUser();
+  console.log(user);
 
   const router = useRouter();
 
@@ -50,7 +50,7 @@ export default function TopicForm({}) {
         headers: {
           'Content-type': 'application/json',
         },
-        body: JSON.stringify({ title, topic, image: imageBase64, userId }),
+        body: JSON.stringify({ title, topic, image: imageBase64, user }),
       });
 
       if (res.ok) {

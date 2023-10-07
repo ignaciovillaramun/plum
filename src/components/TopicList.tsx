@@ -64,11 +64,11 @@ export default function TopicList() {
           (topic: {
             title: ReactNode;
             topic: ReactNode;
-            userId: ReactNode;
+            user: ReactNode;
             image: any;
             _id: Key | null | undefined;
           }) => {
-            if (topic.userId == userId) {
+            if (topic.user == userId) {
               return (
                 <div
                   key={`${topic._id}`}

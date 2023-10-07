@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 
 type UserContextType = {
-  userId: string | null;
+  user: string | null;
   setUserId: (id: string | null) => void;
 };
 
@@ -28,7 +28,7 @@ type UserProviderProps = {
 };
 
 export function UserProvider({ children }: UserProviderProps) {
-  const [userId, setUserId] = useState<string | null>(() => {
+  const [user, setUserId] = useState<string | null>(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('userId') || null;
     }
@@ -37,12 +37,12 @@ export function UserProvider({ children }: UserProviderProps) {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      localStorage.setItem('userId', userId || '');
+      localStorage.setItem('userId', user || '');
     }
-  }, [userId]);
+  }, [user]);
 
   return (
-    <UserContext.Provider value={{ userId, setUserId }}>
+    <UserContext.Provider value={{ user, setUserId }}>
       {children}
     </UserContext.Provider>
   );

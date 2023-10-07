@@ -1,14 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import {
-  signIn,
-  signOut as nextAuthSignOut,
-  useSession,
-} from 'next-auth/react';
+import { signOut as nextAuthSignOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
   const { status } = useSession();
+  const router = useRouter(); // Initialize the router
+
   // const { data: session } = useSession();
 
   const signOut = async () => {
@@ -19,6 +18,10 @@ export default function Navbar() {
     } catch (error) {
       console.error('Error during sign out:', error);
     }
+  };
+
+  const navigateToProfile = () => {
+    router.push('/profile');
   };
 
   return (
@@ -38,7 +41,7 @@ export default function Navbar() {
         </button>
       ) : (
         <button
-          onClick={() => signIn('google')}
+          onClick={navigateToProfile}
           className="bg-slate-900 text-white px-6 py-2 rounded-md"
         >
           Sing In
