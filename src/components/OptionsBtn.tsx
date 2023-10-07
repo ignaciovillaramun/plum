@@ -53,7 +53,9 @@ export default function OptionsBtn(props: {
         className="px-2 py-1 text-gray-600 focus:outline-none"
         onClick={toggleOptions}
       >
-        <span className="text-2xl">&#8942;</span>
+        <span className="text-4xl" style={{ color: '#C03333' }}>
+          &#8942;
+        </span>
       </button>
       {isOpen && (
         <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg z-10 options-menu">

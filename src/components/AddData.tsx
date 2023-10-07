@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
-export default function AddData({ onAdd }) {
+export default function AddData(props: { onAdd: any }) {
   const [newItem, setNewItem] = useState('');
 
   const handleAdd = () => {
     if (newItem.trim() !== '') {
-      onAdd(newItem);
+      props.onAdd(newItem);
       setNewItem('');
     }
   };

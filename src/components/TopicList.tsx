@@ -86,7 +86,7 @@ export default function TopicList() {
                         />
                       </div>
                     </Link>
-                    <div className="absolute top-2 right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                    <div className="absolute top-2 right-2 w-8 h-8 bg-red rounded-full flex items-center justify-center">
                       <OptionsBtn
                         topicId={topic._id}
                         fetchData={() => fetchData}

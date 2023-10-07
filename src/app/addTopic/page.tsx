@@ -8,7 +8,6 @@ import { useUser } from '@/components/UserProvider';
 
 export default function TopicForm({}) {
   const [title, setTitle] = useState('');
-  const [topic, setTopic] = useState('');
   const [image, setImage] = useState<any | null>(null);
   const [imageBase64, setImage64] = useState<any | null>(null);
   const [showAlert, setShowAlert] = useState(false);
@@ -37,7 +36,7 @@ export default function TopicForm({}) {
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    if (!title.trim() || !topic.trim() || !image) {
+    if (!title.trim() || !image) {
       if (!formSubmitted) {
         setShowAlert(true);
       }
@@ -50,7 +49,7 @@ export default function TopicForm({}) {
         headers: {
           'Content-type': 'application/json',
         },
-        body: JSON.stringify({ title, topic, image: imageBase64, user }),
+        body: JSON.stringify({ title, image: imageBase64, user }),
       });
 
       if (res.ok) {
@@ -64,7 +63,6 @@ export default function TopicForm({}) {
 
     // Clear the form inputs
     setTitle('');
-    setTopic('');
     setImage(null);
     setShowAlert(false);
     setFormSubmitted(true);
@@ -99,21 +97,6 @@ export default function TopicForm({}) {
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="topic"
-          >
-            Topic
-          </label>
-          <input
-            className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="topic"
-            placeholder="Enter topic"
-            value={topic}
-            onChange={(e) => setTopic(e.target.value)}
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="image"
           >
             Image
@@ -134,7 +117,7 @@ export default function TopicForm({}) {
                 src={URL.createObjectURL(image)}
                 alt="Selected"
                 width={80}
-                height={80}
+                height={120}
                 className="mt-2"
               />
             </div>
