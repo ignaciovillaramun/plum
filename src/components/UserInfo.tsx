@@ -73,9 +73,7 @@ export default function UserInfo() {
         </div>
       </div>
     );
-  } else {
-    return <SignInBtn />;
-  }
+  } 
 }
 
 export function AuthenticatedUserInfo() {

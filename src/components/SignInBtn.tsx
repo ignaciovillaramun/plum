@@ -2,17 +2,22 @@
 
 import Image from 'next/image';
 import { signIn } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 
-export default function SignInBtn() {
+export default function SignInBtn(props:{onClick: any}){
+  const { status, data: session } = useSession();
+
+
+
+  const handleClick = () => {
+    signIn('google') 
+    if (status === 'authenticated'){
+      props.onClick();
+    }
+  }
   return (
-    <button
-      onClick={() => signIn('google')}
-      className="flex items-center gap-4 shadow-xl rounded-lg pl-3"
-    >
-      <Image src="/google-logo.png" height={30} width={30} alt="Google Logo" />
-      <span className="bg-blue-500 text-whit px-4 py-3">
-        Sign In with Google
-      </span>
+    <button onClick={handleClick}>
+      <Image src="/google-logo.png" height={40} width={40} alt="Google Logo" />
     </button>
   );
 }
