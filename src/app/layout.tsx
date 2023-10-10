@@ -22,9 +22,10 @@ export default function RootLayout({
       <body className={inter.className}>
         <UserProvider>
           <NextAuthProvider>
-             <div className="max-w-3xl mx-auto">
+            <div className=" mx-auto">
+              <Navbar />
               {children}
-             </div>
+            </div>
           </NextAuthProvider>
         </UserProvider>
       </body>
