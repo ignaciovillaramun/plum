@@ -20,6 +20,11 @@ export default function Navbar() {
     }
   };
 
+  const handleSignOut = () => {
+    signOut();
+    router.push('/profile');
+  };
+
   const navigateToProfile = () => {
     router.push('/profile');
   };
@@ -34,7 +39,7 @@ export default function Navbar() {
       <Link href={'/profile'}>Profile</Link>
       {status === 'authenticated' ? (
         <button
-          onClick={() => signOut()}
+          onClick={handleSignOut}
           className="bg-slate-900 text-white px-6 py-2 rounded-md"
         >
           Sing Out

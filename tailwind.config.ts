@@ -7,6 +7,11 @@ const config: Config = {
   ],
   theme: {
     extend: {
+
+      colors:{
+        'red-plum': '#C03333'
+      },
+
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':

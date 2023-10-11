@@ -5,6 +5,7 @@ import SignInBtn from './SignInBtn';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { useUser } from './UserProvider';
+import Login from '@/app/login/page';
 
 const getCurrentUser = async (email: any, setCurrentUser: any) => {
   try {
@@ -73,17 +74,19 @@ export default function UserInfo() {
         </div>
       </div>
     );
+  } else if (!userImage) {
+    return <Login />;
   } else {
     return <SignInBtn />;
   }
 }
 
-export function AuthenticatedUserInfo() {
-  const { status } = useSession();
+// export function AuthenticatedUserInfo() {
+//   const { status } = useSession();
 
-  if (status === 'authenticated') {
-    return <UserInfo />;
-  } else {
-    return <SignInBtn />;
-  }
-}
+//   if (status === 'authenticated') {
+//     return <UserInfo />;
+//   } else {
+//     return <SignInBtn />;
+//   }
+// }
