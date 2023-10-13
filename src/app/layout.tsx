@@ -23,7 +23,7 @@ export default function RootLayout({
         <UserProvider>
           <NextAuthProvider>
             <div className=" mx-auto">
-              <Navbar />
+              {/* <Navbar /> */}
               {children}
             </div>
           </NextAuthProvider>
