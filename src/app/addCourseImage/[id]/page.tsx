@@ -1,22 +1,20 @@
 'use client';
 
-import Alert from '@/components/Alert';
-import Image from 'next/image';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useUser } from '@/components/UserProvider';
 import CreateItems from '@/components/CreateItems';
+import { usePathname } from 'next/navigation';
 
-export default function TopicForm({}) {
+export default function ImageForm() {
   const [title, setTitle] = useState('');
   const [image, setImage] = useState<any | null>(null);
   const [imageBase64, setImage64] = useState<any | null>(null);
   const [showAlert, setShowAlert] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const { user } = useUser();
-  console.log(user);
 
   const router = useRouter();
+  const searchParams = usePathname();
+  const id = searchParams?.split('/').pop();
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files && e.target.files[0];
@@ -45,16 +43,16 @@ export default function TopicForm({}) {
     }
 
     try {
-      const res = await fetch('http://localhost:3000/api/topics', {
+      const res = await fetch(`http://localhost:3000/api/image/${id}`, {
         method: 'POST',
         headers: {
           'Content-type': 'application/json',
         },
-        body: JSON.stringify({ title, image: imageBase64, user }),
+        body: JSON.stringify({ title, image: imageBase64, topic: id }),
       });
 
       if (res.ok) {
-        router.push('/dashboard');
+        router.push(`/courses/${id}`);
       } else {
         throw new Error('Fail to create a topic');
       }
@@ -80,7 +78,4 @@ export default function TopicForm({}) {
       handleCloseAlert={handleCloseAlert}
     />
   );
-}
-function setImage(file: File) {
-  throw new Error('Function not implemented.');
 }

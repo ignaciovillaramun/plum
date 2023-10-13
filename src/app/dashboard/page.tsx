@@ -25,8 +25,10 @@ export default function DashBoard() {
           </button>
         </Link>
       </div>
-      <div className="flex flex-wrap justify-start gap-4">
-        <TopicList />
+      <div className="flex ">
+        <div className=" flex flex-wrap gap-4 w-8/10 mx-auto">
+          <TopicList />
+        </div>
       </div>
     </div>
   );

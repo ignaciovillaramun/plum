@@ -64,9 +64,9 @@ export default function EditTopicForm(props: {
   };
 
   return (
-    <div>
+    <div className="flex">
       <form onSubmit={handleSubmit}>
-        <div className="mb-4">
+        <div className="mb-4 flex w-8/10 mx-auto">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="title"
