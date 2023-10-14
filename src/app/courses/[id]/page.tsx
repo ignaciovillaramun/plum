@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useEffect, useState, Key, ReactNode } from 'react';
+import React, { useEffect, useState, Key, ReactNode, Component } from 'react';
 import Image from 'next/image';
 import AddData from '@/components/AddData';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import Topic from '../../../../models/topic';
+import Lightbox from 'react-18-image-lightbox';
+import 'react-18-image-lightbox/style.css';
 
 const getImages = async () => {
   try {
@@ -17,7 +18,7 @@ const getImages = async () => {
       throw new Error('Failed to fetch images');
     }
     const imagesData = await res.json();
-    console.log('Images data:', imagesData); // Add this line to log the data
+    console.log('Images data:', imagesData);
 
     return imagesData;
   } catch (error) {
@@ -27,18 +28,33 @@ const getImages = async () => {
 
 const fetchData = async (setDataFunction: any) => {
   try {
-    // await all promises here\ (images, url, attachments, notes)
     const imagesData = await getImages();
-    setDataFunction(imagesData);
+    const imagesWithIndex = imagesData.map((image: any, index: string) => ({
+      ...image,
+      index,
+    }));
+
+    setDataFunction(imagesWithIndex);
   } catch (error) {
     console.error(error);
   }
 };
 
 export default function Course() {
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState<
+    {
+      title: ReactNode;
+      topic: ReactNode;
+      image: any;
+      index: any;
+      _id: Key | null | undefined;
+    }[]
+  >([]);
   const [courseId, setCourseId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [photoIndex, setPhotoIndex] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
+  const [lightBoxKey, setLightBoxKey] = useState(0);
 
   const searchParams = usePathname();
   const id = searchParams?.split('/').pop();
@@ -55,15 +71,24 @@ export default function Course() {
       setIsLoading(false);
     }
   }, [images]);
-  console.log(images);
 
-  // if (isLoading) {
-  //   return (
-  //     <div className="flex justify-center items-center min-h-screen">
-  //       <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
-  //     </div>
-  //   );
-  // }
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+      </div>
+    );
+  }
+
+  const closeLightbox = () => {
+    setIsOpen(false);
+  };
+
+  const openLightbox = (index: number) => {
+    setPhotoIndex(index);
+    setIsOpen(true);
+    setLightBoxKey((prevKey) => prevKey + 1); // Trigger a re-render of Lightbox // not working
+  };
 
   // Sample data for demonstration purposes
   const courseData = {
@@ -75,6 +100,7 @@ export default function Course() {
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">Course Information</h1>
+
       {/* Images Section */}
       <div className="mb-4 overflow-x-auto whitespace-nowrap">
         {Array.isArray(images) && images.length > 0
@@ -83,28 +109,44 @@ export default function Course() {
                 title: ReactNode;
                 topic: ReactNode;
                 image: any;
+                index: any;
                 _id: Key | null | undefined;
               }) => {
                 if (image.topic == courseId) {
                   return (
-                    <div key={image._id} className="inline-block mr-4">
+                    <div
+                      key={image._id}
+                      className="inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
+                      onClick={() => openLightbox(image.index)}
+                    >
                       <Image
                         src={image.image}
                         alt={`Image ${image._id}`}
                         width={200}
                         height={200}
                         className="rounded-lg"
+                        loading="lazy"
                       />
+                      <div className="mt-2 text-center font-semibold text-gray-700">
+                        {image.title}
+                      </div>
                     </div>
                   );
                 }
               }
             )
           : null}
+        {isOpen && ( // partial working
+          <Lightbox
+            mainSrc={images[photoIndex]?.image}
+            onCloseRequest={closeLightbox}
+          />
+        )}
         <Link href={`/addCourseImage/${id}`}>
           <AddData onAdd={() => {}} />
         </Link>
       </div>
+
       {/* Attachments Section */}
       <div className="mb-4">
         <h2 className="text-xl font-semibold mb-2">Attachments</h2>
