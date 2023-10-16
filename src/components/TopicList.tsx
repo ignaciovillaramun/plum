@@ -72,7 +72,7 @@ export default function TopicList() {
               return (
                 <div
                   key={`${topic._id}`}
-                  className="bg-white shadow-md rounded-lg my-4 w-60"
+                  className="bg-white shadow-md rounded-lg my-4 w-72"
                 >
                   <div className="relative h-36 overflow-hidden rounded-t-lg">
                     <Link href={`/courses/${topic._id}`}>
@@ -86,19 +86,17 @@ export default function TopicList() {
                         />
                       </div>
                     </Link>
-                    <div className="absolute top-2 right-2 w-8 h-8 bg-red rounded-full flex items-center justify-center">
-                      <OptionsBtn
+              
+                  </div>
+                  <div className=" flex p-4 justify-between items-center">
+                    <h2 className="text-xl font-semibold">
+                      {topic.title}
+                    </h2>
+                    <OptionsBtn
                         topicId={topic._id}
                         fetchData={() => fetchData}
                         profiles={setProfiles}
                       />
-                    </div>
-                  </div>
-                  <div className="p-4">
-                    <h2 className="text-xl font-semibold mb-2">
-                      {topic.title}
-                    </h2>
-                    <h3 className="text-gray-600">{topic.topic}</h3>
                   </div>
                 </div>
               );
