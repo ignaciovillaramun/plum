@@ -50,7 +50,7 @@ export default function OptionsBtn(props: {
     <div className="relative inline-block text-left">
       <button
         type="button"
-        className="px-2 py-1 text-gray-600 focus:outline-none"
+        className=" text-gray-600 focus:outline-none"
         onClick={toggleOptions}
       >
         <span className="text-4xl" style={{ color: '#C03333' }}>
