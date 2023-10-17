@@ -5,7 +5,9 @@ import Image from 'next/image';
 interface CreateItemsProps {
   showAlert: boolean;
   title: string;
+  description: string;
   setTitle: (title: string) => void;
+  setDescription: (description: string) => void;
   image: File | null;
   handleSubmit: (e: React.FormEvent) => void;
   handleImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -15,7 +17,9 @@ interface CreateItemsProps {
 function CreateItems({
   showAlert,
   title,
+  description,
   setTitle,
+  setDescription,
   image,
   handleSubmit,
   handleImageUpload,
@@ -26,7 +30,7 @@ function CreateItems({
       {showAlert && (
         <Alert
           title="Error"
-          topic="Title and Image cannot be empty"
+          topic="Title, description and Image cannot be empty"
           onClose={handleCloseAlert}
         />
       )}
@@ -45,6 +49,22 @@ function CreateItems({
             placeholder="Enter title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+          />
+        </div>
+        <div className="mb-4">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="title"
+          >
+            Description
+          </label>
+          <textarea
+            className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="title"
+            // type="text"
+            placeholder="Enter description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           />
         </div>
         <div className="mb-4">

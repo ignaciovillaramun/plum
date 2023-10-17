@@ -6,6 +6,7 @@ const imageSchema = new Schema(
     image: {
       type: String,
     },
+    description: String,
     topic: {
       type: mongoose.Types.ObjectId,
       ref: 'Topic',

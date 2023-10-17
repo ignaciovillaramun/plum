@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 
 export default function ImageForm() {
   const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const [image, setImage] = useState<any | null>(null);
   const [imageBase64, setImage64] = useState<any | null>(null);
   const [showAlert, setShowAlert] = useState(false);
@@ -35,7 +36,7 @@ export default function ImageForm() {
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    if (!title.trim() || !image) {
+    if (!title.trim() || !image || !description) {
       if (!formSubmitted) {
         setShowAlert(true);
       }
@@ -48,7 +49,12 @@ export default function ImageForm() {
         headers: {
           'Content-type': 'application/json',
         },
-        body: JSON.stringify({ title, image: imageBase64, topic: id }),
+        body: JSON.stringify({
+          title,
+          image: imageBase64,
+          topic: id,
+          description,
+        }),
       });
 
       if (res.ok) {
@@ -62,6 +68,7 @@ export default function ImageForm() {
 
     // Clear the form inputs
     setTitle('');
+    setDescription('');
     setImage(null);
     setShowAlert(false);
     setFormSubmitted(true);
@@ -72,6 +79,8 @@ export default function ImageForm() {
       showAlert={showAlert}
       title={title}
       setTitle={setTitle}
+      description={description}
+      setDescription={setDescription}
       image={image}
       handleSubmit={handleSubmit}
       handleImageUpload={handleImageUpload}

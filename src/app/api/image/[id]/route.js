@@ -31,9 +31,9 @@ export async function GET(req, { params }) {
 // }
 
 export async function POST(req, { params }) {
-  const { title, image, topic } = await req.json();
+  const { title, image, topic, description } = await req.json();
   const { id } = params;
-  console.log(title, 'image', topic);
+  // console.log(title, 'image', topic, description);
 
   try {
     await connectMongoDB();
@@ -43,7 +43,7 @@ export async function POST(req, { params }) {
       return NextResponse.json({ message: 'Topic not found' }, { status: 404 });
     }
 
-    const data = await Image.create({ title, image, topic: id });
+    const data = await Image.create({ title, image, description, topic: id });
     return NextResponse.json({ data }, { status: 201 });
   } catch (error) {
     console.error(error);
