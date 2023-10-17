@@ -10,7 +10,7 @@ export default function SingleViewImg(props: {
   return (
     <div>
       <div className="w-full flex justify-center ">
-        <div className=" h-auto sm:w-4/12">
+        <div className=" h-auto sm:w-8/12">
           <Image
             className="w-full"
             src={props.imgPath}
