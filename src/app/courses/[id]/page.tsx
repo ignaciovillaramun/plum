@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Lightbox from 'react-18-image-lightbox';
 import 'react-18-image-lightbox/style.css';
+import SingleViewImg from '@/components/SingleViewImg';
 
 const getImages = async () => {
   try {
@@ -55,6 +56,7 @@ export default function Course() {
   const [photoIndex, setPhotoIndex] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [lightBoxKey, setLightBoxKey] = useState(0);
+  const [imgSingleView, setimgSingleView] = useState(false);
 
   const searchParams = usePathname();
   const id = searchParams?.split('/').pop();
@@ -97,6 +99,7 @@ export default function Course() {
     urls: ['https://example.com/url1', 'https://example.com/url2'],
   };
 
+
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">Course Information</h1>
@@ -136,16 +139,17 @@ export default function Course() {
               }
             )
           : null}
-        {isOpen && ( // partial working
-          <Lightbox
-            mainSrc={images[photoIndex]?.image}
-            onCloseRequest={closeLightbox}
-          />
-        )}
         <Link href={`/addCourseImage/${id}`}>
           <AddData onAdd={() => {}} />
         </Link>
       </div>
+              
+        {/* Pictures SIgle View */}
+        {isOpen &&  
+           <div onClick={closeLightbox} className='fixed top-0 w-full h-full bg-black bg-opacity-90 p-10 flex justify-center'> 
+                 <SingleViewImg imgPath={images[photoIndex]?.image} altText={`picture ${photoIndex}`} />
+          </div>
+        }
 
       {/* Attachments Section */}
       <div className="mb-4">

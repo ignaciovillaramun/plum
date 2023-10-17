@@ -22,11 +22,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <UserProvider>
-          <NextAuthProvider>
-            <div className="relative">
+          <NextAuthProvider> 
+              <div className='md:ml-[80px]'>{children}</div>
               <Menu />
-              <div className="mt-20 ml-20">{children}</div>
-            </div>
           </NextAuthProvider>
         </UserProvider>
       </body>
