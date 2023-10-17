@@ -12,6 +12,10 @@ const config: Config = {
         'red-plum': '#C03333'
       },
 
+      overlay:{
+        
+      },
+
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
