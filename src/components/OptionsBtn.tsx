@@ -8,6 +8,7 @@ export default function OptionsBtn(props: {
   topicId: any;
   fetchData: (props: any) => (event: any) => void;
   profiles: any;
+  link: any;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
@@ -61,7 +62,7 @@ export default function OptionsBtn(props: {
         <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg z-10 options-menu">
           <ul className="py-2">
             <li>
-              <Link href={`/editTopic/${props.topicId}`}>
+              <Link href={`${props.link}`}>
                 <button
                   type="button"
                   className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"

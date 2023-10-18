@@ -45,11 +45,11 @@ export default function EditTopicPage() {
   }, [id]);
 
   // const { topic } = data || {};
-  const { title, topic: topicValue, image } = data || {};
+  const { title, image } = data || {};
 
   return (
     <>
-      <EditTopicForm id={id} title={title} topic={topicValue} image={image} />
+      <EditTopicForm id={id} title={title} image={image} />
     </>
   );
 }

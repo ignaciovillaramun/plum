@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Alert from './Alert'; // Assuming you have an Alert component
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 
 interface CreateItemsProps {
   showAlert: boolean;
@@ -25,6 +26,11 @@ function CreateItems({
   handleImageUpload,
   handleCloseAlert,
 }: CreateItemsProps) {
+  const searchParams = usePathname();
+  const page = searchParams?.split('/').pop();
+  const isAddTopic = page === 'addTopic' ? false : true;
+  console.log(page, isAddTopic);
+
   return (
     <div className="flex justify-center items-center h-screen">
       {showAlert && (
@@ -51,22 +57,23 @@ function CreateItems({
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="title"
-          >
-            Description
-          </label>
-          <textarea
-            className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="title"
-            // type="text"
-            placeholder="Enter description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </div>
+        {isAddTopic && ( // Conditionally render the "Description" input based on isAddTopic
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="description"
+            >
+              Description
+            </label>
+            <textarea
+              className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="description"
+              placeholder="Enter description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
+        )}
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"

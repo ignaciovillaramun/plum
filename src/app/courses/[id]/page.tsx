@@ -146,7 +146,7 @@ export default function Course() {
       {isOpen && (
         <div
           onClick={closeLightbox}
-          className="fixed top-0 w-full h-full bg-black bg-opacity-90 p-10 flex justify-center"
+          className="absolute top-0 w-full h-full bg-black bg-opacity-90 p-10 flex justify-center"
         >
           <SingleViewImg
             imgPath={images[photoIndex]?.image}
@@ -199,9 +199,6 @@ export default function Course() {
           ))}
         </ul>
       </div>
-
-      {/* Button Component */}
-      {/* <SectionButton /> */}
     </div>
   );
 }

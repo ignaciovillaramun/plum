@@ -3,7 +3,6 @@ import mongoose, { Schema, models } from 'mongoose';
 const topicSchema = new Schema(
   {
     title: String,
-    topic: String,
     image: String,
     user: {
       type: mongoose.Types.ObjectId,

@@ -7,11 +7,9 @@ import { useRouter } from 'next/navigation';
 export default function EditTopicForm(props: {
   id: any;
   title: any;
-  topic: any;
   image: any;
 }) {
   const [newTitle, setNewTitle] = useState(props.title);
-  const [newTopic, setNewTopic] = useState(props.topic);
   const [newImage, setNewImage] = useState(props.image);
   const [newImageBase64, setImage64] = useState<any | null>(null);
   const [selectedImage, setSelectedImage] = useState<any | null>(null);
@@ -20,10 +18,9 @@ export default function EditTopicForm(props: {
 
   useEffect(() => {
     setNewTitle(props.title);
-    setNewTopic(props.topic);
     setNewImage(props.image);
     setImage64(props.image);
-  }, [props.title, props.topic, props.image]);
+  }, [props.title, props.image]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files && e.target.files[0];
@@ -48,7 +45,7 @@ export default function EditTopicForm(props: {
         headers: {
           'Content-type': 'application/json',
         },
-        body: JSON.stringify({ newTitle, newTopic, newImage: newImageBase64 }),
+        body: JSON.stringify({ newTitle, newImage: newImageBase64 }),
       });
 
       if (!res.ok) {
@@ -80,21 +77,6 @@ export default function EditTopicForm(props: {
             placeholder="Enter title"
             value={newTitle}
             onChange={(e) => setNewTitle(e.target.value)}
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="topic"
-          >
-            Topic
-          </label>
-          <input
-            className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="topic"
-            placeholder="Enter topic"
-            value={newTopic}
-            onChange={(e) => setNewTopic(e.target.value)}
           />
         </div>
         <div className="mb-4">

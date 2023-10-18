@@ -13,6 +13,7 @@ export default function TopicForm({}) {
   const [imageBase64, setImage64] = useState<any | null>(null);
   const [showAlert, setShowAlert] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [description, setDescription] = useState('');
   const { user } = useUser();
   console.log(user);
 
@@ -74,6 +75,8 @@ export default function TopicForm({}) {
       showAlert={showAlert}
       title={title}
       setTitle={setTitle}
+      description={''}
+      setDescription={setDescription}
       image={image}
       handleSubmit={handleSubmit}
       handleImageUpload={handleImageUpload}

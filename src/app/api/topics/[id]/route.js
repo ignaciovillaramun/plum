@@ -4,13 +4,9 @@ import Topic from '../../../../../models/topic';
 
 export async function PUT(req, { params }) {
   const { id } = params;
-  const {
-    newTitle: title,
-    newTopic: topic,
-    newImage: image,
-  } = await req.json();
+  const { newTitle: title, newImage: image } = await req.json();
   await connectMongoDB();
-  await Topic.findByIdAndUpdate(id, { title, topic, image });
+  await Topic.findByIdAndUpdate(id, { title, image });
   return NextResponse.json({ message: 'Topic Updated' }, { status: 200 });
 }
 

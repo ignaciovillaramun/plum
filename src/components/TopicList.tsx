@@ -86,17 +86,15 @@ export default function TopicList() {
                         />
                       </div>
                     </Link>
-              
                   </div>
                   <div className=" flex p-4 justify-between items-center">
-                    <h2 className="text-xl font-semibold">
-                      {topic.title}
-                    </h2>
+                    <h2 className="text-xl font-semibold">{topic.title}</h2>
                     <OptionsBtn
-                        topicId={topic._id}
-                        fetchData={() => fetchData}
-                        profiles={setProfiles}
-                      />
+                      topicId={topic._id}
+                      link={`/editTopic/${topic._id}`}
+                      fetchData={() => fetchData}
+                      profiles={setProfiles}
+                    />
                   </div>
                 </div>
               );
