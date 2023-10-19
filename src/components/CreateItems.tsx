@@ -32,7 +32,7 @@ function CreateItems({
   console.log(page, isAddTopic);
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="mt-10 p-8">
       {showAlert && (
         <Alert
           title="Error"
@@ -40,16 +40,23 @@ function CreateItems({
           onClose={handleCloseAlert}
         />
       )}
+      <Image
+          src="/createTopic/letter.png"
+          alt="Selected"
+          width={100}
+          height={100}
+          className='block mx-auto'
+      />
       <form onSubmit={handleSubmit}>
-        <div className="mb-4">
+        <div className="mt-10">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="title"
           >
-            Title
+          <h3 className='text-xl font-medium'>Course Title</h3>
           </label>
           <input
-            className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="border border-black rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="title"
             type="text"
             placeholder="Enter title"
@@ -79,33 +86,42 @@ function CreateItems({
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="image"
           >
-            Image
-          </label>
-          <input
-            className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          {/* <input
+            className="rounded w-full py-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="image"
             type="file"
             accept="image/*"
             onChange={handleImageUpload}
-          />
+          /> */}
+          
+          </label >
+          <div className="flex items-center justify-center bg-grey-lighter mt-10">
+            <label htmlFor="image" className="w-full flex flex-col items-center px-4 py-3 bg-red-plum text-white rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-white hover:text-red-plum">
+                <svg className="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
+                </svg>
+                <span className="mt-2 text-base leading-normal">Select a file</span>
+                <input id="image" type='file' className="hidden" accept="image/*" onChange={handleImageUpload} />
+            </label>
+          </div>
         </div>
         <div className="mb-4">
           {image && (
             <div>
-              <p>Selected Image:</p>
+              <p className='text-xl mt-8'>Selected Image:</p>
               <Image
                 src={URL.createObjectURL(image)}
                 alt="Selected"
-                width={80}
+                width={100}
                 height={120}
                 className="mt-2"
               />
             </div>
           )}
         </div>
-        <div className="mb-4">
+        <div className="mt-12">
           <button
-            className="bg-blue-500 hover-bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="border-red-plum border-2 text-red-plum py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
           >
             Create Topic
