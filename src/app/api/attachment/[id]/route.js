@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { connectMongoDB } from '../../../../../lib/mongo/index';
 import Topic from '../../../../../models/topic';
-import Image from '../../../../../models/image';
+// import Image from '../../../../../models/image';
+import Attachment from '../../../../../models/attachment';
 
 export async function PUT(req, { params }) {
   const { id } = params;
@@ -23,19 +24,17 @@ export async function GET(req, { params }) {
 }
 
 export async function POST(req, { params }) {
-  const { title, image, description } = await req.json();
+  const { title, attachment } = await req.json();
   const { id } = params;
-  // console.log(title, 'image', topic, description);
+  console.log(title, 'attachment', id);
 
   try {
     await connectMongoDB();
     const userExists = await Topic.findById({ _id: id });
-
     if (!userExists) {
       return NextResponse.json({ message: 'Topic not found' }, { status: 404 });
     }
-
-    const data = await Image.create({ title, image, description, topic: id });
+    const data = await Attachment.create({ title, attachment, topic: id });
     return NextResponse.json({ data }, { status: 201 });
   } catch (error) {
     console.error(error);

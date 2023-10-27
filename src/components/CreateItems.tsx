@@ -4,11 +4,12 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
 interface CreateItemsProps {
+  name: string;
   showAlert: boolean;
   title: string;
-  description: string;
+  description?: string;
   setTitle: (title: string) => void;
-  setDescription: (description: string) => void;
+  setDescription?: (description: string) => void;
   image: File | null;
   handleSubmit: (e: React.FormEvent) => void;
   handleImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -16,6 +17,7 @@ interface CreateItemsProps {
 }
 
 function CreateItems({
+  name,
   showAlert,
   title,
   description,
@@ -27,25 +29,33 @@ function CreateItems({
   handleCloseAlert,
 }: CreateItemsProps) {
   const searchParams = usePathname();
-  const page = searchParams?.split('/').pop();
-  const isAddTopic = page === 'addTopic' ? false : true;
-  console.log(page, isAddTopic);
+  const params = searchParams.split('/');
+  const page = params[params.length - 2];
+  const isTopicImage = page === 'addTopicImage' ? true : false;
+  console.log(page, isTopicImage);
 
   return (
     <div className="mt-10 p-8">
-      {showAlert && (
-        <Alert
-          title="Error"
-          topic="Title, description and Image cannot be empty"
-          onClose={handleCloseAlert}
-        />
-      )}
+      {showAlert &&
+        (isTopicImage ? (
+          <Alert
+            title="Error"
+            topic="Title, description and Image cannot be empty"
+            onClose={handleCloseAlert}
+          />
+        ) : (
+          <Alert
+            title="Error"
+            topic="Title and Image cannot be empty"
+            onClose={handleCloseAlert}
+          />
+        ))}
       <Image
-          src="/createTopic/letter.png"
-          alt="Selected"
-          width={100}
-          height={100}
-          className='block mx-auto'
+        src="/createTopic/letter.png"
+        alt="Selected"
+        width={100}
+        height={100}
+        className="block mx-auto"
       />
       <form onSubmit={handleSubmit}>
         <div className="mt-10">
@@ -53,7 +63,7 @@ function CreateItems({
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="title"
           >
-          <h3 className='text-xl font-medium'>Course Title</h3>
+            <h3 className="text-xl font-medium">{name} Title</h3>
           </label>
           <input
             className="border border-black rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -64,7 +74,7 @@ function CreateItems({
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
-        {isAddTopic && ( // Conditionally render the "Description" input based on isAddTopic
+        {isTopicImage && ( // Conditionally render the "Description" input based on isTopicImage
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
@@ -77,7 +87,7 @@ function CreateItems({
               id="description"
               placeholder="Enter description"
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => setDescription && setDescription(e.target.value)}
             />
           </div>
         )}
@@ -86,29 +96,44 @@ function CreateItems({
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="image"
           >
-          {/* <input
+            {/* <input
             className="rounded w-full py-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="image"
             type="file"
             accept="image/*"
             onChange={handleImageUpload}
           /> */}
-          
-          </label >
+          </label>
           <div className="flex items-center justify-center bg-grey-lighter mt-10">
-            <label htmlFor="image" className="w-full flex flex-col items-center px-4 py-3 bg-red-plum text-white rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-white hover:text-red-plum">
-                <svg className="w-8 h-8" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                    <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
-                </svg>
-                <span className="mt-2 text-base leading-normal">Select a file</span>
-                <input id="image" type='file' className="hidden" accept="image/*" onChange={handleImageUpload} />
+            <label
+              htmlFor="image"
+              className="w-full flex flex-col items-center px-4 py-3 bg-red-plum text-white rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-white hover:text-red-plum"
+            >
+              <svg
+                className="w-8 h-8"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
+              </svg>
+              <span className="mt-2 text-base leading-normal">
+                Select a file
+              </span>
+              <input
+                id="image"
+                type="file"
+                className="hidden"
+                accept="image/*"
+                onChange={handleImageUpload}
+              />
             </label>
           </div>
         </div>
         <div className="mb-4">
           {image && (
             <div>
-              <p className='text-xl mt-8'>Selected Image:</p>
+              <p className="text-xl mt-8">Selected Image:</p>
               <Image
                 src={URL.createObjectURL(image)}
                 alt="Selected"
@@ -124,7 +149,7 @@ function CreateItems({
             className="border-red-plum border-2 text-red-plum py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
           >
-            Create Topic
+            Create {name}
           </button>
         </div>
       </form>

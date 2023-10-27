@@ -75,7 +75,7 @@ export default function TopicList() {
                   className="bg-white shadow-md rounded-lg my-4 w-72"
                 >
                   <div className="relative h-36 overflow-hidden rounded-t-lg">
-                    <Link href={`/courses/${topic._id}`}>
+                    <Link href={`/topics/${topic._id}`}>
                       <div className="relative h-36 overflow-hidden rounded-t-lg">
                         <Image
                           src={topic.image}

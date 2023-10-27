@@ -5,9 +5,8 @@ import { useRouter } from 'next/navigation';
 import CreateItems from '@/components/CreateItems';
 import { usePathname } from 'next/navigation';
 
-export default function ImageForm() {
+export default function AttachmentForm() {
   const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
   const [image, setImage] = useState<any | null>(null);
   const [imageBase64, setImage64] = useState<any | null>(null);
   const [showAlert, setShowAlert] = useState(false);
@@ -36,7 +35,7 @@ export default function ImageForm() {
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    if (!title.trim() || !image || !description) {
+    if (!title.trim() || !image) {
       if (!formSubmitted) {
         setShowAlert(true);
       }
@@ -44,21 +43,19 @@ export default function ImageForm() {
     }
 
     try {
-      const res = await fetch(`http://localhost:3000/api/image/${id}`, {
+      const res = await fetch(`http://localhost:3000/api/attachment/${id}`, {
         method: 'POST',
         headers: {
           'Content-type': 'application/json',
         },
         body: JSON.stringify({
           title,
-          image: imageBase64,
-          topic: id,
-          description,
+          attachment: imageBase64,
         }),
       });
 
       if (res.ok) {
-        router.push(`/courses/${id}`);
+        router.push(`/topics/${id}`);
       } else {
         throw new Error('Fail to create a topic');
       }
@@ -68,7 +65,6 @@ export default function ImageForm() {
 
     // Clear the form inputs
     setTitle('');
-    setDescription('');
     setImage(null);
     setShowAlert(false);
     setFormSubmitted(true);
@@ -76,11 +72,10 @@ export default function ImageForm() {
 
   return (
     <CreateItems
+      name="Attachment"
       showAlert={showAlert}
       title={title}
       setTitle={setTitle}
-      description={description}
-      setDescription={setDescription}
       image={image}
       handleSubmit={handleSubmit}
       handleImageUpload={handleImageUpload}

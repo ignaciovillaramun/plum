@@ -25,7 +25,25 @@ const getImages = async () => {
   }
 };
 
-const fetchData = async (setDataFunction: any) => {
+const getAttachments = async () => {
+  try {
+    const res = await fetch('/api/attachment', {
+      cache: 'no-store',
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to fetch attachments');
+    }
+    const attachmentData = await res.json();
+    console.log('Attachment data:', attachmentData);
+
+    return attachmentData;
+  } catch (error) {
+    console.log('Error: ', error);
+  }
+};
+
+const fetchImagesData = async (setDataFunction: any) => {
   try {
     const imagesData = await getImages();
     const imagesWithIndex = imagesData.map((image: any, index: string) => ({
@@ -34,6 +52,22 @@ const fetchData = async (setDataFunction: any) => {
     }));
 
     setDataFunction(imagesWithIndex);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const fetchAttachmentsData = async (setDataFunction: any) => {
+  try {
+    const attachmentsData = await getAttachments();
+    const attachmentsWithIndex = attachmentsData.map(
+      (attachments: any, index: string) => ({
+        ...attachments,
+        index,
+      })
+    );
+
+    setDataFunction(attachmentsWithIndex);
   } catch (error) {
     console.error(error);
   }
@@ -50,7 +84,16 @@ export default function Course() {
       _id: Key | null | undefined;
     }[]
   >([]);
-  const [courseId, setCourseId] = useState<string | null>(null);
+  const [attachments, setAttachments] = useState<
+    {
+      title: ReactNode;
+      topic: ReactNode;
+      attachment: any;
+      index: any;
+      _id: Key | null | undefined;
+    }[]
+  >([]);
+  const [topicId, setTopicId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [photoIndex, setPhotoIndex] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
@@ -60,9 +103,10 @@ export default function Course() {
   const id = searchParams?.split('/').pop();
 
   useEffect(() => {
-    fetchData(setImages);
+    fetchImagesData(setImages);
+    fetchAttachmentsData(setAttachments);
     if (typeof window !== 'undefined') {
-      setCourseId(id || null);
+      setTopicId(id || null);
     }
   }, [id]);
 
@@ -113,7 +157,7 @@ export default function Course() {
                 index: any;
                 _id: Key | null | undefined;
               }) => {
-                if (image.topic == courseId) {
+                if (image.topic == topicId) {
                   return (
                     <div
                       key={image._id}
@@ -137,7 +181,7 @@ export default function Course() {
               }
             )
           : null}
-        <Link href={`/addCourseImage/${id}`}>
+        <Link href={`/addTopicImage/${id}`}>
           <AddData onAdd={() => {}} />
         </Link>
       </div>
@@ -157,23 +201,42 @@ export default function Course() {
       )}
 
       {/* Attachments Section */}
-      <div className="mb-4">
-        <h2 className="text-xl font-semibold mb-2">Attachments</h2>
-        <ul>
-          {courseData.attachments.map((attachment, index) => (
-            <li key={index}>
-              <a
-                href={`path/to/attachment/${attachment}`}
-                download
-                className="text-blue-500 hover:underline"
-              >
-                {attachment}
-              </a>
-            </li>
-          ))}
-        </ul>
+      {Array.isArray(attachments) && attachments.length > 0
+        ? attachments.map(
+            (attachment: {
+              title: ReactNode;
+              topic: ReactNode;
+              attachment: any;
+              index: any;
+              _id: Key | null | undefined;
+            }) => {
+              if (attachment.topic == topicId) {
+                return (
+                  <div
+                    key={attachment._id}
+                    className="inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
+                    onClick={() => openLightbox(attachment.index)}
+                  >
+                    <Image
+                      src={attachment.attachment}
+                      alt={`Attachment ${attachment._id}`}
+                      width={200}
+                      height={200}
+                      className="rounded-lg"
+                      loading="lazy"
+                    />
+                    <div className="mt-2 text-center font-semibold text-gray-700">
+                      {attachment.title}
+                    </div>
+                  </div>
+                );
+              }
+            }
+          )
+        : null}
+      <Link href={`/addTopicAttachment/${id}`}>
         <AddData onAdd={() => {}} />
-      </div>
+      </Link>
 
       {/* Notes Section */}
       <div className="mb-4">
