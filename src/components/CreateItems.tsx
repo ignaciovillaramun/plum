@@ -32,6 +32,7 @@ function CreateItems({
   const params = searchParams.split('/');
   const page = params[params.length - 2];
   const isTopicImage = page === 'addTopicImage' ? true : false;
+  const pdfFormat = isTopicImage ? 'image/*' : 'application/*';
   console.log(page, isTopicImage);
 
   return (
@@ -124,7 +125,7 @@ function CreateItems({
                 id="image"
                 type="file"
                 className="hidden"
-                accept="image/*"
+                accept={pdfFormat}
                 onChange={handleImageUpload}
               />
             </label>
@@ -133,7 +134,7 @@ function CreateItems({
         <div className="mb-4">
           {image && (
             <div>
-              <p className="text-xl mt-8">Selected Image:</p>
+              <p className="text-xl mt-8">Selected {name}:</p>
               <Image
                 src={URL.createObjectURL(image)}
                 alt="Selected"
