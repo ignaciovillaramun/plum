@@ -15,7 +15,6 @@ export default function TopicForm({}) {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [description, setDescription] = useState('');
   const { user } = useUser();
-  console.log(user);
 
   const router = useRouter();
 
@@ -72,6 +71,7 @@ export default function TopicForm({}) {
 
   return (
     <CreateItems
+      name="Topic"
       showAlert={showAlert}
       title={title}
       setTitle={setTitle}

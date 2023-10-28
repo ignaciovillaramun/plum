@@ -53,7 +53,6 @@ export default function EditTopicForm(props: {
       } else {
         router.push('/dashboard');
         // Redirect to Dashboard not working
-        console.log('hello');
       }
     } catch (error) {
       console.log(error);

@@ -38,7 +38,6 @@ function CreateItems({
     page === 'addTopicImage' || home === 'addTopic' ? true : false;
   const showDescription = page === 'addTopicImage' ? true : false;
   const pdfFormat = isTopicImage ? 'image/*' : 'application/*';
-  console.log(home, isTopicImage);
 
   return (
     <div className="mt-10 p-8">
