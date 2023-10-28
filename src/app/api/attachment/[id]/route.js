@@ -26,7 +26,6 @@ export async function GET(req, { params }) {
 export async function POST(req, { params }) {
   const { title, attachment } = await req.json();
   const { id } = params;
-  console.log(title, attachment, id);
 
   try {
     await connectMongoDB();

@@ -18,7 +18,6 @@ export async function DELETE(req) {
 
 export async function POST(req) {
   const { title, image, user } = await req.json();
-  console.log(title, 'image', typeof user, user);
 
   try {
     await connectMongoDB();
