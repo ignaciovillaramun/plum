@@ -32,10 +32,13 @@ function CreateItems({
 }: CreateItemsProps) {
   const searchParams = usePathname();
   const params = searchParams.split('/');
+  const home = params[1];
   const page = params[params.length - 2];
-  const isTopicImage = page === 'addTopicImage' ? true : false;
+  const isTopicImage =
+    page === 'addTopicImage' || home === 'addTopic' ? true : false;
+  const showDescription = page === 'addTopicImage' ? true : false;
   const pdfFormat = isTopicImage ? 'image/*' : 'application/*';
-  console.log(page, isTopicImage);
+  console.log(home, isTopicImage);
 
   return (
     <div className="mt-10 p-8">
@@ -77,7 +80,7 @@ function CreateItems({
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
-        {isTopicImage && ( // Conditionally render the "Description" input based on isTopicImage
+        {showDescription && ( // Conditionally render the "Description" input based on isTopicImage
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
@@ -134,11 +137,23 @@ function CreateItems({
           </div>
         </div>
         <div className="mb-4">
-          {image && (
+          {image && isTopicImage && (
             <div>
               <p className="text-xl mt-8">Selected {name}:</p>
               <Image
                 src={URL.createObjectURL(image)}
+                alt="Selected"
+                width={100}
+                height={120}
+                className="mt-2"
+              />
+            </div>
+          )}
+          {image && !isTopicImage && (
+            <div>
+              <p className="text-xl mt-8">Selected {name}:</p>
+              <Image
+                src="/file.png"
                 alt="Selected"
                 width={100}
                 height={120}
