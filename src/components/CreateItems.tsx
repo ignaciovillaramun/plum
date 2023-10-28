@@ -10,9 +10,10 @@ interface CreateItemsProps {
   description?: string;
   setTitle: (title: string) => void;
   setDescription?: (description: string) => void;
-  image: File | null;
+  image?: File | null;
   handleSubmit: (e: React.FormEvent) => void;
-  handleImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleImageUpload?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleFileUpload?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleCloseAlert: () => void;
 }
 
@@ -23,6 +24,7 @@ function CreateItems({
   description,
   setTitle,
   setDescription,
+  handleFileUpload,
   image,
   handleSubmit,
   handleImageUpload,

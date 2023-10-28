@@ -1,11 +1,18 @@
 'use client';
 
+import { Document, Page } from 'react-pdf';
 import React, { useEffect, useState, Key, ReactNode, Component } from 'react';
 import Image from 'next/image';
 import AddData from '@/components/AddData';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import SingleViewImg from '@/components/SingleViewImg';
+import { pdfjs } from 'react-pdf';
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker.min.js',
+  import.meta.url
+).toString();
 
 const getImages = async () => {
   try {
@@ -98,6 +105,12 @@ export default function Course() {
   const [photoIndex, setPhotoIndex] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [lightBoxKey, setLightBoxKey] = useState(0);
+  const [numPages, setNumPages] = useState<number>();
+  const [pageNumber, setPageNumber] = useState<number>(1);
+
+  function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
+    setNumPages(numPages);
+  }
 
   const searchParams = usePathname();
   const id = searchParams?.split('/').pop();
@@ -134,6 +147,32 @@ export default function Course() {
     setLightBoxKey((prevKey) => prevKey + 1); // Trigger a re-render of Lightbox // not working
   };
 
+  const openNewWindow = (url: any) => {
+    let pdfWindow = window.open('');
+    if (pdfWindow) {
+      pdfWindow.document.write(
+        `<iframe width='100%' height='100%' src=${url}></iframe>`
+      );
+    }
+  };
+
+  const wordAlert = () => {
+    alert('Word document does not have a preview, download instead');
+  };
+
+  function isPDF(base64data: any) {
+    const parts = base64data.split(';');
+
+    if (parts.length >= 2) {
+      const fileType = parts[0].split(':')[1];
+      const pdf = fileType === 'application/pdf' ? true : false;
+      return pdf;
+    } else {
+      // Unable to extract the file type
+      return null;
+    }
+  }
+
   // Sample data for demonstration purposes
   const courseData = {
     attachments: ['Attachment 1.pdf', 'Attachment 2.docx'],
@@ -145,6 +184,7 @@ export default function Course() {
     <div>
       <h1 className="text-2xl font-bold mb-4">Course Information</h1>
 
+      <h2 className="text-xl font-semibold mb-2">Images</h2>
       {/* Images Section */}
       <div className="mb-4 overflow-x-auto whitespace-nowrap">
         {Array.isArray(images) && images.length > 0
@@ -187,10 +227,10 @@ export default function Course() {
       </div>
 
       {/* Pictures SIgle View */}
-      {isOpen && (
+      {isOpen && images.length > 0 && (
         <div
           onClick={closeLightbox}
-          className="absolute top-0 w-full h-full bg-black bg-opacity-90 p-10 flex justify-center"
+          className="absolute top-0 w-full h-full bg-black bg-opacity-90 p-10 flex justify-center z-50"
         >
           <SingleViewImg
             imgPath={images[photoIndex]?.image}
@@ -201,6 +241,7 @@ export default function Course() {
       )}
 
       {/* Attachments Section */}
+      <h2 className="text-xl font-semibold mb-2">Attachments</h2>
       {Array.isArray(attachments) && attachments.length > 0
         ? attachments.map(
             (attachment: {
@@ -212,23 +253,46 @@ export default function Course() {
             }) => {
               if (attachment.topic == topicId) {
                 return (
-                  <div
-                    key={attachment._id}
-                    className="inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
-                    onClick={() => openLightbox(attachment.index)}
-                  >
-                    <Image
-                      src={attachment.attachment}
-                      alt={`Attachment ${attachment._id}`}
-                      width={200}
-                      height={200}
-                      className="rounded-lg"
-                      loading="lazy"
-                    />
-                    <div className="mt-2 text-center font-semibold text-gray-700">
-                      {attachment.title}
+                  <>
+                    <div
+                      key={attachment._id}
+                      className="inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
+                      // onClick={() => openLightbox(attachment.index)}
+                    >
+                      {isPDF(attachment.attachment) ? (
+                        <Image
+                          src="/pdf.png"
+                          alt={`Attachment ${attachment._id}`}
+                          width={200}
+                          height={200}
+                          className="rounded-lg"
+                          loading="lazy"
+                          onClick={() => openNewWindow(attachment.attachment)}
+                        />
+                      ) : (
+                        <Image
+                          src="/word.png"
+                          alt={`Attachment ${attachment._id}`}
+                          width={200}
+                          height={200}
+                          className="rounded-lg"
+                          loading="lazy"
+                          onClick={wordAlert}
+                        />
+                      )}
+
+                      <div className="mt-2 text-center font-semibold text-gray-700">
+                        {attachment.title}
+                      </div>
+                      <a
+                        className="flex items-center justify-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+                        href={attachment.attachment}
+                        download
+                      >
+                        Download File
+                      </a>
                     </div>
-                  </div>
+                  </>
                 );
               }
             }

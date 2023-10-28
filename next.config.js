@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['lh3.googleusercontent.com'],
+    domains: ['lh3.googleusercontent.com', 'localhost', 'file://'],
   },
   async rewrites() {
     return [
@@ -10,6 +10,11 @@ const nextConfig = {
         destination: '/profile',
       },
     ];
+  },
+  webpack: (config) => {
+    config.resolve.alias.canvas = false;
+
+    return config;
   },
 };
 
