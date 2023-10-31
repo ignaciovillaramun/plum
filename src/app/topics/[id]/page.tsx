@@ -182,49 +182,60 @@ export default function Course() {
 
   return (
     <div>
+      <Image
+        className='w-full h-16 object-cover'
+        width={100}
+        height={100}
+        alt='course Picture'
+        src='/dashboard.jpg'
+      />
       <h1 className="text-2xl font-bold mb-4">Course Information</h1>
 
       <h2 className="text-xl font-semibold mb-2">Images</h2>
       {/* Images Section */}
-      <div className="mb-4 overflow-x-auto whitespace-nowrap">
-        {Array.isArray(images) && images.length > 0
-          ? images.map(
-              (image: {
-                title: ReactNode;
-                topic: ReactNode;
-                description: ReactNode;
-                image: any;
-                index: any;
-                _id: Key | null | undefined;
-              }) => {
-                if (image.topic == topicId) {
-                  return (
-                    <div
-                      key={image._id}
-                      className="inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
-                      onClick={() => openLightbox(image.index)}
-                    >
-                      <Image
-                        src={image.image}
-                        alt={`Image ${image._id}`}
-                        width={200}
-                        height={200}
-                        className="rounded-lg"
-                        loading="lazy"
-                      />
-                      <div className="mt-2 text-center font-semibold text-gray-700">
-                        {image.title}
-                      </div>
-                    </div>
-                  );
-                }
-              }
-            )
-          : null}
-        <Link href={`/addTopicImage/${id}`}>
-          <AddData onAdd={() => {}} />
-        </Link>
-      </div>
+      <section className='relative'>
+          <div className="mb-4 overflow-x-auto whitespace-nowrap">
+            {Array.isArray(images) && images.length > 0
+              ? images.map(
+                  (image: {
+                    title: ReactNode;
+                    topic: ReactNode;
+                    description: ReactNode;
+                    image: any;
+                    index: any;
+                    _id: Key | null | undefined;
+                  }) => {
+                    if (image.topic == topicId) {
+                      return (
+                        <div
+                          key={image._id}
+                          className="inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
+                          onClick={() => openLightbox(image.index)}
+                        >
+                          <Image
+                            src={image.image}
+                            alt={`Image ${image._id}`}
+                            width={200}
+                            height={200}
+                            className="rounded-lg"
+                            loading="lazy"
+                          />
+                          <div className="mt-2 text-center font-semibold text-gray-700">
+                            {image.title}
+                          </div>
+                        </div>
+                      );
+                    }
+                  }
+                )
+              : null}
+          </div>
+          <div className='absolute inset-y-2/4 end-0 drop-shadow-lg'>
+            <Link href={`/addTopicImage/${id}`}>
+              <AddData onAdd={() => {}} />
+            </Link>
+          </div>  
+      </section>
 
       {/* Pictures SIgle View */}
       {isOpen && images.length > 0 && (
@@ -242,65 +253,69 @@ export default function Course() {
 
       {/* Attachments Section */}
       <h2 className="text-xl font-semibold mb-2">Attachments</h2>
-      {Array.isArray(attachments) && attachments.length > 0
-        ? attachments.map(
-            (attachment: {
-              title: ReactNode;
-              topic: ReactNode;
-              attachment: any;
-              index: any;
-              _id: Key | null | undefined;
-            }) => {
-              if (attachment.topic == topicId) {
-                return (
-                  <>
-                    <div
-                      key={attachment._id}
-                      className="inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
-                      // onClick={() => openLightbox(attachment.index)}
-                    >
-                      {isPDF(attachment.attachment) ? (
-                        <Image
-                          src="/pdf.png"
-                          alt={`Attachment ${attachment._id}`}
-                          width={200}
-                          height={200}
-                          className="rounded-lg"
-                          loading="lazy"
-                          onClick={() => openNewWindow(attachment.attachment)}
-                        />
-                      ) : (
-                        <Image
-                          src="/word.png"
-                          alt={`Attachment ${attachment._id}`}
-                          width={200}
-                          height={200}
-                          className="rounded-lg"
-                          loading="lazy"
-                          onClick={wordAlert}
-                        />
-                      )}
+      <section className='relative'>
+          {Array.isArray(attachments) && attachments.length > 0
+            ? attachments.map(
+                (attachment: {
+                  title: ReactNode;
+                  topic: ReactNode;
+                  attachment: any;
+                  index: any;
+                  _id: Key | null | undefined;
+                }) => {
+                  if (attachment.topic == topicId) {
+                    return (
+                      <>
+                        <div
+                          key={attachment._id}
+                          className="inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
+                          // onClick={() => openLightbox(attachment.index)}
+                        >
+                          {isPDF(attachment.attachment) ? (
+                            <Image
+                              src="/pdf.png"
+                              alt={`Attachment ${attachment._id}`}
+                              width={200}
+                              height={200}
+                              className="rounded-lg"
+                              loading="lazy"
+                              onClick={() => openNewWindow(attachment.attachment)}
+                            />
+                          ) : (
+                            <Image
+                              src="/word.png"
+                              alt={`Attachment ${attachment._id}`}
+                              width={200}
+                              height={200}
+                              className="rounded-lg"
+                              loading="lazy"
+                              onClick={wordAlert}
+                            />
+                          )}
 
-                      <div className="mt-2 text-center font-semibold text-gray-700">
-                        {attachment.title}
-                      </div>
-                      <a
-                        className="flex items-center justify-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-                        href={attachment.attachment}
-                        download
-                      >
-                        Download File
-                      </a>
-                    </div>
-                  </>
-                );
-              }
-            }
-          )
-        : null}
-      <Link href={`/addTopicAttachment/${id}`}>
-        <AddData onAdd={() => {}} />
-      </Link>
+                          <div className="mt-2 text-center font-semibold text-gray-700">
+                            {attachment.title}
+                          </div>
+                          <a
+                            className="flex items-center justify-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+                            href={attachment.attachment}
+                            download
+                          >
+                            Download File
+                          </a>
+                        </div>
+                      </>
+                    );
+                  }
+                }
+              )
+            : null}
+          <div className='absolute inset-y-2/4 end-0 drop-shadow-lg'>  
+          <Link href={`/addTopicAttachment/${id}`}>
+            <AddData onAdd={() => {}} />
+          </Link>
+          </div>
+      </section>
 
       {/* Notes Section */}
       <div className="mb-4">

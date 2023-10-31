@@ -30,7 +30,7 @@ export default function Profile() {
     router.push('/profile');
   };
   return (
-    <div className="grid place-items-center h-screen ">
+    <div className="">
       <UserInfo />
       {status === 'authenticated' && (
         <button

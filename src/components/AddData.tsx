@@ -11,13 +11,10 @@ export default function AddData(props: { onAdd: any }) {
   };
 
   return (
-    <div className="mb-4">
-      <button
-        onClick={handleAdd}
-        className="ml-2 p-2 bg-blue-500 text-white rounded-full cursor-pointer"
-      >
-        +
-      </button>
+    <div className="bg-zinc-100 p-5 rounded-bl-3xl rounded-tl-3xl">
+      <svg 
+      onClick={handleAdd}
+      className='w-10 text-red-plum' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200"><path fill="currentColor" d="M600 0C268.629 0 0 268.629 0 600s268.629 600 600 600s600-268.629 600-600S931.371 0 600 0zm-95.801 261.841h191.602v242.358h242.358v191.602H695.801v242.358H504.199V695.801H261.841V504.199h242.358V261.841z"/></svg>
     </div>
   );
 }

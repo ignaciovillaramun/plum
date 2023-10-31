@@ -53,25 +53,36 @@ export default function UserInfo() {
     name = firstChar + restOfStr;
   }
 
+  //
+  const [themeColor, setThemeColor] = useState('red-plum')
+  
+
   if (userImage) {
     return (
-      <div className="shadow-xl p-8 rounded-md flex flex-col gap-3">
-        <div className="flex items-center">
-          <Image
-            className="rounded-full"
+      <div className='bg-zinc-100 h-full'>
+        <div className="bg-[url('/bg-gradient.jpeg')] h-52 px-5 pt-12 drop-shadow-lg">
+           <p className="font-bold text-center text-2xl text-white">{name}</p>
+           <Image
+            className="rounded-full mt-[40px] block mx-auto"
             src={userImage}
-            width={60}
+            width={130}
             height={60}
             alt="Profile Image"
           />{' '}
-          <span className="font-bold pl-4">{name}</span>
         </div>
-        <div>
-          Name: <span className="font-bold">{name}</span>
+       
+
+        <div className='bg-white mt-24  w-4/5 block mx-auto drop-shadow-md rounded-xl p-6'>
+          <div className='mb-10'>
+            <p className='text-lg font-medium'>Topics:</p> <span></span>
+          </div>
+          <div className='flex'>
+            <p className='text-lg mr-4 font-medium'>Color Theme</p><div className={`${themeColor} w-6 h-6 rounded-full`}></div>
+          </div>
+          
         </div>
-        <div>
-          Email: <span className="font-bold">{session?.user?.email}</span>
-        </div>
+
+
       </div>
     );
   } else if (!userImage) {
