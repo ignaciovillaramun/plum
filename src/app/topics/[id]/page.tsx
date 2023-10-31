@@ -183,7 +183,7 @@ export default function Course() {
   return (
     <div>
       <Image
-        className='w-full h-16 object-cover'
+        className='w-full max-h-40 object-cover'
         width={100}
         height={100}
         alt='course Picture'
