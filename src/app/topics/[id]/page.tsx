@@ -9,6 +9,7 @@ import Link from 'next/link';
 import SingleViewImg from '@/components/SingleViewImg';
 import { pdfjs } from 'react-pdf';
 
+//BACKEND HOOKS 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.js',
   import.meta.url
@@ -108,6 +109,12 @@ export default function Course() {
   const [numPages, setNumPages] = useState<number>();
   const [pageNumber, setPageNumber] = useState<number>(1);
 
+  //UI HOOKS
+  const[ openImage, setOpenImage] = useState([false,"rotate-0"])
+  const[ openAttachments, setOpenAttachments] = useState([false,"rotate-0"])
+
+  
+
   function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
     setNumPages(numPages);
   }
@@ -180,6 +187,7 @@ export default function Course() {
     urls: ['https://example.com/url1', 'https://example.com/url2'],
   };
 
+
   return (
     <div>
       <Image
@@ -189,53 +197,59 @@ export default function Course() {
         alt='course Picture'
         src='/dashboard.jpg'
       />
-      <h1 className="text-2xl font-bold mb-4">Course Information</h1>
+      <h1 className="text-2xl font-bold mb-4 px-8 pt-8">Course Information</h1>
 
-      <h2 className="text-xl font-semibold mb-2">Images</h2>
-      {/* Images Section */}
-      <section className='relative'>
-          <div className="mb-4 overflow-x-auto whitespace-nowrap">
-            {Array.isArray(images) && images.length > 0
-              ? images.map(
-                  (image: {
-                    title: ReactNode;
-                    topic: ReactNode;
-                    description: ReactNode;
-                    image: any;
-                    index: any;
-                    _id: Key | null | undefined;
-                  }) => {
-                    if (image.topic == topicId) {
-                      return (
-                        <div
-                          key={image._id}
-                          className="inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
-                          onClick={() => openLightbox(image.index)}
-                        >
-                          <Image
-                            src={image.image}
-                            alt={`Image ${image._id}`}
-                            width={200}
-                            height={200}
-                            className="rounded-lg"
-                            loading="lazy"
-                          />
-                          <div className="mt-2 text-center font-semibold text-gray-700">
-                            {image.title}
-                          </div>
-                        </div>
-                      );
-                    }
-                  }
-                )
-              : null}
-          </div>
-          <div className='absolute inset-y-2/4 end-0 drop-shadow-lg'>
-            <Link href={`/addTopicImage/${id}`}>
-              <AddData onAdd={() => {}} />
-            </Link>
-          </div>  
-      </section>
+      <div className=' flex mb-2 px-8 py-5 bg-zinc-100 justify-between border-b'>
+          <h2 className="text-xl font-semibold">Images</h2>
+          <svg 
+          onClick={()=> {openImage[0] ? setOpenImage([false,"rotate-0"]) : setOpenImage([true,"rotate-180"])}}
+          className={`w-6 text-red-plum ${openImage[1]}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><g transform="translate(0 1024) scale(1 -1)"><path fill="currentColor" d="M104.704 685.248a64 64 0 0 0 90.496 0l316.8-316.8l316.8 316.8a64 64 0 0 0 90.496-90.496L557.248 232.704a64 64 0 0 0-90.496 0L104.704 594.752a64 64 0 0 0 0 90.496z"/></g></svg>
+      </div>
+      {openImage[0] && 
+          <section className='relative pl-8 py-5'>
+              <div className="mb-4 overflow-x-auto whitespace-nowrap">
+                {Array.isArray(images) && images.length > 0
+                  ? images.map(
+                      (image: {
+                        title: ReactNode;
+                        topic: ReactNode;
+                        description: ReactNode;
+                        image: any;
+                        index: any;
+                        _id: Key | null | undefined;
+                      }) => {
+                        if (image.topic == topicId) {
+                          return (
+                            <div
+                              key={image._id}
+                              className="inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
+                              onClick={() => openLightbox(image.index)}
+                            >
+                              <Image
+                                src={image.image}
+                                alt={`Image ${image._id}`}
+                                width={200}
+                                height={200}
+                                className="rounded-lg"
+                                loading="lazy"
+                              />
+                              <div className="mt-2 text-center font-semibold text-gray-700">
+                                {image.title}
+                              </div>
+                            </div>
+                          );
+                        }
+                      }
+                    )
+                  : null}
+              </div>
+              <div className='absolute inset-y-2/4 end-0 drop-shadow-lg'>
+                <Link href={`/addTopicImage/${id}`}>
+                  <AddData onAdd={() => {}} />
+                </Link>
+              </div>  
+          </section>
+      }
 
       {/* Pictures SIgle View */}
       {isOpen && images.length > 0 && (
@@ -252,80 +266,87 @@ export default function Course() {
       )}
 
       {/* Attachments Section */}
-      <h2 className="text-xl font-semibold mb-2">Attachments</h2>
-      <section className='relative'>
-          {Array.isArray(attachments) && attachments.length > 0
-            ? attachments.map(
-                (attachment: {
-                  title: ReactNode;
-                  topic: ReactNode;
-                  attachment: any;
-                  index: any;
-                  _id: Key | null | undefined;
-                }) => {
-                  if (attachment.topic == topicId) {
-                    return (
-                      <>
-                        <div
-                          key={attachment._id}
-                          className="inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
-                          // onClick={() => openLightbox(attachment.index)}
-                        >
-                          {isPDF(attachment.attachment) ? (
-                            <Image
-                              src="/pdf.png"
-                              alt={`Attachment ${attachment._id}`}
-                              width={200}
-                              height={200}
-                              className="rounded-lg"
-                              loading="lazy"
-                              onClick={() => openNewWindow(attachment.attachment)}
-                            />
-                          ) : (
-                            <Image
-                              src="/word.png"
-                              alt={`Attachment ${attachment._id}`}
-                              width={200}
-                              height={200}
-                              className="rounded-lg"
-                              loading="lazy"
-                              onClick={wordAlert}
-                            />
-                          )}
+      <div className=' flex px-8 py-5 bg-zinc-100 justify-between'>
+      <h2 className="text-xl font-semibold">Attachments</h2>
+      <svg 
+      onClick={ ()=> {openAttachments[0] ? setOpenAttachments([false,"rotate-0"]) : setOpenAttachments([true,"rotate-180"])}}
+      className={`w-6 text-red-plum ${openAttachments[1]}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><g transform="translate(0 1024) scale(1 -1)"><path fill="currentColor" d="M104.704 685.248a64 64 0 0 0 90.496 0l316.8-316.8l316.8 316.8a64 64 0 0 0 90.496-90.496L557.248 232.704a64 64 0 0 0-90.496 0L104.704 594.752a64 64 0 0 0 0 90.496z"/></g></svg>
+      </div>
+      {openAttachments[0] && 
+          <section className='relative pl-8 py-5'>
+              {Array.isArray(attachments) && attachments.length > 0
+                ? attachments.map(
+                    (attachment: {
+                      title: ReactNode;
+                      topic: ReactNode;
+                      attachment: any;
+                      index: any;
+                      _id: Key | null | undefined;
+                    }) => {
+                      if (attachment.topic == topicId) {
+                        return (
+                          <>
+                            <div
+                              key={attachment._id}
+                              className="inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
+                              // onClick={() => openLightbox(attachment.index)}
+                            >
+                              {isPDF(attachment.attachment) ? (
+                                <Image
+                                  src="/pdf.png"
+                                  alt={`Attachment ${attachment._id}`}
+                                  width={200}
+                                  height={200}
+                                  className="rounded-lg"
+                                  loading="lazy"
+                                  onClick={() => openNewWindow(attachment.attachment)}
+                                />
+                              ) : (
+                                <Image
+                                  src="/word.png"
+                                  alt={`Attachment ${attachment._id}`}
+                                  width={200}
+                                  height={200}
+                                  className="rounded-lg"
+                                  loading="lazy"
+                                  onClick={wordAlert}
+                                />
+                              )}
 
-                          <div className="mt-2 text-center font-semibold text-gray-700">
-                            {attachment.title}
-                          </div>
-                          <a
-                            className="flex items-center justify-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-                            href={attachment.attachment}
-                            download
-                          >
-                            Download File
-                          </a>
-                        </div>
-                      </>
-                    );
-                  }
-                }
-              )
-            : null}
-          <div className='absolute inset-y-2/4 end-0 drop-shadow-lg'>  
-          <Link href={`/addTopicAttachment/${id}`}>
-            <AddData onAdd={() => {}} />
-          </Link>
-          </div>
-      </section>
+                              <div className="mt-2 text-center font-semibold text-gray-700">
+                                {attachment.title}
+                              </div>
+                              <a
+                                className="flex items-center justify-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+                                href={attachment.attachment}
+                                download
+                              >
+                                Download File
+                              </a>
+                            </div>
+                          </>
+                        );
+                      }
+                    }
+                  )
+                : null}
+              <div className='absolute inset-y-2/4 end-0 drop-shadow-lg'>  
+              <Link href={`/addTopicAttachment/${id}`}>
+                <AddData onAdd={() => {}} />
+              </Link>
+              </div>
+          </section>
+      }
 
       {/* Notes Section */}
       <div className="mb-4">
-        <h2 className="text-xl font-semibold mb-2">Notes</h2>
-        <p className="text-gray-700">{courseData.notes}</p>
+        <h2 className="text-xl font-semibold mb-2 pl-8">Notes</h2>
+        <p className="text-gray-700 pl-8">{courseData.notes}</p>
       </div>
 
       {/* URLs Section */}
       <div className="mb-4">
-        <h2 className="text-xl font-semibold mb-2">URLs</h2>
+        <h2 className="text-xl font-semibold mb-2 pl-8">URLs</h2>
         <ul>
           {courseData.urls.map((url, index) => (
             <li key={index}>

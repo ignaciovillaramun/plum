@@ -54,7 +54,7 @@ export default function UserInfo() {
   }
 
   //
-  const [themeColor, setThemeColor] = useState('red-plum')
+  const [themeColor, setThemeColor] = useState('bg-red-plum')
   
 
   if (userImage) {
