@@ -17,19 +17,21 @@ import Note from '../../../../../models/notes';
 // }
 
 export async function GET(req, { params }) {
-  const { id } = params;
-  console.log(id);
-  await connectMongoDB();
-  const note = await Note.findOne({ _id: id });
-  // console.log(note);
-  return NextResponse.json({ note }, { status: 200 });
+  try {
+    const { id } = params;
+    console.log(id);
+    await connectMongoDB();
+    const note = await Note.findOne({ _id: id });
+    return NextResponse.json({ note }, { status: 200 });
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export async function POST(req, { params }) {
-  const { title, description } = await req.json();
-  const { id } = params;
-
   try {
+    const { title, description } = await req.json();
+    const { id } = params;
     await connectMongoDB();
     const userExists = await Topic.findById({ _id: id });
     if (!userExists) {

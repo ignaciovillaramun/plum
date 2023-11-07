@@ -4,29 +4,36 @@ import Topic from '../../../../../models/topic';
 import Image from '../../../../../models/image';
 
 export async function PUT(req, { params }) {
-  const { id } = params;
-  const {
-    newTitle: title,
-    newTopic: topic,
-    newImage: image,
-  } = await req.json();
-  await connectMongoDB();
-  await Topic.findByIdAndUpdate(id, { title, topic, image });
-  return NextResponse.json({ message: 'Topic Updated' }, { status: 200 });
+  try {
+    const { id } = params;
+    const {
+      newTitle: title,
+      newTopic: topic,
+      newImage: image,
+    } = await req.json();
+    await connectMongoDB();
+    await Topic.findByIdAndUpdate(id, { title, topic, image });
+    return NextResponse.json({ message: 'Topic Updated' }, { status: 200 });
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export async function GET(req, { params }) {
-  const { id } = params;
-  await connectMongoDB();
-  const topic = await Topic.findOne({ _id: id });
-  return NextResponse.json({ topic }, { status: 200 });
+  try {
+    const { id } = params;
+    await connectMongoDB();
+    const topic = await Topic.findOne({ _id: id });
+    return NextResponse.json({ topic }, { status: 200 });
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export async function POST(req, { params }) {
-  const { title, image, description } = await req.json();
-  const { id } = params;
-
   try {
+    const { title, image, description } = await req.json();
+    const { id } = params;
     await connectMongoDB();
     const userExists = await Topic.findById({ _id: id });
 

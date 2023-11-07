@@ -4,7 +4,11 @@ import { connectMongoDB } from '../../../../lib/mongo/index';
 import Attachment from '../../../../models/attachment';
 
 export async function GET() {
-  await connectMongoDB();
-  const attachment = await Attachment.find();
-  return NextResponse.json(attachment);
+  try {
+    await connectMongoDB();
+    const attachment = await Attachment.find();
+    return NextResponse.json(attachment);
+  } catch (error) {
+    console.log(error);
+  }
 }

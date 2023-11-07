@@ -10,16 +10,19 @@ export async function GET() {
 }
 
 export async function DELETE(req) {
-  const id = req.nextUrl.searchParams.get('id');
-  await connectMongoDB();
-  await Topic.findByIdAndDelete(id);
-  return NextResponse.json({ message: 'Topic Deleted' }, { status: 200 });
+  try {
+    const id = req.nextUrl.searchParams.get('id');
+    await connectMongoDB();
+    await Topic.findByIdAndDelete(id);
+    return NextResponse.json({ message: 'Topic Deleted' }, { status: 200 });
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export async function POST(req) {
-  const { title, image, user } = await req.json();
-
   try {
+    const { title, image, user } = await req.json();
     await connectMongoDB();
     const userExists = await User.findById({ _id: user });
 

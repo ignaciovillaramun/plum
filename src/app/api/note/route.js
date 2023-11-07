@@ -4,7 +4,11 @@ import { connectMongoDB } from '../../../../lib/mongo/index';
 import Notes from '../../../../models/notes';
 
 export async function GET() {
-  await connectMongoDB();
-  const notes = await Notes.find();
-  return NextResponse.json(notes);
+  try {
+    await connectMongoDB();
+    const notes = await Notes.find();
+    return NextResponse.json(notes);
+  } catch (error) {
+    console.log(error);
+  }
 }

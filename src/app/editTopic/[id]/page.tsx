@@ -33,9 +33,13 @@ export default function EditTopicPage() {
 
   useEffect(() => {
     async function fetchData() {
-      const { topic } = await getTopicById(id || '');
-      if (topic) {
-        setData(topic);
+      try {
+        const { topic } = await getTopicById(id || '');
+        if (topic) {
+          setData(topic);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
       }
     }
 
