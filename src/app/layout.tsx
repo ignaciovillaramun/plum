@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { NextAuthProvider } from './providers';
 import { UserProvider } from '@/components/UserProvider';
+import { TopicProvider } from '@/components/TopicContext';
 import Menu from '@/components/Menu';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -22,10 +23,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <UserProvider>
-          <NextAuthProvider> 
-              <div className='md:ml-[80px]'>{children}</div>
+          <TopicProvider>
+            <NextAuthProvider>
+              <div className="md:ml-[80px]">{children}</div>
               <Menu />
-          </NextAuthProvider>
+            </NextAuthProvider>
+          </TopicProvider>
         </UserProvider>
       </body>
     </html>

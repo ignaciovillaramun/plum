@@ -2,8 +2,9 @@
 
 import Image from 'next/image';
 import OptionsBtn from './OptionsBtn';
-import React, { useEffect, useState, Key, ReactNode } from 'react';
+import React, { useContext, useEffect, useState, Key, ReactNode } from 'react';
 import Link from 'next/link';
+import TopicContext from '@/components/TopicContext';
 
 const getTopics = async () => {
   try {
@@ -35,6 +36,8 @@ export default function TopicList() {
   const [userId, setUserId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const topicContext = useContext(TopicContext);
+
   useEffect(() => {
     fetchData(setProfiles);
     if (typeof window !== 'undefined') {
@@ -42,6 +45,10 @@ export default function TopicList() {
       setUserId(storedUserId);
     }
   }, []);
+
+  const updateLastTopicUrlInContext = (url: string) => {
+    topicContext?.setLastTopicUrl(url);
+  };
 
   useEffect(() => {
     if (Array.isArray(topics) && topics.length > 0) {
@@ -76,7 +83,12 @@ export default function TopicList() {
                 >
                   <div className="relative h-36 overflow-hidden rounded-t-lg">
                     <Link href={`/topics/${topic._id}`}>
-                      <div className="relative h-36 overflow-hidden rounded-t-lg">
+                      <div
+                        className="relative h-36 overflow-hidden rounded-t-lg"
+                        onClick={() =>
+                          updateLastTopicUrlInContext(`/topics/${topic._id}`)
+                        }
+                      >
                         <Image
                           src={topic.image}
                           layout="fill"

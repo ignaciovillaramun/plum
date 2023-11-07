@@ -12,8 +12,8 @@ export default function ViewNote() {
     <div className="flex items-center justify-center h-screen">
       <div className="bg-yellow-200 p-4 rounded-lg shadow-md border w-9/12 border-gray-300">
         <div>
-          <h1 className="text-xl font-semibold mb-2 uppercase">
-            Title: {title}
+          <h1 className="text-5xl font-semibold mb-2 uppercase text-center pb-12">
+            {title}
           </h1>
           <p className="text-gray-600">
             {description

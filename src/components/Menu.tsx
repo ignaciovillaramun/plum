@@ -1,9 +1,14 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Link from 'next/link';
+import TopicContext from '@/components/TopicContext';
 
 function Menu() {
+  const topicContext = useContext(TopicContext);
+
+  const lastTopicUrl = topicContext?.lastTopicUrl;
+
   return (
     <div
       id="menu"
@@ -21,7 +26,7 @@ function Menu() {
         </svg>
       </Link>
 
-      <Link href={'/'}>
+      <Link href={lastTopicUrl || '/dashboard'}>
         <svg
           className={`text-white w-9
         md:mb-5`}
