@@ -4,7 +4,7 @@ import React, { createContext, useState, ReactNode } from 'react';
 
 type UserContextType = {
   lastTopicUrl: string | null;
-  setLastTopicUrl: (url: string | null) => void; // Update the type of url
+  setLastTopicUrl: (url: string | null) => void;
 };
 
 const TopicContext = createContext<UserContextType | undefined>(undefined);
@@ -14,11 +14,10 @@ type UserProviderProps = {
 };
 
 export const TopicProvider = ({ children }: UserProviderProps) => {
-  const [lastTopicUrl, setLastTopicUrl] = useState<string | null>(null); // Specify the type here
+  const [lastTopicUrl, setLastTopicUrl] = useState<string | null>(null);
   console.log(lastTopicUrl);
 
   const updateLastTopicUrl = (url: string | null) => {
-    // Specify the type here
     setLastTopicUrl(url);
   };
 
