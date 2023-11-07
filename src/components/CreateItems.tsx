@@ -112,7 +112,7 @@ function CreateItems({
           <div className="flex items-center justify-center bg-grey-lighter mt-10">
             <label
               htmlFor="image"
-              className="w-full flex flex-col items-center px-4 py-3 bg-red-plum text-white rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-white hover:text-red-plum"
+              className="w-full flex flex-col items-center px-4 py-3 bg-theme-color text-white rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-white hover:text-theme-color"
             >
               <svg
                 className="w-8 h-8"
@@ -163,7 +163,7 @@ function CreateItems({
         </div>
         <div className="mt-12">
           <button
-            className="border-red-plum border-2 text-red-plum py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="border-theme-color border-2 py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
           >
             Create {name}

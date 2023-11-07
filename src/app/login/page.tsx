@@ -9,7 +9,7 @@ export default function Login() {
     <>
       <div className="bg-slate-300 w-full h-[350px]"></div>
       <section className="px-8 py-10">
-        <h1 className="text-center text-red-plum font-semibold text-3xl">
+        <h1 className="text-center text-theme-color font-semibold text-3xl">
           Login
         </h1>
         <div className="flex border-b border-slate-400 py-3 mt-5">
@@ -59,7 +59,7 @@ export default function Login() {
             className="w-full ml-2"
           />
         </div>
-        <button className="block bg-red-plum py-2 px-3 w-3/4 mx-auto mt-7 rounded-xl text-white font-light">
+        <button className="block bg-theme-color py-2 px-3 w-3/4 mx-auto mt-7 rounded-xl text-white font-light">
           Login
         </button>
         <p className="text-base text-center mt-5 font-light">
@@ -94,7 +94,7 @@ export default function Login() {
         </div>
         <p className="text-base text-center mt-5 font-light">
           New int the app?{' '}
-          <span className="text-red-plum font-semibold">Register</span>
+          <span className="text-theme-color font-semibold">Register</span>
         </p>
       </section>
     </>

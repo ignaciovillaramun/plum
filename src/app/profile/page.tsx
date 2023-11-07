@@ -14,6 +14,7 @@ export default function Profile() {
   const signOut = async () => {
     try {
       localStorage.removeItem('userId');
+      localStorage.removeItem('theme');
 
       await nextAuthSignOut();
     } catch (error) {
@@ -26,9 +27,9 @@ export default function Profile() {
     router.push('/profile');
   };
 
-  const navigateToProfile = () => {
-    router.push('/profile');
-  };
+  // const navigateToProfile = () => {
+  //   router.push('/profile');
+  // };
   return (
     <div className="">
       <UserInfo />

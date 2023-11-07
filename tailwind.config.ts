@@ -7,14 +7,13 @@ const config: Config = {
   ],
   theme: {
     extend: {
-
-      colors:{
-        'red-plum': '#C03333'
+      colors: {
+        'red-plum': '#C03333',
+        'theme-color': '#C03333',
+        // 'theme-color': 'var(--theme-color)',
       },
 
-      overlay:{
-        
-      },
+      overlay: {},
 
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
