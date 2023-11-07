@@ -7,6 +7,7 @@ import AddData from '@/components/AddData';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import SingleViewImg from '@/components/SingleViewImg';
+import { useRouter } from 'next/navigation';
 import { pdfjs } from 'react-pdf';
 
 //BACKEND HOOKS
@@ -14,6 +15,14 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.js',
   import.meta.url
 ).toString();
+
+type Note = {
+  title: string | undefined;
+  topic: ReactNode;
+  description: string | undefined;
+  index: any;
+  _id: Key | null | undefined;
+};
 
 const getImages = async () => {
   try {
@@ -36,6 +45,24 @@ const getImages = async () => {
 const getAttachments = async () => {
   try {
     const res = await fetch('/api/attachment', {
+      cache: 'no-store',
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to fetch attachments');
+    }
+    const attachmentData = await res.json();
+    console.log('Attachment data:', attachmentData);
+
+    return attachmentData;
+  } catch (error) {
+    console.log('Error: ', error);
+  }
+};
+
+const getNotes = async () => {
+  try {
+    const res = await fetch('/api/note', {
       cache: 'no-store',
     });
 
@@ -81,6 +108,20 @@ const fetchAttachmentsData = async (setDataFunction: any) => {
   }
 };
 
+const fetchNotesData = async (setDataFunction: any) => {
+  try {
+    const notesData = await getNotes();
+    const notesWithIndex = notesData.map((notes: any, index: string) => ({
+      ...notes,
+      index,
+    }));
+
+    setDataFunction(notesWithIndex);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export default function Course() {
   const [images, setImages] = useState<
     {
@@ -101,6 +142,8 @@ export default function Course() {
       _id: Key | null | undefined;
     }[]
   >([]);
+  const [notes, setNotes] = useState<Note[]>([]);
+
   const [topicId, setTopicId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [photoIndex, setPhotoIndex] = useState(0);
@@ -112,6 +155,9 @@ export default function Course() {
   //UI HOOKS
   const [openImage, setOpenImage] = useState([false, 'rotate-0']);
   const [openAttachments, setOpenAttachments] = useState([false, 'rotate-0']);
+  const [openNotes, setOpenNotes] = useState([false, 'rotate-0']);
+
+  const router = useRouter();
 
   function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
     setNumPages(numPages);
@@ -123,6 +169,7 @@ export default function Course() {
   useEffect(() => {
     fetchImagesData(setImages);
     fetchAttachmentsData(setAttachments);
+    fetchNotesData(setNotes);
     if (typeof window !== 'undefined') {
       setTopicId(id || null);
     }
@@ -187,6 +234,7 @@ export default function Course() {
 
   return (
     <div>
+      {/* Attachments Section */}
       <Image
         className="w-full max-h-40 object-cover"
         width={100}
@@ -196,7 +244,7 @@ export default function Course() {
       />
       <h1 className="text-2xl font-bold mb-4 px-8 pt-8">Course Information</h1>
 
-      <div className=" flex mb-2 px-8 py-5 bg-zinc-100 justify-between border-b">
+      <div className=" flex mb-2 px-8 py-5 bg-zinc-100 justify-between">
         <h2 className="text-xl font-semibold">Images</h2>
         <svg
           onClick={() => {
@@ -277,7 +325,7 @@ export default function Course() {
       )}
 
       {/* Attachments Section */}
-      <div className=" flex px-8 py-5 bg-zinc-100 justify-between">
+      <div className=" flex mb-2 px-8 py-5 bg-zinc-100 justify-between">
         <h2 className="text-xl font-semibold">Attachments</h2>
         <svg
           onClick={() => {
@@ -299,77 +347,149 @@ export default function Course() {
       </div>
       {openAttachments[0] && (
         <section className="relative pl-8 py-5">
-          {Array.isArray(attachments) && attachments.length > 0
-            ? attachments.map(
-                (attachment: {
-                  title: ReactNode;
-                  topic: ReactNode;
-                  attachment: any;
-                  index: any;
-                  _id: Key | null | undefined;
-                }) => {
-                  if (attachment.topic == topicId) {
-                    return (
-                      <>
-                        <div
-                          key={attachment._id}
-                          className="inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
-                          // onClick={() => openLightbox(attachment.index)}
-                        >
-                          {isPDF(attachment.attachment) ? (
-                            <Image
-                              src="/pdf.png"
-                              alt={`Attachment ${attachment._id}`}
-                              width={200}
-                              height={200}
-                              className="rounded-lg"
-                              loading="lazy"
-                              onClick={() =>
-                                openNewWindow(attachment.attachment)
-                              }
-                            />
-                          ) : (
-                            <Image
-                              src="/word.png"
-                              alt={`Attachment ${attachment._id}`}
-                              width={200}
-                              height={200}
-                              className="rounded-lg"
-                              loading="lazy"
-                              onClick={wordAlert}
-                            />
-                          )}
-
-                          <div className="mt-2 text-center font-semibold text-gray-700">
-                            {attachment.title}
-                          </div>
-                          <a
-                            className="flex items-center justify-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-                            href={attachment.attachment}
-                            download
+          <div className="mb- overflow-x-auto whitespace-nowrap">
+            {Array.isArray(attachments) && attachments.length > 0
+              ? attachments.map(
+                  (attachment: {
+                    title: ReactNode;
+                    topic: ReactNode;
+                    attachment: any;
+                    index: any;
+                    _id: Key | null | undefined;
+                  }) => {
+                    if (attachment.topic == topicId) {
+                      return (
+                        <>
+                          <div
+                            key={attachment._id}
+                            className="inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
+                            // onClick={() => openLightbox(attachment.index)}
                           >
-                            Download File
-                          </a>
-                        </div>
-                      </>
-                    );
+                            {isPDF(attachment.attachment) ? (
+                              <Image
+                                src="/pdf.png"
+                                alt={`Attachment ${attachment._id}`}
+                                width={200}
+                                height={200}
+                                className="rounded-lg"
+                                loading="lazy"
+                                onClick={() =>
+                                  openNewWindow(attachment.attachment)
+                                }
+                              />
+                            ) : (
+                              <Image
+                                src="/word.png"
+                                alt={`Attachment ${attachment._id}`}
+                                width={200}
+                                height={200}
+                                className="rounded-lg"
+                                loading="lazy"
+                                onClick={wordAlert}
+                              />
+                            )}
+
+                            <div className="mt-2 text-center font-semibold text-gray-700">
+                              {attachment.title}
+                            </div>
+                            <a
+                              className="flex items-center justify-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+                              href={attachment.attachment}
+                              download
+                            >
+                              Download File
+                            </a>
+                          </div>
+                        </>
+                      );
+                    }
                   }
-                }
-              )
-            : null}
-          <div className="absolute inset-y-2/4 end-0 drop-shadow-lg">
-            <Link href={`/addTopicAttachment/${id}`}>
-              <AddData onAdd={() => {}} />
-            </Link>
+                )
+              : null}
+            <div className="absolute inset-y-2/4 end-0 drop-shadow-lg">
+              <Link href={`/addTopicAttachment/${id}`}>
+                <AddData onAdd={() => {}} />
+              </Link>
+            </div>
           </div>
         </section>
       )}
 
       {/* Notes Section */}
-      <div className="mb-4">
-        <h2 className="text-xl font-semibold mb-2 pl-8">Notes</h2>
-        <p className="text-gray-700 pl-8">{courseData.notes}</p>
+      <div className=" flex mb-2 px-8 py-5 bg-zinc-100 justify-between">
+        <h2 className="text-xl font-semibold">Notes</h2>
+        <svg
+          onClick={() => {
+            openNotes[0]
+              ? setOpenNotes([false, 'rotate-0'])
+              : setOpenNotes([true, 'rotate-180']);
+          }}
+          className={`w-6 text-theme-color ${openNotes[1]}`}
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1024 1024"
+        >
+          <g transform="translate(0 1024) scale(1 -1)">
+            <path
+              fill="currentColor"
+              d="M104.704 685.248a64 64 0 0 0 90.496 0l316.8-316.8l316.8 316.8a64 64 0 0 0 90.496-90.496L557.248 232.704a64 64 0 0 0-90.496 0L104.704 594.752a64 64 0 0 0 0 90.496z"
+            />
+          </g>
+        </svg>
       </div>
+      {openNotes[0] && (
+        <section className="relative pl-8 py-5">
+          <div className="mb- overflow-x-auto whitespace-nowrap">
+            {Array.isArray(notes) && notes.length > 0
+              ? notes.map(
+                  (note: {
+                    title: string | undefined;
+                    topic: ReactNode;
+                    description: string | undefined;
+                    index: any;
+                    _id: Key | null | undefined;
+                  }) => {
+                    if (note.topic === topicId) {
+                      return (
+                        <div
+                          key={note._id}
+                          className="inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
+                        >
+                          <Link
+                            href={{
+                              pathname: '/viewNote',
+                              query: {
+                                title: note.title || '',
+                                description: note.description || '',
+                              },
+                            }}
+                          >
+                            <Image
+                              src="/notes.png"
+                              alt={`Attachment ${note._id}`}
+                              width={200}
+                              height={200}
+                              className="rounded-lg"
+                              loading="lazy"
+                            />
+                          </Link>
+                          <div className="mt-2 text-center font-semibold text-gray-700">
+                            {note.title || 'No Title'}{' '}
+                            {/* Handle undefined title with a default */}
+                          </div>
+                        </div>
+                      );
+                    }
+                  }
+                )
+              : null}
+            <div className="absolute inset-y-2/4 end-0 drop-shadow-lg">
+              <Link href={`/addTopicNotes/${id}`}>
+                <AddData onAdd={() => {}} />
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* URLs Section */}
       <div className="mb-4">

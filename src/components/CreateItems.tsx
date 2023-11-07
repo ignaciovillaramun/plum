@@ -13,7 +13,6 @@ interface CreateItemsProps {
   image?: File | null;
   handleSubmit: (e: React.FormEvent) => void;
   handleImageUpload?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleFileUpload?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleCloseAlert: () => void;
 }
 
@@ -24,7 +23,6 @@ function CreateItems({
   description,
   setTitle,
   setDescription,
-  handleFileUpload,
   image,
   handleSubmit,
   handleImageUpload,
@@ -36,8 +34,10 @@ function CreateItems({
   const page = params[params.length - 2];
   const isTopicImage =
     page === 'addTopicImage' || home === 'addTopic' ? true : false;
-  const showDescription = page === 'addTopicImage' ? true : false;
+  const showDescription =
+    page === 'addTopicImage' || 'addTopicNotes' ? true : false;
   const pdfFormat = isTopicImage ? 'image/*' : 'application/*';
+  const isTopicNotes = page === 'addTopicNotes' ? true : false;
 
   return (
     <div className="mt-10 p-8">
@@ -109,31 +109,33 @@ function CreateItems({
             onChange={handleImageUpload}
           /> */}
           </label>
-          <div className="flex items-center justify-center bg-grey-lighter mt-10">
-            <label
-              htmlFor="image"
-              className="w-full flex flex-col items-center px-4 py-3 bg-theme-color text-white rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-white hover:text-theme-color"
-            >
-              <svg
-                className="w-8 h-8"
-                fill="currentColor"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
+          {!isTopicNotes && (
+            <div className="flex items-center justify-center bg-grey-lighter mt-10">
+              <label
+                htmlFor="image"
+                className="w-full flex flex-col items-center px-4 py-3 bg-theme-color text-white rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-white hover:text-theme-color"
               >
-                <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
-              </svg>
-              <span className="mt-2 text-base leading-normal">
-                Select a file
-              </span>
-              <input
-                id="image"
-                type="file"
-                className="hidden"
-                accept={pdfFormat}
-                onChange={handleImageUpload}
-              />
-            </label>
-          </div>
+                <svg
+                  className="w-8 h-8"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
+                </svg>
+                <span className="mt-2 text-base leading-normal">
+                  Select a file
+                </span>
+                <input
+                  id="image"
+                  type="file"
+                  className="hidden"
+                  accept={pdfFormat}
+                  onChange={handleImageUpload}
+                />
+              </label>
+            </div>
+          )}
         </div>
         <div className="mb-4">
           {image && isTopicImage && (
