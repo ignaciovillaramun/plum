@@ -3,9 +3,10 @@
 import Image from 'next/image';
 import SignInBtn from './SignInBtn';
 import { useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useUser } from './UserProvider';
 import Login from '@/app/login/page';
+import { themeColor } from '@/app/layout';
 
 const getCurrentUser = async (email: any, setCurrentUser: any) => {
   try {
@@ -58,10 +59,10 @@ const updateColorTheme = async (userId: String, themeColor: string) => {
 };
 
 export default function UserInfo() {
+  const {theme, setTheme}: any = useContext(themeColor);
   const { status, data: session } = useSession();
   const [currentUser, setCurrentUser] = useState({ _id: '', theme: '' });
   const { setUserId, setThemeColor } = useUser();
-  const [theme, setTheme] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const email = session?.user?.email;
 
@@ -110,9 +111,10 @@ export default function UserInfo() {
   }
 
   const colorOptions = [
-    { name: 'Green', value: 'bg-green-500' },
-    { name: 'Red', value: 'bg-red-plum' },
-    { name: 'Blue', value: 'bg-blue-500' },
+    { name: 'red', value: 'red-plum' },
+    { name: 'p100', value: 'theme-color1' },
+    { name: 'p50', value: 'theme-color2' },
+    { name: 'p30', value: 'theme-color3' },
   ];
 
   if (isLoading) {
@@ -136,16 +138,19 @@ export default function UserInfo() {
         </div>
 
         <div className="bg-white mt-24 w-4/5 block mx-auto drop-shadow-md rounded-xl p-6">
-          <div className="mb-10">
+          <div className="mb-5">
             <p className="text-lg font-medium">Topics:</p> <span></span>
           </div>
-          <div className="flex">
-            <p className="text-lg mr-4 font-medium">Color Theme</p>
-            <div className="flex space-x-4">
+          <div className="flex align-middle">
+            <p className="text-lg mr-4 font-medium">Color Theme</p> 
+            <div className={`bg-${theme} w-6 h-6 rounded-full`}></div>
+          </div>
+          <div className="flex space-x-4 mt-5">
+              <p className='text-lg mr-3 font-medium'>Pick a color</p>
               {colorOptions.map((colorOption) => (
                 <div
                   key={colorOption.value}
-                  className={`w-6 h-6 rounded-full ${colorOption.value} cursor-pointer`}
+                  className={`w-6 h-6 rounded-full bg-${colorOption.value} cursor-pointer`}
                   onClick={() => {
                     setTheme(colorOption.value);
                     updateColorTheme(currentUser._id, colorOption.value);
@@ -153,11 +158,10 @@ export default function UserInfo() {
                 ></div>
               ))}
             </div>
-          </div>
-          <div className={`${theme} w-6 h-6 rounded-full mt-4`}></div>
+     
         </div>
       </div>
-    );
+    )
   } else if (!name) {
     return <Login />;
   } else {

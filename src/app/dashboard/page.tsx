@@ -1,7 +1,12 @@
+"use client"
 import TopicList from '@/components/TopicList';
 import Link from 'next/link';
+import { themeColor } from '../layout';
+import { useContext } from 'react';
 
 export default function DashBoard() {
+  const {theme, setTheme}: any = useContext(themeColor);
+
   return (
     <div>
       <div className="flex items-center justify-between mt-8 px-6">
@@ -9,7 +14,7 @@ export default function DashBoard() {
         <Link href={'/addTopic'}>
           <button className=" bg-white shadow-md rounded-full hover:bg-gray-100 focus:outline-none">
             <svg
-              className="w-10 text-theme-color"
+              className={`w-10 text-${theme}`} 
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 1200 1200"
             >

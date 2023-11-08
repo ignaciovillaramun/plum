@@ -9,8 +9,9 @@ const config: Config = {
     extend: {
       colors: {
         'red-plum': '#C03333',
-        'theme-color': '#C03333',
-        // 'theme-color': 'var(--theme-color)',
+        'theme-color1': '#5a1f4f',
+        'theme-color2': '#945187',
+        'theme-color3': '#c3749c',
       },
 
       overlay: {},
