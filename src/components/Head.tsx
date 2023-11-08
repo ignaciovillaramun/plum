@@ -1,9 +1,5 @@
-function Head(){
-    return(
-        <head>
-            
-        </head>
-    )
+function Head() {
+  return <></>;
 }
 
-export default Head
+export default Head;

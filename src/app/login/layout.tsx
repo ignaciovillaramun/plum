@@ -12,7 +12,6 @@ export const metadata: Metadata = {
 export default function Login({ children }: { children: React.ReactNode }) {
   return (
     <html>
-      <head></head>
       <body>{children}</body>
     </html>
   );

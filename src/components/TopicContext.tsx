@@ -15,8 +15,6 @@ type UserProviderProps = {
 
 export const TopicProvider = ({ children }: UserProviderProps) => {
   const [lastTopicUrl, setLastTopicUrl] = useState<string | null>(null);
-  console.log(lastTopicUrl);
-
   const updateLastTopicUrl = (url: string | null) => {
     setLastTopicUrl(url);
   };

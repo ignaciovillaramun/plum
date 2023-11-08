@@ -2,17 +2,18 @@
 
 import React, { useState, useEffect, useContext } from 'react';
 import { themeColor } from '@/app/layout';
+import TopicContext from '@/components/TopicContext';
 import Link from 'next/link';
 
-
-
 function Menu() {
-
   // Get the values from state context in Layout
-  const {theme, setTheme}: any = useContext(themeColor);
+  const { theme, setTheme }: any = useContext(themeColor);
+
+  const topicContext = useContext(TopicContext);
+  const lastTopicUrl = topicContext?.lastTopicUrl;
 
   return (
-    <div 
+    <div
       id="menu"
       className={`bg-${theme} flex justify-between py-3 px-4 w-full fixed bottom-0
             md:fixed md:flex-col md:w-20 md:h-full md:justify-normal z-10`}
@@ -28,7 +29,7 @@ function Menu() {
         </svg>
       </Link>
 
-      <Link href={'/'}>
+      <Link href={lastTopicUrl || '/dashboard'}>
         <svg
           className={`text-white w-9
         md:mb-5`}
