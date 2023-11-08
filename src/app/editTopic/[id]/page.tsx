@@ -14,6 +14,7 @@ type TopicData = {
 const getTopicById = async (id: string) => {
   try {
     const res = await fetch(`http://localhost:3000/api/topics/${id}`, {
+      method: 'GET',
       cache: 'no-store',
     });
 
@@ -34,7 +35,7 @@ export default function EditTopicPage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const { topic } = await getTopicById(id || '');
+        const topic = await getTopicById(id || '');
         if (topic) {
           setData(topic);
         }

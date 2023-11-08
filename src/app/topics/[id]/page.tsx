@@ -24,6 +24,26 @@ type Note = {
   _id: Key | null | undefined;
 };
 
+const getHeaderImages = async (id: any, setHeaderImage: any) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/topics/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-type': 'application/json',
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to fetch user data');
+    }
+
+    const userData = await res.json();
+    setHeaderImage(userData.image);
+  } catch (error) {
+    console.log('Error fetching user data:', error);
+  }
+};
+
 const getImages = async () => {
   try {
     const res = await fetch('/api/image', {
@@ -150,12 +170,14 @@ export default function Course() {
   const [isOpen, setIsOpen] = useState(false);
   const [lightBoxKey, setLightBoxKey] = useState(0);
   const [numPages, setNumPages] = useState<number>();
+  const [headerImage, setHeaderImage] = useState('');
   const [pageNumber, setPageNumber] = useState<number>(1);
 
   //UI HOOKS
   const [openImage, setOpenImage] = useState([false, 'rotate-0']);
   const [openAttachments, setOpenAttachments] = useState([false, 'rotate-0']);
   const [openNotes, setOpenNotes] = useState([false, 'rotate-0']);
+  const [openUrls, setOpenUrls] = useState([false, 'rotate-0']);
 
   const router = useRouter();
 
@@ -170,6 +192,7 @@ export default function Course() {
     fetchImagesData(setImages);
     fetchAttachmentsData(setAttachments);
     fetchNotesData(setNotes);
+    getHeaderImages(id, setHeaderImage);
     if (typeof window !== 'undefined') {
       setTopicId(id || null);
     }
@@ -227,9 +250,13 @@ export default function Course() {
 
   // Sample data for demonstration purposes
   const courseData = {
-    attachments: ['Attachment 1.pdf', 'Attachment 2.docx'],
-    notes: 'These are course notes.',
-    urls: ['https://example.com/url1', 'https://example.com/url2'],
+    urls: [
+      { name: 'Node Js', url: 'https://nodejs.org/en/' },
+      {
+        name: 'Stack Overflow',
+        url: 'https://stackoverflow.com/questions/5119041/how-can-i-get-a-web-sites-favicon',
+      },
+    ],
   };
 
   return (
@@ -240,7 +267,7 @@ export default function Course() {
         width={100}
         height={100}
         alt="course Picture"
-        src="/dashboard.jpg"
+        src={headerImage}
       />
       <h1 className="text-2xl font-bold mb-4 px-8 pt-8">Course Information</h1>
 
@@ -492,23 +519,61 @@ export default function Course() {
       )}
 
       {/* URLs Section */}
-      <div className="mb-4">
-        <h2 className="text-xl font-semibold mb-2 pl-8">URLs</h2>
-        <ul>
-          {courseData.urls.map((url, index) => (
-            <li key={index}>
-              <a
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 hover:underline"
-              >
-                {url}
-              </a>
-            </li>
-          ))}
-        </ul>
+      <div className=" flex mb-2 px-8 py-5 bg-zinc-100 justify-between">
+        <h2 className="text-xl font-semibold">URLs</h2>
+        <svg
+          onClick={() => {
+            openUrls[0]
+              ? setOpenUrls([false, 'rotate-0'])
+              : setOpenUrls([true, 'rotate-180']);
+          }}
+          className={`w-6 text-theme-color ${openUrls[1]}`}
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1024 1024"
+        >
+          <g transform="translate(0 1024) scale(1 -1)">
+            <path
+              fill="currentColor"
+              d="M104.704 685.248a64 64 0 0 0 90.496 0l316.8-316.8l316.8 316.8a64 64 0 0 0 90.496-90.496L557.248 232.704a64 64 0 0 0-90.496 0L104.704 594.752a64 64 0 0 0 0 90.496z"
+            />
+          </g>
+        </svg>
       </div>
+      {openUrls[0] && (
+        <section className="relative pl-8 py-5">
+          <ul className="mb- overflow-x-auto whitespace-nowrap">
+            {courseData.urls.map((url, index) => (
+              <li
+                key={index}
+                className="inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
+              >
+                <a
+                  href={url.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 hover:underline"
+                >
+                  <Image
+                    src="/notes.png"
+                    alt={`Attachment ${''}`}
+                    width={200}
+                    height={200}
+                    className="rounded-lg"
+                    loading="lazy"
+                  />
+                  {url.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          <div className="absolute inset-y-2/4 end-0 drop-shadow-lg">
+            <Link href={`/addTopicNotes/${id}`}>
+              <AddData onAdd={() => {}} />
+            </Link>
+          </div>
+        </section>
+      )}
     </div>
   );
 }
