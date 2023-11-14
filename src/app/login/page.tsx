@@ -1,15 +1,29 @@
 'use client';
 
 import SignInBtn from '@/components/SignInBtn';
-import { signOut as nextAuthSignOut, useSession } from 'next-auth/react';
+import { signOut as nextAuthSignOut, useSession} from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { themeColor } from '../layout';
+import { useContext } from 'react';
+
 
 export default function Login() {
+  const {theme, setTheme}: any = useContext(themeColor);
+
   return (
     <>
-      <div className="bg-slate-300 w-full h-[350px]"></div>
-      <section className="px-8 py-10">
-        <h1 className="text-center text-theme-color font-semibold text-3xl">
+      <div className="bg-slate-300 w-full h-[320px]">
+      <Image
+       src="/loginImg.jpg"
+       width={500}
+       height={500}
+       alt="picture"
+       className=' h-full w-full object-cover'
+      />
+      </div>
+      <section className="px-8 py-10 md:w-2/6 block mx-auto">
+        <h1 className={`text-center ${theme} font-semibold text-3xl`}>
           Login
         </h1>
         <div className="flex border-b border-slate-400 py-3 mt-5">
@@ -37,7 +51,7 @@ export default function Login() {
               d="M319.77 415.77c-28.56 12-47.28 14.5-79.28 14.5c-97.2 0-169-78.8-160.49-176s94.31-176 191.51-176C381 78.27 441.19 150 432.73 246c-6.31 71.67-52.11 92.32-76.09 88.07c-22.56-4-41.18-24.42-37.74-63.5l8.48-96.25"
             />
           </svg>
-          <input type="text" placeholder="Email" className="w-full ml-1" />
+          <input type="text" placeholder="Email" className="w-full ml-1 bg-zinc-100" />
         </div>
         <div className="flex border-b border-slate-400 py-3">
           <svg
@@ -56,10 +70,10 @@ export default function Login() {
           <input
             type="Password"
             placeholder="Password"
-            className="w-full ml-2"
+            className="w-full ml-2  bg-zinc-100"
           />
         </div>
-        <button className="block bg-theme-color py-2 px-3 w-3/4 mx-auto mt-7 rounded-xl text-white font-light">
+        <button className="block bg-red-plum py-2 px-3 w-3/4 mx-auto mt-7 rounded-xl text-white font-light">
           Login
         </button>
         <p className="text-base text-center mt-5 font-light">
@@ -94,7 +108,7 @@ export default function Login() {
         </div>
         <p className="text-base text-center mt-5 font-light">
           New int the app?{' '}
-          <span className="text-theme-color font-semibold">Register</span>
+          <span className="text-red-plum font-semibold">Register</span>
         </p>
       </section>
     </>

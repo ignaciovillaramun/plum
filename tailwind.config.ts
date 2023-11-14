@@ -8,10 +8,10 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        'red-plum': '#C03333',
-        'theme-color1': '#5a1f4f',
-        'theme-color2': '#945187',
-        'theme-color3': '#c3749c',
+        'red-plum':'#C03333',
+        'theme-color1':'#5a1f4f',
+        'theme-color2':'#945187',
+        'theme-color3':'#c3749c',
       },
 
       overlay: {},
@@ -23,6 +23,8 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar-hide')
+  ],
 };
 export default config;

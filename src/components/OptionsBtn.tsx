@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { useRouter } from 'next/navigation';
+import { themeColor } from '@/app/layout';
 
 export default function OptionsBtn(props: {
   topicId: any;
@@ -10,6 +11,8 @@ export default function OptionsBtn(props: {
   profiles: any;
   link: any;
 }) {
+  const {theme, setTheme}: any = useContext(themeColor);
+  const [textTheme, setTextTheme] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
@@ -53,6 +56,21 @@ export default function OptionsBtn(props: {
     };
   }, []);
 
+  useEffect(() => {
+    if(theme === 'bg-red-plum'){
+      setTextTheme('text-red-plum')
+    }
+    else if(theme === 'bg-theme-color1'){
+      setTextTheme('text-theme-color1')
+    }
+    else if(theme === 'bg-theme-color2'){
+      setTextTheme('text-theme-color2')
+    }
+    else if(theme === 'bg-theme-color3'){
+      setTextTheme('text-theme-color3')
+    }
+   },[]);
+
   const toggleOptions = () => {
     setIsOpen(!isOpen);
   };
@@ -64,7 +82,7 @@ export default function OptionsBtn(props: {
         className=" text-gray-600 focus:outline-none"
         onClick={toggleOptions}
       >
-        <span className="text-4xl" style={{ color: '#C03333' }}>
+        <span className={`text-4xl ${textTheme}`}>
           &#8942;
         </span>
       </button>
