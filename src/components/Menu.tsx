@@ -15,7 +15,7 @@ function Menu() {
   return (
     <div
       id="menu"
-      className={`bg-${theme} flex justify-between py-3 px-4 w-full fixed bottom-0
+      className={`${theme} flex justify-between py-3 px-4 w-full fixed bottom-0
             md:fixed md:flex-col md:w-20 md:h-full md:justify-normal z-10`}
     >
       <Link href={'/dashboard'}>

@@ -1,13 +1,16 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext} from 'react';
 import UserInfo from '@/components/UserInfo';
 import { signOut as nextAuthSignOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { themeColor } from '@/app/layout';
 
 export default function Profile() {
   const { status } = useSession();
   const router = useRouter(); // Initialize the router
+  const {theme, setTheme}: any = useContext(themeColor);
+
 
   // const { data: session } = useSession();
 
@@ -31,12 +34,12 @@ export default function Profile() {
   //   router.push('/profile');
   // };
   return (
-    <div className="">
+    <div className="bg-zinc-100 pb-40">
       <UserInfo />
       {status === 'authenticated' && (
         <button
           onClick={handleSignOut}
-          className="bg-slate-900 text-white px-6 py-2 rounded-md"
+          className={`${theme} block w-2/4 mx-auto text-white px-6 py-4 rounded-md`}
         >
           Sing Out
         </button>

@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { themeColor } from '@/app/layout';
+
 
 export default function AddData(props: { onAdd: any }) {
   const [newItem, setNewItem] = useState('');
+  const {theme, setTheme}: any = useContext(themeColor);
+  const [textTheme, setTextTheme] = useState('');
 
   const handleAdd = () => {
     if (newItem.trim() !== '') {
@@ -10,11 +14,26 @@ export default function AddData(props: { onAdd: any }) {
     }
   };
 
+  useEffect(() => {
+    if(theme === 'bg-red-plum'){
+      setTextTheme('text-red-plum')
+    }
+    else if(theme === 'bg-theme-color1'){
+      setTextTheme('text-theme-color1')
+    }
+    else if(theme === 'bg-theme-color2'){
+      setTextTheme('text-theme-color2')
+    }
+    else if(theme === 'bg-theme-color3'){
+      setTextTheme('text-theme-color3')
+    }
+   },[]);
+
   return (
     <div className="bg-zinc-100 p-5 rounded-bl-3xl rounded-tl-3xl">
       <svg
         onClick={handleAdd}
-        className="w-10 text-theme-color"
+        className={`w-10 ${textTheme}`}
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 1200 1200"
       >

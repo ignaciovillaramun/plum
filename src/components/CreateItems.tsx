@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect} from 'react';
 import Alert from './Alert'; // Assuming you have an Alert component
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { themeColor } from '@/app/layout';
 
 interface CreateItemsProps {
   name: string;
@@ -28,6 +29,12 @@ function CreateItems({
   handleImageUpload,
   handleCloseAlert,
 }: CreateItemsProps) {
+
+  const [borderTheme, setBordeTtheme] = useState('');
+  const [textTheme, setTextTheme] = useState('');
+  const {theme, setTheme}: any = useContext(themeColor);
+ 
+
   const searchParams = usePathname();
   const params = searchParams.split('/');
   const home = params[1];
@@ -39,8 +46,28 @@ function CreateItems({
   const pdfFormat = isTopicImage ? 'image/*' : 'application/*';
   const isTopicNotes = page === 'addTopicNotes' ? true : false;
 
+
+  useEffect(() => {
+    if(theme === 'bg-red-plum'){
+      setTextTheme('text-red-plum')
+      setBordeTtheme('border-red-plum')
+    }
+    else if(theme === 'bg-theme-color1'){
+      setTextTheme('text-theme-color1')
+      setBordeTtheme('border-theme-color1')
+    }
+    else if(theme === 'bg-theme-color2'){
+      setTextTheme('text-theme-color2')
+      setBordeTtheme('border-theme-color2')
+    }
+    else if(theme === 'bg-theme-color3'){
+      setTextTheme('text-theme-color3')
+      setBordeTtheme('border-theme-color3')
+    }
+   },[]);
+
   return (
-    <div className="mt-10 p-8">
+    <div className="mt-10 p-8 pb-40 md:w-2/4 md:block md:mx-auto">
       {showAlert &&
         (isTopicImage ? (
           <Alert
@@ -82,13 +109,13 @@ function CreateItems({
         {showDescription && ( // Conditionally render the "Description" input based on isTopicImage
           <div className="mb-4">
             <label
-              className="block text-gray-700 text-sm font-bold mb-2"
+              className="text-xl block text-gray-700 font-bold mb-2 mt-5"
               htmlFor="description"
             >
               Description
             </label>
             <textarea
-              className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className=" border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline md:h-40"
               id="description"
               placeholder="Enter description"
               value={description}
@@ -116,14 +143,14 @@ function CreateItems({
                 className="w-full flex flex-col items-center px-4 py-3 bg-theme-color text-white rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-white hover:text-theme-color"
               >
                 <svg
-                  className="w-8 h-8"
+                  className={`w-8 h-8 ${textTheme}`} 
                   fill="currentColor"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                 >
                   <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
                 </svg>
-                <span className="mt-2 text-base leading-normal">
+                <span className={`mt-2 text-base leading-normal ${textTheme} `}>
                   Select a file
                 </span>
                 <input
@@ -165,7 +192,7 @@ function CreateItems({
         </div>
         <div className="mt-12">
           <button
-            className="border-theme-color border-2 py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className={`${borderTheme} ${textTheme} block mx-auto border-2 py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
             type="submit"
           >
             Create {name}

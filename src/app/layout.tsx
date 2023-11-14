@@ -9,6 +9,7 @@ import { TopicProvider } from '@/components/TopicContext';
 import { useState, createContext, useEffect} from 'react';
 import Menu from '@/components/Menu';
 
+
 const inter = Inter({ subsets: ['latin'] });
 export const themeColor = createContext({})
 
@@ -25,6 +26,7 @@ export default function RootLayout({
 
   // Create context state
   const [theme, setTheme] = useState('');
+ 
 
   //Get the Color from local storage when the program loads
   useEffect(()=>{
@@ -34,9 +36,10 @@ export default function RootLayout({
       setTheme(value);
     }else{
   //if the is no color i local storage set default color
-      setTheme('red-plum');
+      setTheme('bg-red-plum');
     }
   },[])
+
   return (
     <html lang="en">
       <body className={inter.className}> 

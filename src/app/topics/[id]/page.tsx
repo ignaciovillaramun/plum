@@ -1,7 +1,7 @@
 'use client';
 
 import { Document, Page } from 'react-pdf';
-import React, { useEffect, useState, Key, ReactNode, Component } from 'react';
+import React, { useEffect, useState, Key, ReactNode, Component, useContext } from 'react';
 import Image from 'next/image';
 import AddData from '@/components/AddData';
 import { usePathname } from 'next/navigation';
@@ -9,6 +9,11 @@ import Link from 'next/link';
 import SingleViewImg from '@/components/SingleViewImg';
 import { useRouter } from 'next/navigation';
 import { pdfjs } from 'react-pdf';
+import { themeColor } from '@/app/layout';
+import { Suspense } from 'react'
+
+
+
 
 //BACKEND HOOKS
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -163,7 +168,8 @@ export default function Course() {
     }[]
   >([]);
   const [notes, setNotes] = useState<Note[]>([]);
-
+  const {theme, setTheme}: any = useContext(themeColor);
+  const [textTheme, setTextTheme] = useState('');
   const [topicId, setTopicId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [photoIndex, setPhotoIndex] = useState(0);
@@ -178,6 +184,22 @@ export default function Course() {
   const [openAttachments, setOpenAttachments] = useState([false, 'rotate-0']);
   const [openNotes, setOpenNotes] = useState([false, 'rotate-0']);
   const [openUrls, setOpenUrls] = useState([false, 'rotate-0']);
+
+   // CHange text colore based in color theme
+   useEffect(() => {
+    if(theme === 'bg-red-plum'){
+      setTextTheme('text-red-plum')
+    }
+    else if(theme === 'bg-theme-color1'){
+      setTextTheme('text-theme-color1')
+    }
+    else if(theme === 'bg-theme-color2'){
+      setTextTheme('text-theme-color2')
+    }
+    else if(theme === 'bg-theme-color3'){
+      setTextTheme('text-theme-color3')
+    }
+   },[theme]);
 
   const router = useRouter();
 
@@ -260,18 +282,18 @@ export default function Course() {
   };
 
   return (
-    <div>
+    <div className='pb-40'>
       {/* Attachments Section */}
       <Image
-        className="w-full max-h-40 object-cover"
+        className="w-full max-h-56 object-cover md:max-h-[320px]"
         width={100}
         height={100}
         alt="course Picture"
         src={headerImage}
       />
-      <h1 className="text-2xl font-bold mb-4 px-8 pt-8">Course Information</h1>
+      <h1 className="text-2xl text-center font-bold mb-6 px-8 pt-8 md:text-4xl md:mb-10">Topic Information</h1>
 
-      <div className=" flex mb-2 px-8 py-5 bg-zinc-100 justify-between">
+      <div className="flex mb-2 px-8 py-5 bg-zinc-100 justify-between md:px-16">
         <h2 className="text-xl font-semibold">Images</h2>
         <svg
           onClick={() => {
@@ -279,7 +301,7 @@ export default function Course() {
               ? setOpenImage([false, 'rotate-0'])
               : setOpenImage([true, 'rotate-180']);
           }}
-          className={`w-6 text-theme-color ${openImage[1]}`}
+          className={`${textTheme} w-6 text-theme-color ${openImage[1]}`}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1024 1024"
         >
@@ -291,9 +313,10 @@ export default function Course() {
           </g>
         </svg>
       </div>
+      
       {openImage[0] && (
-        <section className="relative pl-8 py-5">
-          <div className="mb-4 overflow-x-auto whitespace-nowrap">
+        <section className="relative pl-8 py-5 scrollbar-hide">
+          <div className="mb-4 overflow-x-auto whitespace-nowrap scrollbar-hide">
             {Array.isArray(images) && images.length > 0
               ? images.map(
                   (image: {
@@ -349,10 +372,11 @@ export default function Course() {
             description={images[photoIndex]?.description}
           />
         </div>
-      )}
+      )
+      }
 
       {/* Attachments Section */}
-      <div className=" flex mb-2 px-8 py-5 bg-zinc-100 justify-between">
+      <div className=" flex mb-2 px-8 py-5 bg-zinc-100 justify-between md:px-16">
         <h2 className="text-xl font-semibold">Attachments</h2>
         <svg
           onClick={() => {
@@ -360,7 +384,7 @@ export default function Course() {
               ? setOpenAttachments([false, 'rotate-0'])
               : setOpenAttachments([true, 'rotate-180']);
           }}
-          className={`w-6 text-theme-color ${openAttachments[1]}`}
+          className={` w-6 ${textTheme} ${openAttachments[1]}`}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1024 1024"
         >
@@ -374,7 +398,7 @@ export default function Course() {
       </div>
       {openAttachments[0] && (
         <section className="relative pl-8 py-5">
-          <div className="mb- overflow-x-auto whitespace-nowrap">
+          <div className="mb- overflow-x-auto whitespace-nowrap scrollbar-hide">
             {Array.isArray(attachments) && attachments.length > 0
               ? attachments.map(
                   (attachment: {
@@ -389,7 +413,7 @@ export default function Course() {
                         <>
                           <div
                             key={attachment._id}
-                            className="inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
+                            className=" inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-4 transform transition-transform hover:scale-105"
                             // onClick={() => openLightbox(attachment.index)}
                           >
                             {isPDF(attachment.attachment) ? (
@@ -420,7 +444,7 @@ export default function Course() {
                               {attachment.title}
                             </div>
                             <a
-                              className="flex items-center justify-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+                              className={`flex items-center justify-center ${theme} text-white px-4 py-2 rounded hover:bg-blue-700`}
                               href={attachment.attachment}
                               download
                             >
@@ -443,7 +467,7 @@ export default function Course() {
       )}
 
       {/* Notes Section */}
-      <div className=" flex mb-2 px-8 py-5 bg-zinc-100 justify-between">
+      <div className=" flex mb-2 px-8 py-5 bg-zinc-100 justify-between md:px-16">
         <h2 className="text-xl font-semibold">Notes</h2>
         <svg
           onClick={() => {
@@ -451,7 +475,7 @@ export default function Course() {
               ? setOpenNotes([false, 'rotate-0'])
               : setOpenNotes([true, 'rotate-180']);
           }}
-          className={`w-6 text-theme-color ${openNotes[1]}`}
+          className={`w-6 ${textTheme} ${openNotes[1]}`}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1024 1024"
         >
@@ -465,7 +489,7 @@ export default function Course() {
       </div>
       {openNotes[0] && (
         <section className="relative pl-8 py-5">
-          <div className="mb- overflow-x-auto whitespace-nowrap">
+          <div className="mb- overflow-x-auto whitespace-nowrap scrollbar-hide">
             {Array.isArray(notes) && notes.length > 0
               ? notes.map(
                   (note: {
@@ -519,7 +543,7 @@ export default function Course() {
       )}
 
       {/* URLs Section */}
-      <div className=" flex mb-2 px-8 py-5 bg-zinc-100 justify-between">
+      <div className=" flex mb-2 px-8 py-5 bg-zinc-100 justify-between md:px-16">
         <h2 className="text-xl font-semibold">URLs</h2>
         <svg
           onClick={() => {
@@ -527,7 +551,7 @@ export default function Course() {
               ? setOpenUrls([false, 'rotate-0'])
               : setOpenUrls([true, 'rotate-180']);
           }}
-          className={`w-6 text-theme-color ${openUrls[1]}`}
+          className={`w-6 ${textTheme} ${openUrls[1]}`}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1024 1024"
         >
@@ -540,8 +564,8 @@ export default function Course() {
         </svg>
       </div>
       {openUrls[0] && (
-        <section className="relative pl-8 py-5">
-          <ul className="mb- overflow-x-auto whitespace-nowrap">
+        <section className="relative pl-8 py-5 scrollbar-hide">
+          <ul className="mb- overflow-x-auto whitespace-nowrap scrollbar-hide">
             {courseData.urls.map((url, index) => (
               <li
                 key={index}

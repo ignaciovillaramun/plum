@@ -5,6 +5,8 @@ import OptionsBtn from './OptionsBtn';
 import React, { useContext, useEffect, useState, Key, ReactNode } from 'react';
 import Link from 'next/link';
 import TopicContext from '@/components/TopicContext';
+import AOS from 'aos'
+import 'aos/dist/aos.css';
 
 const getTopics = async () => {
   try {
@@ -35,7 +37,6 @@ export default function TopicList() {
   const [topics, setProfiles] = useState([]);
   const [userId, setUserId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-
   const topicContext = useContext(TopicContext);
 
   useEffect(() => {
@@ -45,6 +46,12 @@ export default function TopicList() {
       setUserId(storedUserId);
     }
   }, []);
+
+  useEffect(() => {
+
+    AOS.init()
+
+   },[])
 
   const updateLastTopicUrlInContext = (url: string) => {
     topicContext?.setLastTopicUrl(url);
@@ -79,7 +86,8 @@ export default function TopicList() {
               return (
                 <div
                   key={`${topic._id}`}
-                  className="bg-white shadow-md rounded-lg my-4 w-72"
+                  data-aos="fade-up"
+                  className="block bg-white shadow-md rounded-lg my-8 mx-auto w-72 md:inline-block md:mr-5"
                 >
                   <div className="relative h-36 overflow-hidden rounded-t-lg">
                     <Link href={`/topics/${topic._id}`}>

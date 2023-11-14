@@ -7,6 +7,8 @@ import { useEffect, useState, useContext } from 'react';
 import { useUser } from './UserProvider';
 import Login from '@/app/login/page';
 import { themeColor } from '@/app/layout';
+import AOS from 'aos'
+import 'aos/dist/aos.css';
 
 const getCurrentUser = async (email: any, setCurrentUser: any) => {
   try {
@@ -67,6 +69,15 @@ export default function UserInfo() {
   const email = session?.user?.email;
 
   useEffect(() => {
+
+    AOS.init({
+      duration: 1300
+    })
+
+   },[])
+
+
+  useEffect(() => {
     if (status === 'authenticated' && email) {
       getCurrentUser(email, setCurrentUser)
         .then(() => setIsLoading(false))
@@ -111,10 +122,10 @@ export default function UserInfo() {
   }
 
   const colorOptions = [
-    { name: 'red', value: 'red-plum' },
-    { name: 'p100', value: 'theme-color1' },
-    { name: 'p50', value: 'theme-color2' },
-    { name: 'p30', value: 'theme-color3' },
+    { name: 'red', value:  'bg-red-plum'},
+    { name: 'p100', value: 'bg-theme-color1'},
+    { name: 'p50', value:  'bg-theme-color2'},
+    { name: 'p30', value:  'bg-theme-color3'},
   ];
 
   if (isLoading) {
@@ -124,12 +135,14 @@ export default function UserInfo() {
       </div>
     );
   } else if (name) {
-    return (
+ 
+   return (
       <div className="bg-zinc-100 h-full">
-        <div className="bg-[url('/bg-gradient.jpeg')] h-52 px-5 pt-12 drop-shadow-lg">
-          <p className="font-bold text-center text-2xl text-white">{name}</p>
+        <div className="bg-[url('/bg-gradient.jpeg')] bg-no-repeat bg-center bg-cover h-52 px-5 pt-12 drop-shadow-lg md:h-70">
+          <p className="font-bold text-center text-2xl text-white md:text-3xl" >{name}</p>
           <Image
-            className="rounded-full mt-[40px] block mx-auto"
+            data-aos="fade-in"
+            className="rounded-full mt-[40px] block mx-auto md:w-40"
             src={userImage}
             width={130}
             height={60}
@@ -137,20 +150,22 @@ export default function UserInfo() {
           />
         </div>
 
-        <div className="bg-white mt-24 w-4/5 block mx-auto drop-shadow-md rounded-xl p-6">
+        <div className="bg-white mt-24 w-4/5 block mx-auto drop-shadow-md rounded-xl p-6 md:w-2/4">
           <div className="mb-5">
             <p className="text-lg font-medium">Topics:</p> <span></span>
           </div>
           <div className="flex align-middle">
             <p className="text-lg mr-4 font-medium">Color Theme</p> 
-            <div className={`bg-${theme} w-6 h-6 rounded-full`}></div>
+            <div className={`${theme} w-6 h-6 rounded-full`}></div>
           </div>
           <div className="flex space-x-4 mt-5">
               <p className='text-lg mr-3 font-medium'>Pick a color</p>
               {colorOptions.map((colorOption) => (
                 <div
                   key={colorOption.value}
-                  className={`w-6 h-6 rounded-full bg-${colorOption.value} cursor-pointer`}
+                  data-aos="zoom-in"
+                  data-aos-delay="400"
+                  className={`w-6 h-6 rounded-full ${colorOption.value} cursor-pointer`}
                   onClick={() => {
                     setTheme(colorOption.value);
                     updateColorTheme(currentUser._id, colorOption.value);
@@ -158,8 +173,11 @@ export default function UserInfo() {
                 ></div>
               ))}
             </div>
-     
         </div>
+            <br />
+            <br />
+            <br />
+            <br />
       </div>
     )
   } else if (!name) {
