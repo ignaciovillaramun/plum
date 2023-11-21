@@ -4,7 +4,13 @@ function Course(props:{cName: string, cPicure: string}){
     return(
         <div className="w-64 shadow-lg">
             <div className="h-28"> 
-                <img className="h-full w-full object-cover" src={props.cPicure} alt={`${props.cName} topic`}/>
+                <Image
+                src={props.cPicure}
+                width={200}
+                height={200}
+                alt={`${props.cName} topic`}
+                className="h-full w-full object-cover"
+                />
             </div>
             <div className="flex justify-between py-4 px-2">
                 <p className="text-lg font-medium">{props.cName}</p> 

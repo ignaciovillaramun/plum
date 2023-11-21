@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@iconify/react": "^4.1.1",
+    "@types/aos": "^3.0.7",
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
