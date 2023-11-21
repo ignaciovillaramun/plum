@@ -3,8 +3,8 @@ import { themeColor } from '@/app/layout';
 
 
 export default function AddData(props: { onAdd: any }) {
-  const [newItem, setNewItem] = useState('');
   const {theme, setTheme}: any = useContext(themeColor);
+  const [newItem, setNewItem] = useState('');
   const [textTheme, setTextTheme] = useState('');
 
   const handleAdd = () => {
@@ -27,7 +27,7 @@ export default function AddData(props: { onAdd: any }) {
     else if(theme === 'bg-theme-color3'){
       setTextTheme('text-theme-color3')
     }
-   },[]);
+   },[theme]);
 
   return (
     <div className="bg-zinc-100 p-5 rounded-bl-3xl rounded-tl-3xl">
