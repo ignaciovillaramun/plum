@@ -1,12 +1,11 @@
-"use client"
+'use client';
 import TopicList from '@/components/TopicList';
 import Link from 'next/link';
-import { themeColor } from '../layout';
-import { useContext, useEffect, useState, Suspense} from 'react';
-
+import { ThemeContext } from '@/components/ThemeProvider';
+import { useContext, useEffect, useState, Suspense } from 'react';
 
 export default function DashBoard() {
-  const {theme, setTheme}: any = useContext(themeColor);
+  const { theme, setTheme }: any = useContext(ThemeContext);
   const [textTheme, setTextTheme] = useState('');
 
   // Set the color of the text based on the them color in local storage
@@ -25,20 +24,17 @@ export default function DashBoard() {
   //   setTextTheme(color)
   //  },[]);
 
- useEffect(() => {
-    if(theme === 'bg-red-plum'){
-      setTextTheme('text-red-plum')
+  useEffect(() => {
+    if (theme === 'bg-red-plum') {
+      setTextTheme('text-red-plum');
+    } else if (theme === 'bg-theme-color1') {
+      setTextTheme('text-theme-color1');
+    } else if (theme === 'bg-theme-color2') {
+      setTextTheme('text-theme-color2');
+    } else if (theme === 'bg-theme-color3') {
+      setTextTheme('text-theme-color3');
     }
-    else if(theme === 'bg-theme-color1'){
-      setTextTheme('text-theme-color1')
-    }
-    else if(theme === 'bg-theme-color2'){
-      setTextTheme('text-theme-color2')
-    }
-    else if(theme === 'bg-theme-color3'){
-      setTextTheme('text-theme-color3')
-    }
-   },[theme]);
+  }, [theme]);
 
   return (
     <div>
@@ -47,7 +43,7 @@ export default function DashBoard() {
         <Link href={'/addTopic'}>
           <button className=" bg-white shadow-md rounded-full hover:bg-gray-100 focus:outline-none">
             <svg
-              className={`w-10 ${textTheme}`} 
+              className={`w-10 ${textTheme}`}
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 1200 1200"
             >
@@ -61,9 +57,9 @@ export default function DashBoard() {
       </div>
       <div className="w-full">
         <div className="flex-col pb-24 md:flex-row md:px-20">
-        <Suspense fallback={<p>Loading feed...</p>}>
-          <TopicList/>
-        </Suspense>
+          <Suspense fallback={<p>Loading feed...</p>}>
+            <TopicList />
+          </Suspense>
         </div>
       </div>
     </div>

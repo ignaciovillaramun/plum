@@ -12,7 +12,7 @@ type UserContextType = {
   user: string | null;
   theme: string | null; // Add the 'theme' variable
   setUserId: (id: string | null) => void;
-  setThemeColor: (theme: string | null) => void; // Add the 'setThemeColor' function
+  setthemeColor: (theme: string | null) => void; // Add the 'setthemeColor' function
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -37,7 +37,7 @@ export function UserProvider({ children }: UserProviderProps) {
     return null;
   });
 
-  const [theme, setThemeColor] = useState<string | null>(() => {
+  const [theme, setthemeColor] = useState<string | null>(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('theme') || null;
     }
@@ -52,7 +52,7 @@ export function UserProvider({ children }: UserProviderProps) {
   }, [user, theme]); // Include 'theme' in the dependency array
 
   return (
-    <UserContext.Provider value={{ user, theme, setUserId, setThemeColor }}>
+    <UserContext.Provider value={{ user, theme, setUserId, setthemeColor }}>
       {children}
     </UserContext.Provider>
   );

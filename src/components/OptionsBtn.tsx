@@ -1,9 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import React, { useState, useEffect,useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/navigation';
-import { themeColor } from '@/app/layout';
+import { ThemeContext } from '@/components/ThemeProvider';
 
 export default function OptionsBtn(props: {
   topicId: any;
@@ -11,7 +11,7 @@ export default function OptionsBtn(props: {
   profiles: any;
   link: any;
 }) {
-  const {theme, setTheme}: any = useContext(themeColor);
+  const { theme, setTheme }: any = useContext(ThemeContext);
   const [textTheme, setTextTheme] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
@@ -57,19 +57,16 @@ export default function OptionsBtn(props: {
   }, []);
 
   useEffect(() => {
-    if(theme === 'bg-red-plum'){
-      setTextTheme('text-red-plum')
+    if (theme === 'bg-red-plum') {
+      setTextTheme('text-red-plum');
+    } else if (theme === 'bg-theme-color1') {
+      setTextTheme('text-theme-color1');
+    } else if (theme === 'bg-theme-color2') {
+      setTextTheme('text-theme-color2');
+    } else if (theme === 'bg-theme-color3') {
+      setTextTheme('text-theme-color3');
     }
-    else if(theme === 'bg-theme-color1'){
-      setTextTheme('text-theme-color1')
-    }
-    else if(theme === 'bg-theme-color2'){
-      setTextTheme('text-theme-color2')
-    }
-    else if(theme === 'bg-theme-color3'){
-      setTextTheme('text-theme-color3')
-    }
-   },[theme]);
+  }, [theme]);
 
   const toggleOptions = () => {
     setIsOpen(!isOpen);
@@ -82,9 +79,7 @@ export default function OptionsBtn(props: {
         className=" text-gray-600 focus:outline-none"
         onClick={toggleOptions}
       >
-        <span className={`text-4xl ${textTheme}`}>
-          &#8942;
-        </span>
+        <span className={`text-4xl ${textTheme}`}>&#8942;</span>
       </button>
       {isOpen && (
         <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg z-10 options-menu">

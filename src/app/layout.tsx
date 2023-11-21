@@ -1,4 +1,4 @@
-"use client"
+'use client';
 // import Navbar from '@/components/Navbar';
 import './globals.css';
 import type { Metadata } from 'next';
@@ -6,12 +6,12 @@ import { Inter } from 'next/font/google';
 import { NextAuthProvider } from './providers';
 import { UserProvider } from '@/components/UserProvider';
 import { TopicProvider } from '@/components/TopicContext';
-import { useState, createContext, useEffect} from 'react';
+import { useState, createContext, useEffect } from 'react';
+import { ThemeProvider } from '@/components/ThemeProvider';
 import Menu from '@/components/Menu';
 
-
 const inter = Inter({ subsets: ['latin'] });
-export const themeColor = createContext({})
+// export const themeColor = createContext({});
 
 // export const metadata: Metadata = {
 //   title: 'Plum',
@@ -23,36 +23,34 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
   // Create context state
   const [theme, setTheme] = useState('');
- 
 
   //Get the Color from local storage when the program loads
-  useEffect(()=>{
+  useEffect(() => {
     let value = localStorage.getItem('theme');
-    if (value !== null){
+    if (value !== null) {
       console.log('Retrieved value from local storage:', value);
       setTheme(value);
-    }else{
-  //if the is no color i local storage set default color
+    } else {
+      //if the is no color i local storage set default color
       setTheme('bg-red-plum');
     }
-  },[])
+  }, []);
 
   return (
     <html lang="en">
-      <body className={inter.className}> 
-          <TopicProvider>
-            <UserProvider>
-            <NextAuthProvider> 
-            <themeColor.Provider value={{theme, setTheme}}>
-                <div className='md:ml-[80px]'>{children}</div>
+      <body className={inter.className}>
+        <TopicProvider>
+          <UserProvider>
+            <NextAuthProvider>
+              <ThemeProvider value={{ theme, setTheme }}>
+                <div className="md:ml-[80px] bg-white">{children}</div>
                 <Menu />
-            </themeColor.Provider>
+              </ThemeProvider>
             </NextAuthProvider>
           </UserProvider>
-          </TopicProvider>
+        </TopicProvider>
       </body>
     </html>
   );

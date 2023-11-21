@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState, useEffect, useContext } from 'react';
-import { themeColor } from '@/app/layout';
+import { ThemeContext } from '@/components/ThemeProvider';
 import TopicContext from '@/components/TopicContext';
 import Link from 'next/link';
 
 function Menu() {
   // Get the values from state context in Layout
-  const { theme, setTheme }: any = useContext(themeColor);
+  const { theme, setTheme }: any = useContext(ThemeContext);
 
   const topicContext = useContext(TopicContext);
   const lastTopicUrl = topicContext?.lastTopicUrl;

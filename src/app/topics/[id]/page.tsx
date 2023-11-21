@@ -1,7 +1,14 @@
 'use client';
 
 import { Document, Page } from 'react-pdf';
-import React, { useEffect, useState, Key, ReactNode, Component, useContext } from 'react';
+import React, {
+  useEffect,
+  useState,
+  Key,
+  ReactNode,
+  Component,
+  useContext,
+} from 'react';
 import Image from 'next/image';
 import AddData from '@/components/AddData';
 import { usePathname } from 'next/navigation';
@@ -9,11 +16,8 @@ import Link from 'next/link';
 import SingleViewImg from '@/components/SingleViewImg';
 import { useRouter } from 'next/navigation';
 import { pdfjs } from 'react-pdf';
-import { themeColor } from '@/app/layout';
-import { Suspense } from 'react'
-
-
-
+import { ThemeContext } from '@/components/ThemeProvider';
+import { Suspense } from 'react';
 
 //BACKEND HOOKS
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -168,7 +172,7 @@ export default function Course() {
     }[]
   >([]);
   const [notes, setNotes] = useState<Note[]>([]);
-  const {theme, setTheme}: any = useContext(themeColor);
+  const { theme, setTheme }: any = useContext(ThemeContext);
   const [textTheme, setTextTheme] = useState('');
   const [topicId, setTopicId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -185,21 +189,18 @@ export default function Course() {
   const [openNotes, setOpenNotes] = useState([false, 'rotate-0']);
   const [openUrls, setOpenUrls] = useState([false, 'rotate-0']);
 
-   // CHange text colore based in color theme
-   useEffect(() => {
-    if(theme === 'bg-red-plum'){
-      setTextTheme('text-red-plum')
+  // CHange text colore based in color theme
+  useEffect(() => {
+    if (theme === 'bg-red-plum') {
+      setTextTheme('text-red-plum');
+    } else if (theme === 'bg-theme-color1') {
+      setTextTheme('text-theme-color1');
+    } else if (theme === 'bg-theme-color2') {
+      setTextTheme('text-theme-color2');
+    } else if (theme === 'bg-theme-color3') {
+      setTextTheme('text-theme-color3');
     }
-    else if(theme === 'bg-theme-color1'){
-      setTextTheme('text-theme-color1')
-    }
-    else if(theme === 'bg-theme-color2'){
-      setTextTheme('text-theme-color2')
-    }
-    else if(theme === 'bg-theme-color3'){
-      setTextTheme('text-theme-color3')
-    }
-   },[theme]);
+  }, [theme]);
 
   const router = useRouter();
 
@@ -282,7 +283,7 @@ export default function Course() {
   };
 
   return (
-    <div className='pb-40'>
+    <div className="pb-40">
       {/* Attachments Section */}
       <Image
         className="w-full max-h-56 object-cover md:max-h-[320px]"
@@ -291,7 +292,9 @@ export default function Course() {
         alt="course Picture"
         src={headerImage}
       />
-      <h1 className="text-2xl text-center font-bold mb-6 px-8 pt-8 md:text-4xl md:mb-10">Topic Information</h1>
+      <h1 className="text-2xl text-center font-bold mb-6 px-8 pt-8 md:text-4xl md:mb-10">
+        Topic Information
+      </h1>
 
       <div className="flex mb-2 px-8 py-5 bg-zinc-100 justify-between md:px-16">
         <h2 className="text-xl font-semibold">Images</h2>
@@ -313,7 +316,7 @@ export default function Course() {
           </g>
         </svg>
       </div>
-      
+
       {openImage[0] && (
         <section className="relative pl-8 py-5 scrollbar-hide">
           <div className="mb-4 overflow-x-auto whitespace-nowrap scrollbar-hide">
@@ -372,8 +375,7 @@ export default function Course() {
             description={images[photoIndex]?.description}
           />
         </div>
-      )
-      }
+      )}
 
       {/* Attachments Section */}
       <div className=" flex mb-2 px-8 py-5 bg-zinc-100 justify-between md:px-16">

@@ -1,9 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { themeColor } from '@/app/layout';
-
+import { ThemeContext } from '@/components/ThemeProvider';
 
 export default function AddData(props: { onAdd: any }) {
-  const {theme, setTheme}: any = useContext(themeColor);
+  const { theme, setTheme }: any = useContext(ThemeContext);
   const [newItem, setNewItem] = useState('');
   const [textTheme, setTextTheme] = useState('');
 
@@ -15,19 +14,16 @@ export default function AddData(props: { onAdd: any }) {
   };
 
   useEffect(() => {
-    if(theme === 'bg-red-plum'){
-      setTextTheme('text-red-plum')
+    if (theme === 'bg-red-plum') {
+      setTextTheme('text-red-plum');
+    } else if (theme === 'bg-theme-color1') {
+      setTextTheme('text-theme-color1');
+    } else if (theme === 'bg-theme-color2') {
+      setTextTheme('text-theme-color2');
+    } else if (theme === 'bg-theme-color3') {
+      setTextTheme('text-theme-color3');
     }
-    else if(theme === 'bg-theme-color1'){
-      setTextTheme('text-theme-color1')
-    }
-    else if(theme === 'bg-theme-color2'){
-      setTextTheme('text-theme-color2')
-    }
-    else if(theme === 'bg-theme-color3'){
-      setTextTheme('text-theme-color3')
-    }
-   },[theme]);
+  }, [theme]);
 
   return (
     <div className="bg-zinc-100 p-5 rounded-bl-3xl rounded-tl-3xl">

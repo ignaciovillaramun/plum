@@ -4,12 +4,12 @@ import React, { useEffect, useState, useContext } from 'react';
 import UserInfo from '@/components/UserInfo';
 import { signOut as nextAuthSignOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { themeColor } from '@/app/layout';
+import { ThemeContext } from '@/components/ThemeProvider';
 
 export default function Profile() {
   const { status } = useSession();
   const router = useRouter(); // Initialize the router
-  const { theme, setTheme }: any = useContext(themeColor);
+  const { theme, setTheme }: any = useContext(ThemeContext);
 
   // const { data: session } = useSession();
 

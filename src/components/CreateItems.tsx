@@ -1,8 +1,8 @@
-import React, { useState, useContext, useEffect} from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Alert from './Alert'; // Assuming you have an Alert component
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { themeColor } from '@/app/layout';
+import { ThemeContext } from '@/components/ThemeProvider';
 
 interface CreateItemsProps {
   name: string;
@@ -29,11 +29,9 @@ function CreateItems({
   handleImageUpload,
   handleCloseAlert,
 }: CreateItemsProps) {
-
   const [borderTheme, setBordeTtheme] = useState('');
   const [textTheme, setTextTheme] = useState('');
-  const {theme, setTheme}: any = useContext(themeColor);
- 
+  const { theme, setTheme }: any = useContext(ThemeContext);
 
   const searchParams = usePathname();
   const params = searchParams.split('/');
@@ -46,25 +44,21 @@ function CreateItems({
   const pdfFormat = isTopicImage ? 'image/*' : 'application/*';
   const isTopicNotes = page === 'addTopicNotes' ? true : false;
 
-
   useEffect(() => {
-    if(theme === 'bg-red-plum'){
-      setTextTheme('text-red-plum')
-      setBordeTtheme('border-red-plum')
+    if (theme === 'bg-red-plum') {
+      setTextTheme('text-red-plum');
+      setBordeTtheme('border-red-plum');
+    } else if (theme === 'bg-theme-color1') {
+      setTextTheme('text-theme-color1');
+      setBordeTtheme('border-theme-color1');
+    } else if (theme === 'bg-theme-color2') {
+      setTextTheme('text-theme-color2');
+      setBordeTtheme('border-theme-color2');
+    } else if (theme === 'bg-theme-color3') {
+      setTextTheme('text-theme-color3');
+      setBordeTtheme('border-theme-color3');
     }
-    else if(theme === 'bg-theme-color1'){
-      setTextTheme('text-theme-color1')
-      setBordeTtheme('border-theme-color1')
-    }
-    else if(theme === 'bg-theme-color2'){
-      setTextTheme('text-theme-color2')
-      setBordeTtheme('border-theme-color2')
-    }
-    else if(theme === 'bg-theme-color3'){
-      setTextTheme('text-theme-color3')
-      setBordeTtheme('border-theme-color3')
-    }
-   },[theme]);
+  }, [theme]);
 
   return (
     <div className="mt-10 p-8 pb-40 md:w-2/4 md:block md:mx-auto">
@@ -143,7 +137,7 @@ function CreateItems({
                 className="w-full flex flex-col items-center px-4 py-3 bg-theme-color text-white rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-white hover:text-theme-color"
               >
                 <svg
-                  className={`w-8 h-8 ${textTheme}`} 
+                  className={`w-8 h-8 ${textTheme}`}
                   fill="currentColor"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
