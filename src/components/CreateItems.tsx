@@ -64,7 +64,7 @@ function CreateItems({
       setTextTheme('text-theme-color3')
       setBordeTtheme('border-theme-color3')
     }
-   },[]);
+   },[theme]);
 
   return (
     <div className="mt-10 p-8 pb-40 md:w-2/4 md:block md:mx-auto">
