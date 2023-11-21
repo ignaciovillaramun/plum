@@ -12,7 +12,7 @@ import 'aos/dist/aos.css';
 
 const getCurrentUser = async (email: any, setCurrentUser: any) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/user/${email}`, {
+    const res = await fetch(`/api/user/${email}`, {
       method: 'GET',
       headers: {
         'Content-type': 'application/json',
@@ -34,7 +34,7 @@ const getCurrentUser = async (email: any, setCurrentUser: any) => {
 
 const updateColorTheme = async (userId: String, themeColor: string) => {
   try {
-    const response = await fetch(`http://localhost:3000/api/user/${userId}`, {
+    const response = await fetch(`/api/user/${userId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
