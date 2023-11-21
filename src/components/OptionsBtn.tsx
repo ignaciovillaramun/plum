@@ -69,7 +69,7 @@ export default function OptionsBtn(props: {
     else if(theme === 'bg-theme-color3'){
       setTextTheme('text-theme-color3')
     }
-   },[]);
+   },[theme]);
 
   const toggleOptions = () => {
     setIsOpen(!isOpen);
