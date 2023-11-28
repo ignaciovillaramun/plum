@@ -75,8 +75,8 @@ export default function TopicForm({}) {
       showAlert={showAlert}
       title={title}
       setTitle={setTitle}
-      description={''}
-      setDescription={setDescription}
+      // description={''}
+      // setDescription={setDescription}
       image={image}
       handleSubmit={handleSubmit}
       handleImageUpload={handleImageUpload}

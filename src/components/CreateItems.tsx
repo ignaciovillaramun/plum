@@ -35,14 +35,17 @@ function CreateItems({
 
   const searchParams = usePathname();
   const params = searchParams.split('/');
-  const home = params[1];
-  const page = params[params.length - 2];
+  const page = params.length < 2 ? params[params.length - 2] : params[1];
   const isTopicImage =
-    page === 'addTopicImage' || home === 'addTopic' ? true : false;
-  const showDescription =
-    page === 'addTopicImage' || 'addTopicNotes' ? true : false;
+    page === 'addTopicImage' || page === 'addTopic' ? true : false;
+
+  const showDescription = page === 'addTopicNotes' ? true : false;
+  const showDescription2 = page === 'addTopicImage' ? true : false;
+
   const pdfFormat = isTopicImage ? 'image/*' : 'application/*';
   const isTopicNotes = page === 'addTopicNotes' ? true : false;
+  console.log(showDescription2, showDescription);
+  console.log(page);
 
   useEffect(() => {
     if (theme === 'bg-red-plum') {
@@ -100,23 +103,26 @@ function CreateItems({
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
-        {showDescription && ( // Conditionally render the "Description" input based on isTopicImage
-          <div className="mb-4">
-            <label
-              className="text-xl block text-gray-700 font-bold mb-2 mt-5"
-              htmlFor="description"
-            >
-              Description
-            </label>
-            <textarea
-              className=" border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline md:h-40"
-              id="description"
-              placeholder="Enter description"
-              value={description}
-              onChange={(e) => setDescription && setDescription(e.target.value)}
-            />
-          </div>
-        )}
+        {showDescription ||
+          (showDescription2 && ( // Conditionally render the "Description" input based on isTopicImage
+            <div className="mb-4">
+              <label
+                className="text-xl block text-gray-700 font-bold mb-2 mt-5"
+                htmlFor="description"
+              >
+                Description
+              </label>
+              <textarea
+                className=" border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline md:h-40"
+                id="description"
+                placeholder="Enter description"
+                value={description}
+                onChange={(e) =>
+                  setDescription && setDescription(e.target.value)
+                }
+              />
+            </div>
+          ))}
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
