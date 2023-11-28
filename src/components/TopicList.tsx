@@ -5,7 +5,7 @@ import OptionsBtn from './OptionsBtn';
 import React, { useContext, useEffect, useState, Key, ReactNode } from 'react';
 import Link from 'next/link';
 import TopicContext from '@/components/TopicContext';
-import AOS from 'aos'
+import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 const getTopics = async () => {
@@ -33,11 +33,12 @@ const fetchData = async (setDataFunction: any) => {
   }
 };
 
-export default function TopicList() {
+export default function TopicList(props: { label: any }) {
   const [topics, setProfiles] = useState([]);
   const [userId, setUserId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const topicContext = useContext(TopicContext);
+  console.log('hellos label', props.label);
 
   useEffect(() => {
     fetchData(setProfiles);
@@ -48,10 +49,8 @@ export default function TopicList() {
   }, []);
 
   useEffect(() => {
-
-    AOS.init()
-
-   },[])
+    AOS.init();
+  }, []);
 
   const updateLastTopicUrlInContext = (url: string) => {
     topicContext?.setLastTopicUrl(url);

@@ -10,6 +10,8 @@ export default function Profile() {
   const { status } = useSession();
   const router = useRouter(); // Initialize the router
   const { theme, setTheme }: any = useContext(ThemeContext);
+  console.log('hello3', status);
+  console.log(status === 'authenticated');
 
   // const { data: session } = useSession();
 
@@ -35,6 +37,7 @@ export default function Profile() {
   return (
     <div className="bg-zinc-100 pb-40">
       <UserInfo />
+
       {status === 'authenticated' && (
         <button
           onClick={handleSignOut}

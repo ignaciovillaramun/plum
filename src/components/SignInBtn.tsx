@@ -9,9 +9,7 @@ export default function SignInBtn() {
 
   return (
     <button onClick={() => signIn('google')}>
-  
       <Image src="/google-logo.png" height={40} width={40} alt="Google Logo" />
- 
     </button>
   );
 }

@@ -296,14 +296,16 @@ export default function Course() {
         Topic Information
       </h1>
 
-      <div className="flex mb-2 px-8 py-5 bg-zinc-100 justify-between md:px-16">
+      <div
+        className="flex mb-2 px-8 py-5 bg-zinc-200 justify-between md:px-16"
+        onClick={() => {
+          openImage[0]
+            ? setOpenImage([false, 'rotate-0'])
+            : setOpenImage([true, 'rotate-180']);
+        }}
+      >
         <h2 className="text-xl font-semibold">Images</h2>
         <svg
-          onClick={() => {
-            openImage[0]
-              ? setOpenImage([false, 'rotate-0'])
-              : setOpenImage([true, 'rotate-180']);
-          }}
           className={`${textTheme} w-6 text-theme-color ${openImage[1]}`}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1024 1024"
@@ -318,7 +320,7 @@ export default function Course() {
       </div>
 
       {openImage[0] && (
-        <section className="relative pl-8 py-5 scrollbar-hide">
+        <section className="relative pl-8 py-5 scrollbar-hide min-h-[150px]">
           <div className="mb-4 overflow-x-auto whitespace-nowrap scrollbar-hide">
             {Array.isArray(images) && images.length > 0
               ? images.map(
@@ -355,7 +357,7 @@ export default function Course() {
                 )
               : null}
           </div>
-          <div className="absolute inset-y-2/4 end-0 drop-shadow-lg">
+          <div className="absolute inset-y-1/4 end-0 drop-shadow-lg">
             <Link href={`/addTopicImage/${id}`}>
               <AddData onAdd={() => {}} />
             </Link>
@@ -378,14 +380,16 @@ export default function Course() {
       )}
 
       {/* Attachments Section */}
-      <div className=" flex mb-2 px-8 py-5 bg-zinc-100 justify-between md:px-16">
+      <div
+        className=" flex mb-2 px-8 py-5 bg-zinc-200 justify-between md:px-16"
+        onClick={() => {
+          openAttachments[0]
+            ? setOpenAttachments([false, 'rotate-0'])
+            : setOpenAttachments([true, 'rotate-180']);
+        }}
+      >
         <h2 className="text-xl font-semibold">Attachments</h2>
         <svg
-          onClick={() => {
-            openAttachments[0]
-              ? setOpenAttachments([false, 'rotate-0'])
-              : setOpenAttachments([true, 'rotate-180']);
-          }}
           className={` w-6 ${textTheme} ${openAttachments[1]}`}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1024 1024"
@@ -399,7 +403,7 @@ export default function Course() {
         </svg>
       </div>
       {openAttachments[0] && (
-        <section className="relative pl-8 py-5">
+        <section className="relative pl-8 py-5 min-h-[150px]">
           <div className="mb- overflow-x-auto whitespace-nowrap scrollbar-hide">
             {Array.isArray(attachments) && attachments.length > 0
               ? attachments.map(
@@ -459,7 +463,7 @@ export default function Course() {
                   }
                 )
               : null}
-            <div className="absolute inset-y-2/4 end-0 drop-shadow-lg">
+            <div className="absolute inset-y-1/4 end-0 drop-shadow-lg">
               <Link href={`/addTopicAttachment/${id}`}>
                 <AddData onAdd={() => {}} />
               </Link>
@@ -469,14 +473,16 @@ export default function Course() {
       )}
 
       {/* Notes Section */}
-      <div className=" flex mb-2 px-8 py-5 bg-zinc-100 justify-between md:px-16">
+      <div
+        className=" flex mb-2 px-8 py-5 bg-zinc-200 justify-between md:px-16"
+        onClick={() => {
+          openNotes[0]
+            ? setOpenNotes([false, 'rotate-0'])
+            : setOpenNotes([true, 'rotate-180']);
+        }}
+      >
         <h2 className="text-xl font-semibold">Notes</h2>
         <svg
-          onClick={() => {
-            openNotes[0]
-              ? setOpenNotes([false, 'rotate-0'])
-              : setOpenNotes([true, 'rotate-180']);
-          }}
           className={`w-6 ${textTheme} ${openNotes[1]}`}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1024 1024"
@@ -490,7 +496,7 @@ export default function Course() {
         </svg>
       </div>
       {openNotes[0] && (
-        <section className="relative pl-8 py-5">
+        <section className="relative pl-8 py-5 min-h-[150px]">
           <div className="mb- overflow-x-auto whitespace-nowrap scrollbar-hide">
             {Array.isArray(notes) && notes.length > 0
               ? notes.map(
@@ -535,7 +541,7 @@ export default function Course() {
                   }
                 )
               : null}
-            <div className="absolute inset-y-2/4 end-0 drop-shadow-lg">
+            <div className="absolute inset-y-1/4 end-0 drop-shadow-lg">
               <Link href={`/addTopicNotes/${id}`}>
                 <AddData onAdd={() => {}} />
               </Link>
@@ -545,14 +551,16 @@ export default function Course() {
       )}
 
       {/* URLs Section */}
-      <div className=" flex mb-2 px-8 py-5 bg-zinc-100 justify-between md:px-16">
+      <div
+        className=" flex mb-2 px-8 py-5 bg-zinc-200 justify-between md:px-16"
+        onClick={() => {
+          openUrls[0]
+            ? setOpenUrls([false, 'rotate-0'])
+            : setOpenUrls([true, 'rotate-180']);
+        }}
+      >
         <h2 className="text-xl font-semibold">URLs</h2>
         <svg
-          onClick={() => {
-            openUrls[0]
-              ? setOpenUrls([false, 'rotate-0'])
-              : setOpenUrls([true, 'rotate-180']);
-          }}
           className={`w-6 ${textTheme} ${openUrls[1]}`}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1024 1024"
@@ -566,7 +574,7 @@ export default function Course() {
         </svg>
       </div>
       {openUrls[0] && (
-        <section className="relative pl-8 py-5 scrollbar-hide">
+        <section className="relative pl-8 py-5 scrollbar-hide min-h-[150px]">
           <ul className="mb- overflow-x-auto whitespace-nowrap scrollbar-hide">
             {courseData.urls.map((url, index) => (
               <li
@@ -593,7 +601,7 @@ export default function Course() {
             ))}
           </ul>
 
-          <div className="absolute inset-y-2/4 end-0 drop-shadow-lg">
+          <div className="absolute inset-y-1/4 end-0 drop-shadow-lg">
             <Link href={`/addTopicNotes/${id}`}>
               <AddData onAdd={() => {}} />
             </Link>

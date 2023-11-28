@@ -39,14 +39,13 @@ export default function RootLayout({
   }, []);
 
   return (
-    <html lang="en">
+    <html lang="en" className="bg-zinc-100">
       <body className={inter.className}>
         <TopicProvider>
           <UserProvider>
             <NextAuthProvider>
               <ThemeProvider value={{ theme, setTheme }}>
-                <div className="md:ml-[80px] bg-white">{children}</div>
-                <Menu />
+                {children}
               </ThemeProvider>
             </NextAuthProvider>
           </UserProvider>

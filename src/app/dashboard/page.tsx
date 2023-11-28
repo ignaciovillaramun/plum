@@ -7,22 +7,11 @@ import { useContext, useEffect, useState, Suspense } from 'react';
 export default function DashBoard() {
   const { theme, setTheme }: any = useContext(ThemeContext);
   const [textTheme, setTextTheme] = useState('');
+  const [label, setLabel] = useState('asdasdadsasd');
 
-  // Set the color of the text based on the them color in local storage
-  // const setTextColor = (str: string) => {
-  //   const Color : string = str.substring(3);
-  //   let textColor : string = 'text-' + Color
-  //   return textColor;
-  // };
-
-  // useEffect(() => {
-  //  const color = setTextColor(theme)
-  // }, [theme]);
-
-  // useEffect(() => {
-  //   const color = setTextColor(theme)
-  //   setTextTheme(color)
-  //  },[]);
+  const handleOptionChange = (event: any) => {
+    setLabel(event.target.value);
+  };
 
   useEffect(() => {
     if (theme === 'bg-red-plum') {
@@ -40,6 +29,11 @@ export default function DashBoard() {
     <div>
       <div className="flex items-center justify-between mt-8 mb-5 px-6 md:px-20">
         <h1 className={`text-4xl ${textTheme}`}>Dashboard</h1>
+        <label htmlFor="dropdown">Select an option:</label>
+        <select id="dropdown" value={label} onChange={handleOptionChange}>
+          <option value="option1">Religion</option>
+          <option value="option2">Mathematics</option>
+        </select>{' '}
         <Link href={'/addTopic'}>
           <button className=" bg-white shadow-md rounded-full hover:bg-gray-100 focus:outline-none">
             <svg
@@ -58,7 +52,7 @@ export default function DashBoard() {
       <div className="w-full">
         <div className="flex-col pb-24 md:flex-row md:px-20">
           <Suspense fallback={<p>Loading feed...</p>}>
-            <TopicList />
+            <TopicList label={label} />
           </Suspense>
         </div>
       </div>
