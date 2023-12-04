@@ -57,6 +57,7 @@ const getHeaderImages = async (id: any, setHeaderImage: any) => {
 const getImages = async () => {
   try {
     const res = await fetch('/api/image', {
+      method: 'GET',
       cache: 'no-store',
     });
 
@@ -75,6 +76,7 @@ const getImages = async () => {
 const getAttachments = async () => {
   try {
     const res = await fetch('/api/attachment', {
+      method: 'GET',
       cache: 'no-store',
     });
 
@@ -93,6 +95,7 @@ const getAttachments = async () => {
 const getNotes = async () => {
   try {
     const res = await fetch('/api/note', {
+      method: 'GET',
       cache: 'no-store',
     });
 
@@ -111,6 +114,7 @@ const getNotes = async () => {
 const getUrls = async () => {
   try {
     const res = await fetch('/api/url', {
+      method: 'GET',
       cache: 'no-store',
     });
 
