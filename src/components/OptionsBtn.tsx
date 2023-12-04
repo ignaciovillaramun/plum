@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { ThemeContext } from '@/components/ThemeProvider';
 
 export default function OptionsBtn(props: {
-  topicId?: any;
+  api?: any;
   fetchData?: ((props: any) => (event: any) => void) | undefined;
   profiles?: any;
   link?: any;
@@ -18,26 +18,22 @@ export default function OptionsBtn(props: {
 
   const removeTopic = async () => {
     try {
-      const confirmed = confirm('Are you sure');
+      // const confirmed = confirm('Are you sure');
 
-      if (confirmed) {
-        const res = await fetch(`api/topics?id=${props.topicId}`, {
-          method: 'DELETE',
-        });
+      // if (confirmed) {
+      const res = await fetch(`${props.api}`, {
+        method: 'DELETE',
+      });
 
-        if (res.ok) {
-          router.refresh();
-          if (props.fetchData) {
-            props.fetchData(props.profiles);
-          }
-        } else {
-          console.error(
-            'Error deleting the topic:',
-            res.status,
-            res.statusText
-          );
+      if (res.ok) {
+        router.refresh();
+        if (props.fetchData) {
+          props.fetchData(props.profiles);
         }
+      } else {
+        console.error('Error deleting the topic:', res.status, res.statusText);
       }
+      // }
     } catch (error) {
       console.error('An error occurred:', error);
     }

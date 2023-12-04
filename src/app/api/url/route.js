@@ -11,3 +11,15 @@ export async function GET() {
     console.log(error);
   }
 }
+
+export async function DELETE(req) {
+  try {
+    const id = req.nextUrl.searchParams.get('id');
+    console.log(id);
+    await connectMongoDB();
+    await Url.findByIdAndDelete(id);
+    return NextResponse.json({ message: 'Url Deleted' }, { status: 200 });
+  } catch (error) {
+    console.log(error);
+  }
+}

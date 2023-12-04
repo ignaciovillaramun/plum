@@ -109,7 +109,7 @@ export default function TopicList(props: { label: any }) {
                   <div className=" flex p-4 justify-between items-center">
                     <h2 className="text-xl font-semibold">{topic.title}</h2>
                     <OptionsBtn
-                      topicId={topic._id}
+                      api={`/api/topics?id=${topic._id}`}
                       link={`/editTopic/${topic._id}`}
                       fetchData={() => fetchData}
                       profiles={setProfiles}

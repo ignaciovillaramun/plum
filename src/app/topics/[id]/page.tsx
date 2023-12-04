@@ -620,7 +620,9 @@ export default function Course() {
                 return (
                   <li
                     key={url._id}
-                    className="relative overflow-hidden inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
+                    data-aos="fade-up"
+                    className="inline-block bg-white shadow-md rounded-lg my-8 mx-5 w-52 md:mr-5"
+                    // className="relative overflow-hidden inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
                   >
                     <a
                       href={url.url?.toString() ?? '#'}
@@ -637,9 +639,12 @@ export default function Course() {
                         loading="lazy"
                       />
                     </a>
-                    <div className=" flex p-4 justify-between items-center">
+                    <div className=" flex p-4 justify-between items-center ">
                       {url.title}
-                      <OptionsBtn link={`/editTopicUrls/${url._id}`} />
+                      <OptionsBtn
+                        link={`/editTopicUrls/${url._id}`}
+                        api={`/api/url?id=${url._id}`}
+                      />
                     </div>
                   </li>
                 );
