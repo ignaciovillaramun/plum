@@ -212,6 +212,7 @@ export default function Course() {
     {
       title: ReactNode;
       url: ReactNode;
+      topic: ReactNode;
       index: any;
       _id: Key | null | undefined;
     }[]
@@ -614,32 +615,36 @@ export default function Course() {
       {openUrls[0] && (
         <section className="relative overflow-hidden pl-8 py-5 scrollbar-hide min-h-[150px]">
           <ul className=" overflow-x-auto whitespace-nowrap scrollbar-hide">
-            {urls.map((url) => (
-              <li
-                key={url._id}
-                className="relative overflow-hidden inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
-              >
-                <a
-                  href={url.url?.toString() ?? '#'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline"
-                >
-                  <Image
-                    src="/notes.png"
-                    alt={`Attachment ${''}`}
-                    width={200}
-                    height={200}
-                    className="rounded-lg"
-                    loading="lazy"
-                  />
-                </a>
-                <div className=" flex p-4 justify-between items-center">
-                  {url.title}
-                  <OptionsBtn link={`/editTopicUrls/${url._id}`} />
-                </div>
-              </li>
-            ))}
+            {urls.map((url) => {
+              if (url.topic == topicId) {
+                return (
+                  <li
+                    key={url._id}
+                    className="relative overflow-hidden inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
+                  >
+                    <a
+                      href={url.url?.toString() ?? '#'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 hover:underline"
+                    >
+                      <Image
+                        src="/notes.png"
+                        alt={`Attachment ${''}`}
+                        width={200}
+                        height={200}
+                        className="rounded-lg"
+                        loading="lazy"
+                      />
+                    </a>
+                    <div className=" flex p-4 justify-between items-center">
+                      {url.title}
+                      <OptionsBtn link={`/editTopicUrls/${url._id}`} />
+                    </div>
+                  </li>
+                );
+              }
+            })}
           </ul>
 
           <div className="absolute inset-y-1/4 end-0 drop-shadow-lg">
