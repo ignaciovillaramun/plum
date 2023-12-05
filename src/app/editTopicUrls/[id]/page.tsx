@@ -91,7 +91,7 @@ export default function EditTopicPage() {
       if (res.ok) {
         router.push(`/topics/${topic}`);
       } else {
-        throw new Error('Fail to create a topic');
+        throw new Error('Fail to edit a topic');
       }
     } catch (error) {
       console.log(error);
@@ -129,7 +129,7 @@ export default function EditTopicPage() {
             type="text"
             placeholder="Enter url"
             value={url}
-            onChange={(e) => setUrl && setUrl(e.target.value)}
+            onChange={(e) => setUrl(e.target.value)}
           />
         </div>
       </div>
