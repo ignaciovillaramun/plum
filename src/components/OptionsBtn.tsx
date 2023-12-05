@@ -81,7 +81,7 @@ export default function OptionsBtn(props: {
         <span className={`text-4xl ${textTheme}`}>&#8942;</span>
       </button>
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg z-10 options-menu">
+        <div className="absolute right-0 top-[-115px] mt-2 w-40 bg-white border rounded-lg shadow-lg z-10 options-menu">
           <ul className="py-2">
             <li>
               <Link href={`${props.link}`}>
