@@ -368,7 +368,7 @@ export default function Course() {
 
       {openImage[0] && (
         <section className="relative pl-8 py-5 scrollbar-hide min-h-[150px]">
-          <div className="mb-4 overflow-x-auto whitespace-nowrap scrollbar-hide">
+          <div className="mb-4 overflow-x-auto whitespace-nowrap scrollbar-hide py-[20px]">
             {Array.isArray(images) && images.length > 0
               ? images.map(
                   (image: {
@@ -457,7 +457,7 @@ export default function Course() {
       </div>
       {openAttachments[0] && (
         <section className="relative pl-8 py-5 min-h-[150px]">
-          <div className="mb- overflow-x-auto whitespace-nowrap scrollbar-hide">
+          <div className="mb- overflow-x-auto whitespace-nowrap scrollbar-hide py-[20px]">
             {Array.isArray(attachments) && attachments.length > 0
               ? attachments.map(
                   (attachment: {
@@ -557,7 +557,7 @@ export default function Course() {
       </div>
       {openNotes[0] && (
         <section className="relative pl-8 py-5 min-h-[150px]">
-          <div className="mb- overflow-x-auto whitespace-nowrap scrollbar-hide">
+          <div className="mb- overflow-x-auto whitespace-nowrap scrollbar-hide py-[20px]">
             {Array.isArray(notes) && notes.length > 0
               ? notes.map((note) => {
                   if (note.topic === topicId) {
@@ -634,7 +634,7 @@ export default function Course() {
       </div>
       {openUrls[0] && (
         <section className="relative overflow-hidden pl-8 py-5 scrollbar-hide min-h-[150px]">
-          <ul className=" overflow-x-auto whitespace-nowrap scrollbar-hide">
+          <ul className=" overflow-x-auto whitespace-nowrap scrollbar-hide py-[20px]">
             {urls.map((url) => {
               if (url.topic == topicId) {
                 return (

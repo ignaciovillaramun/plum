@@ -107,26 +107,23 @@ function CreateItems({
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
-        {showDescription ||
-          (showDescription2 && ( // Conditionally render the "Description" input based on isTopicImage
-            <div className="mb-4">
-              <label
-                className="text-xl block text-gray-700 font-bold mb-2 mt-5"
-                htmlFor="description"
-              >
-                Description
-              </label>
-              <textarea
-                className=" border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline md:h-40"
-                id="description"
-                placeholder="Enter description"
-                value={description}
-                onChange={(e) =>
-                  setDescription && setDescription(e.target.value)
-                }
-              />
-            </div>
-          ))}
+        {(showDescription || showDescription2) && (
+          <div className="mb-4">
+            <label
+              className="text-xl block  text-gray-700 font-bold mb-2 mt-5"
+              htmlFor="description"
+            >
+              Description
+            </label>
+            <textarea
+              className=" border  border-black rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline md:h-40"
+              id="description"
+              placeholder="Enter description"
+              value={description}
+              onChange={(e) => setDescription && setDescription(e.target.value)}
+            />
+          </div>
+        )}
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
