@@ -384,18 +384,24 @@ export default function Course() {
                         <div
                           key={image._id}
                           className="inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
-                          onClick={() => openLightbox(image.index)}
                         >
-                          <Image
-                            src={image.image}
-                            alt={`Image ${image._id}`}
-                            width={200}
-                            height={200}
-                            className="rounded-lg"
-                            loading="lazy"
-                          />
-                          <div className="mt-2 text-center font-semibold text-gray-700">
+                          <div onClick={() => openLightbox(image.index)}>
+                            <Image
+                              src={image.image}
+                              alt={`Image ${image._id}`}
+                              width={200}
+                              height={200}
+                              className="rounded-lg"
+                              loading="lazy"
+                            />
+                          </div>
+                          <div className=" flex p-4 justify-between items-center ">
                             {image.title}
+                            <OptionsBtn
+                              //create editTopicImage page
+                              link={`/editTopicImage/${image._id}`}
+                              api={`/api/image?id=${image._id}`}
+                            />
                           </div>
                         </div>
                       );
@@ -496,13 +502,20 @@ export default function Course() {
                             <div className="mt-2 text-center font-semibold text-gray-700">
                               {attachment.title}
                             </div>
-                            <a
-                              className={`flex items-center justify-center ${theme} text-white px-4 py-2 rounded hover:bg-blue-700`}
-                              href={attachment.attachment}
-                              download
-                            >
-                              Download File
-                            </a>
+                            <div className=" flex p-4 justify-between items-center ">
+                              <a
+                                className={`flex items-center justify-center ${theme} text-white px-4 py-2 rounded hover:bg-blue-700`}
+                                href={attachment.attachment}
+                                download
+                              >
+                                Download File
+                              </a>
+                              <OptionsBtn
+                                //create editTopicAttachment page
+                                link={`/editTopicAttachment/${attachment._id}`}
+                                api={`/api/attachment?id=${attachment._id}`}
+                              />
+                            </div>
                           </div>
                         </>
                       );
@@ -572,7 +585,14 @@ export default function Course() {
                           />
                         </Link>
                         <div className="mt-2 text-center font-semibold text-gray-700">
-                          {note.title || 'No Title'}{' '}
+                          <div className=" flex p-4 justify-between items-center ">
+                            {note.title || 'No Title'}{' '}
+                            <OptionsBtn
+                              //create editTopicNotes page
+                              link={`/editTopicNotes/${note._id}`}
+                              api={`/api/note?id=${note._id}`}
+                            />
+                          </div>
                           {/* Handle undefined title with a default */}
                         </div>
                       </div>

@@ -7,7 +7,6 @@ export async function PUT(req, { params }) {
   try {
     const { id } = params;
     const { title, url } = await req.json();
-    console.log(title, url);
     await connectMongoDB();
     await Url.findByIdAndUpdate(id, { title, url });
     return NextResponse.json({ message: 'Topic Updated' }, { status: 200 });
@@ -19,7 +18,6 @@ export async function PUT(req, { params }) {
 export async function GET(req, { params }) {
   try {
     const { id } = params;
-    console.log(id);
     await connectMongoDB();
     const url = await Url.findOne({ _id: id });
     return NextResponse.json(url, { status: 200 });
