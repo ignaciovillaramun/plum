@@ -50,30 +50,6 @@ const getTopics = async () => {
   }
 };
 
-const fetchData = async (setDataFunction: any) => {
-  try {
-    const profilesData = await getTopics();
-
-    if (profilesData) {
-      const uniqueTagsSet = new Set(
-        profilesData
-          .filter((topic: any) => topic.tag)
-          .map((topic: any) => {
-            const lowercasedTag = topic.tag.toLowerCase();
-
-            return lowercasedTag;
-          })
-      );
-
-      const uniqueTagsArray = Array.from(uniqueTagsSet);
-
-      setDataFunction(uniqueTagsArray);
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 export default function DashBoard() {
   const { selectedLabel, setSelectedLabel } = useSelectedLabel();
   const { theme, setTheme }: any = useContext(ThemeContext);
@@ -85,7 +61,6 @@ export default function DashBoard() {
   const id = searchParams?.split('/').pop();
 
   useEffect(() => {
-    fetchData(setProfiles);
     getHeaderImages(id, setHeaderImage);
   }, [id]);
 

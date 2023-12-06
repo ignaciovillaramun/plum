@@ -28,13 +28,19 @@ const getTopics = async () => {
   }
 };
 
-const fetchData = async (setDataFunction: any) => {
+const fetchData = async (setDataFunction: any, userId: any) => {
   try {
+    console.log(userId);
+
     const profilesData = await getTopics();
 
     if (profilesData) {
+      const userTopics = profilesData.filter(
+        (topic: any) => topic.user === userId
+      );
+      // console.log(userTopics);
       const uniqueTagsSet = new Set(
-        profilesData
+        userTopics
           .filter((topic: any) => topic.tag)
           .map((topic: any) => {
             const lowercasedTag = topic.tag.toLowerCase();
@@ -42,6 +48,7 @@ const fetchData = async (setDataFunction: any) => {
             return lowercasedTag;
           })
       );
+      console.log(uniqueTagsSet);
 
       const uniqueTagsArray = Array.from(uniqueTagsSet);
 
@@ -58,15 +65,26 @@ export default function DashBoard() {
   const { theme, setTheme }: any = useContext(ThemeContext);
   const [textTheme, setTextTheme] = useState('');
   const [topics, setProfiles] = useState([]);
+  const [userId, setUserId] = useState<string | null>(null);
 
   const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = event.target.value;
     setSelectedLabel(selectedValue);
     localStorage.setItem('selectedLabel', selectedValue);
   };
+
   useEffect(() => {
-    fetchData(setProfiles);
+    if (typeof window !== 'undefined') {
+      const storedUserId = localStorage.getItem('userId');
+      setUserId(storedUserId);
+    }
   }, []);
+
+  useEffect(() => {
+    if (userId) {
+      fetchData(setProfiles, userId);
+    }
+  }, [userId, setProfiles]);
 
   useEffect(() => {
     if (theme === 'bg-red-plum') {
@@ -79,8 +97,6 @@ export default function DashBoard() {
       setTextTheme('text-theme-color3');
     }
   }, [theme]);
-
-  // const { title, image, tag } = data || {};
 
   return (
     <div>

@@ -1,10 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import OptionsBtn from './OptionsBtn';
 import React, { useContext, useEffect, useState, Key, ReactNode } from 'react';
-import Link from 'next/link';
-import TopicContext from '@/components/TopicContext';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { ThemeContext } from '@/components/ThemeProvider';
@@ -44,8 +41,6 @@ export default function RelatedTopics() {
   const router = useRouter();
   const searchParams = usePathname();
   const parentId = searchParams?.split('/').pop();
-
-  const topicContext = useContext(TopicContext);
 
   useEffect(() => {
     fetchData(setProfiles);

@@ -14,7 +14,6 @@ import AddData from '@/components/AddData';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import SingleViewImg from '@/components/SingleViewImg';
-import { useRouter } from 'next/navigation';
 import { pdfjs } from 'react-pdf';
 import { ThemeContext } from '@/components/ThemeProvider';
 import { Suspense } from 'react';
@@ -271,15 +270,16 @@ export default function Course() {
   const [photoIndex, setPhotoIndex] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [lightBoxKey, setLightBoxKey] = useState(0);
-  const [numPages, setNumPages] = useState<number>();
   const [headerImage, setHeaderImage] = useState('');
-  const [pageNumber, setPageNumber] = useState<number>(1);
 
   //UI HOOKS
   const [openImage, setOpenImage] = useState([false, 'rotate-0']);
   const [openAttachments, setOpenAttachments] = useState([false, 'rotate-0']);
   const [openNotes, setOpenNotes] = useState([false, 'rotate-0']);
   const [openUrls, setOpenUrls] = useState([false, 'rotate-0']);
+
+  const searchParams = usePathname();
+  const id = searchParams?.split('/').pop();
 
   // CHange text colore based in color theme
   useEffect(() => {
@@ -294,15 +294,6 @@ export default function Course() {
     }
   }, [theme]);
 
-  const router = useRouter();
-
-  function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
-    setNumPages(numPages);
-  }
-
-  const searchParams = usePathname();
-  const id = searchParams?.split('/').pop();
-
   useEffect(() => {
     fetchImagesData(setImages);
     fetchRelatedTopicsData(setRelatedTopics);
@@ -316,10 +307,19 @@ export default function Course() {
   }, [id]);
 
   useEffect(() => {
-    if (Array.isArray(images) && images.length > 0) {
+    if (
+      Array.isArray(images) &&
+      images.length >= 0 &&
+      Array.isArray(attachments) &&
+      attachments.length >= 0 &&
+      Array.isArray(notes) &&
+      notes.length >= 0 &&
+      Array.isArray(relatedTopics) &&
+      relatedTopics.length >= 0
+    ) {
       setIsLoading(false);
     }
-  }, [images]);
+  }, [images, attachments, notes, relatedTopics]);
 
   if (isLoading) {
     return (
@@ -365,15 +365,13 @@ export default function Course() {
     }
   }
 
-  // Sample data for demonstration purposes
-  const courseData = {
-    urls: [
-      { name: 'Node Js', url: 'https://nodejs.org/en/' },
-      {
-        name: 'Stack Overflow',
-        url: 'https://stackoverflow.com/questions/5119041/how-can-i-get-a-web-sites-favicon',
-      },
-    ],
+  const handleDataRefresh = () => {
+    fetchImagesData(setImages);
+    fetchRelatedTopicsData(setRelatedTopics);
+    fetchAttachmentsData(setAttachments);
+    fetchNotesData(setNotes);
+    getHeaderImages(id, setHeaderImage);
+    fetchUrlsData(setUrls);
   };
 
   return (
@@ -445,9 +443,9 @@ export default function Course() {
                           <div className=" flex p-4 justify-between items-center ">
                             {image.title}
                             <OptionsBtn
-                              //create editTopicImage page
                               link={`/editTopicImage/${image._id}`}
                               api={`/api/image?id=${image._id}`}
+                              onDataRefresh={handleDataRefresh}
                             />
                           </div>
                         </div>
@@ -526,7 +524,7 @@ export default function Course() {
                               <Image
                                 src="/pdf.png"
                                 alt={`Attachment ${attachment._id}`}
-                                width={200}
+                                width={150}
                                 height={200}
                                 className="rounded-lg"
                                 loading="lazy"
@@ -538,7 +536,7 @@ export default function Course() {
                               <Image
                                 src="/word.png"
                                 alt={`Attachment ${attachment._id}`}
-                                width={200}
+                                width={195}
                                 height={200}
                                 className="rounded-lg"
                                 loading="lazy"
@@ -558,9 +556,9 @@ export default function Course() {
                                 Download File
                               </a>
                               <OptionsBtn
-                                //create editTopicAttachment page
                                 link={`/editTopicAttachment/${attachment._id}`}
                                 api={`/api/attachment?id=${attachment._id}`}
+                                onDataRefresh={handleDataRefresh}
                               />
                             </div>
                           </div>
@@ -635,12 +633,11 @@ export default function Course() {
                           <div className=" flex p-4 justify-between items-center ">
                             {note.title || 'No Title'}{' '}
                             <OptionsBtn
-                              //create editTopicNotes page
                               link={`/editTopicNotes/${note._id}`}
                               api={`/api/note?id=${note._id}`}
+                              onDataRefresh={handleDataRefresh}
                             />
                           </div>
-                          {/* Handle undefined title with a default */}
                         </div>
                       </div>
                     );
@@ -698,7 +695,7 @@ export default function Course() {
                       className="text-blue-500 hover:underline"
                     >
                       <Image
-                        src="/notes.png"
+                        src="/url.png"
                         alt={`Attachment ${''}`}
                         width={200}
                         height={200}
@@ -711,6 +708,7 @@ export default function Course() {
                       <OptionsBtn
                         link={`/editTopicUrls/${url._id}`}
                         api={`/api/url?id=${url._id}`}
+                        onDataRefresh={handleDataRefresh}
                       />
                     </div>
                   </li>
@@ -746,7 +744,7 @@ export default function Course() {
         </Link>
 
         <div className="mb- overflow-x-auto whitespace-nowrap scrollbar-hide py-[20px]">
-          {Array.isArray(notes) && notes.length > 0
+          {Array.isArray(relatedTopics) && relatedTopics.length > 0
             ? relatedTopics.map((relatedTopic) => {
                 if (relatedTopic.parentTopic === topicId) {
                   return (
@@ -770,9 +768,9 @@ export default function Course() {
                           <OptionsBtn
                             onlyDelete={true}
                             api={`/api/related?id=${relatedTopic._id}`}
+                            onDataRefresh={handleDataRefresh}
                           />
                         </div>
-                        {/* Handle undefined title with a default */}
                       </div>
                     </div>
                   );

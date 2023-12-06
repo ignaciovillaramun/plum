@@ -41,8 +41,6 @@ export default function TopicList() {
   const topicContext = useContext(TopicContext);
   const { selectedLabel, setSelectedLabel } = useSelectedLabel();
 
-  console.log('hellos label', selectedLabel);
-
   useEffect(() => {
     fetchData(setProfiles);
     if (typeof window !== 'undefined') {
@@ -63,6 +61,11 @@ export default function TopicList() {
     if (Array.isArray(topics) && topics.length > 0) {
       setIsLoading(false);
     }
+    if (Array.isArray(topics) && topics.length === 0) {
+      setTimeout(function () {
+        setIsLoading(false);
+      }, 10000);
+    }
   }, [topics]);
 
   if (isLoading) {
@@ -72,6 +75,10 @@ export default function TopicList() {
       </div>
     );
   }
+
+  const handleDataRefresh = () => {
+    fetchData(setProfiles);
+  };
 
   if (Array.isArray(topics) && topics.length > 0) {
     return (
@@ -120,6 +127,7 @@ export default function TopicList() {
                       link={`/editTopic/${topic._id}`}
                       fetchData={() => fetchData}
                       profiles={setProfiles}
+                      onDataRefresh={handleDataRefresh}
                     />
                   </div>
                 </div>

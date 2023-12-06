@@ -11,6 +11,7 @@ export default function OptionsBtn(props: {
   profiles?: any;
   link?: any;
   onlyDelete?: Boolean;
+  onDataRefresh?: any;
 }) {
   const { theme, setTheme }: any = useContext(ThemeContext);
   const [textTheme, setTextTheme] = useState('');
@@ -27,10 +28,7 @@ export default function OptionsBtn(props: {
       });
 
       if (res.ok) {
-        router.refresh();
-        if (props.fetchData) {
-          props.fetchData(props.profiles);
-        }
+        props.onDataRefresh();
       } else {
         console.error('Error deleting the topic:', res.status, res.statusText);
       }
