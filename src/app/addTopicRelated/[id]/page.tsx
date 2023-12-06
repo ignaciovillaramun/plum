@@ -2,6 +2,7 @@
 import RelatedTopics from '@/components/RelatedTopics';
 import Link from 'next/link';
 import { ThemeContext } from '@/components/ThemeProvider';
+import Image from 'next/image';
 import {
   useContext,
   useEffect,
@@ -10,8 +11,29 @@ import {
   ReactNode,
   Key,
 } from 'react';
-
 import { useSelectedLabel } from '@/components/SelectedLabelContext';
+import { usePathname } from 'next/navigation';
+
+const getHeaderImages = async (id: any, setHeaderImage: any) => {
+  try {
+    const res = await fetch(`/api/topics/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-type': 'application/json',
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to fetch user data');
+    }
+
+    const userData = await res.json();
+    setHeaderImage(userData.image);
+  } catch (error) {
+    console.log('Error fetching user data:', error);
+  }
+};
+
 const getTopics = async () => {
   try {
     const res = await fetch('/api/topics', {
@@ -54,19 +76,18 @@ const fetchData = async (setDataFunction: any) => {
 
 export default function DashBoard() {
   const { selectedLabel, setSelectedLabel } = useSelectedLabel();
-
   const { theme, setTheme }: any = useContext(ThemeContext);
   const [textTheme, setTextTheme] = useState('');
   const [topics, setProfiles] = useState([]);
+  const [headerImage, setHeaderImage] = useState('');
 
-  const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedValue = event.target.value;
-    setSelectedLabel(selectedValue);
-    localStorage.setItem('selectedLabel', selectedValue);
-  };
+  const searchParams = usePathname();
+  const id = searchParams?.split('/').pop();
+
   useEffect(() => {
     fetchData(setProfiles);
-  }, []);
+    getHeaderImages(id, setHeaderImage);
+  }, [id]);
 
   useEffect(() => {
     if (theme === 'bg-red-plum') {
@@ -84,6 +105,13 @@ export default function DashBoard() {
 
   return (
     <div>
+      <Image
+        className="w-full max-h-56 object-cover md:max-h-[320px]"
+        width={100}
+        height={100}
+        alt="course Picture"
+        src={headerImage}
+      />
       <div className="flex items-center justify-between mt-8 mb-5 px-6 md:px-20">
         <h1 className={`text-4xl ${textTheme}`}>Add Topic Related</h1>
       </div>
