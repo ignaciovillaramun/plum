@@ -329,6 +329,14 @@ export default function Course() {
     ],
   };
 
+  const scrollToTop = () => {
+    // Scroll to the top of the page
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth', // Optional: Add smooth scrolling behavior
+    })
+  }
+
   return (
     <div className="pb-40">
       {/* Attachments Section */}
@@ -418,11 +426,12 @@ export default function Course() {
         </section>
       )}
 
-      {/* Pictures SIgle View */}
-      {isOpen && images.length > 0 && (
+         {/* Pictures SIgle View */}
+         {isOpen && images.length > 0 && (
+        scrollToTop(),
         <div
           onClick={closeLightbox}
-          className="absolute top-0 w-full h-full bg-black bg-opacity-90 p-10 flex justify-center z-50"
+          className={`absolute top-0 w-full h-[1300px] bg-black bg-opacity-90 p-10  z-50`}
         >
           <SingleViewImg
             imgPath={images[photoIndex]?.image}
