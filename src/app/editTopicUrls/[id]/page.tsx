@@ -27,7 +27,7 @@ const getUrlById = async (id: string) => {
   }
 };
 
-export default function EditTopicPage() {
+export default function EditTopicUrl() {
   const searchParams = usePathname();
   const id = searchParams?.split('/').pop();
   const [url, setUrl] = useState('');

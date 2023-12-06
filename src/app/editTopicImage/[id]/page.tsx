@@ -5,15 +5,15 @@ import { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { ThemeContext } from '@/components/ThemeProvider';
 
-const getNoteById = async (id: string) => {
+const getImageById = async (id: string) => {
   try {
-    const res = await fetch(`/api/note/${id}`, {
+    const res = await fetch(`/api/image/${id}`, {
       method: 'GET',
       cache: 'no-store',
     });
 
     if (!res.ok) {
-      throw new Error('Failed to fetch note');
+      throw new Error('Failed to fetch image');
     }
     return res.json();
   } catch (error) {
@@ -21,7 +21,7 @@ const getNoteById = async (id: string) => {
   }
 };
 
-export default function EditTopicNotes() {
+export default function EditTopicImages() {
   const searchParams = usePathname();
   const id = searchParams?.split('/').pop();
   const [description, setDescription] = useState('');
@@ -36,11 +36,11 @@ export default function EditTopicNotes() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const note = await getNoteById(id || '');
-        if (note) {
-          setDescription(note.description);
-          setTitle(note.title);
-          setTopic(note.topic);
+        const image = await getImageById(id || '');
+        if (image) {
+          setDescription(image.description);
+          setTitle(image.title);
+          setTopic(image.topic);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -74,7 +74,7 @@ export default function EditTopicNotes() {
     console.log('preventDefault called');
 
     try {
-      const res = await fetch(`/api/note/${id}`, {
+      const res = await fetch(`/api/image/${id}`, {
         method: 'PUT',
         headers: {
           'Content-type': 'application/json',
@@ -102,7 +102,7 @@ export default function EditTopicNotes() {
           className="block text-gray-700 text-sm font-bold mb-2"
           htmlFor="title"
         >
-          <h3 className="text-xl font-medium">Note Title</h3>
+          <h3 className="text-xl font-medium">Image Title</h3>
         </label>
         <input
           className="border border-black rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -114,7 +114,7 @@ export default function EditTopicNotes() {
         />
       </div>
       <div>
-        <p className="text-xl mt-8">Note Description</p>
+        <p className="text-xl mt-8">Image Description</p>
         <div className="mt-2">
           <label
             className="block text-gray-700 text-sm font-bold"
@@ -133,7 +133,7 @@ export default function EditTopicNotes() {
           className={`${borderTheme} ${textTheme} block mx-auto border-2 py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
           type="submit"
         >
-          Edit Note
+          Edit Image
         </button>
       </div>
     </form>

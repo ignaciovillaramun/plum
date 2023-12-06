@@ -22,7 +22,7 @@ export async function DELETE(req) {
 
 export async function POST(req) {
   try {
-    const { title, image, user } = await req.json();
+    const { title, image, user, tag } = await req.json();
     await connectMongoDB();
     const userExists = await User.findById({ _id: user });
 
@@ -30,7 +30,7 @@ export async function POST(req) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
 
-    const data = await Topic.create({ title, image, user });
+    const data = await Topic.create({ title, image, user, tag });
     return NextResponse.json({ data }, { status: 201 });
   } catch (error) {
     console.error(error);

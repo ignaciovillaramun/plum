@@ -4,6 +4,7 @@ const topicSchema = new Schema(
   {
     title: String,
     image: String,
+    tag: String,
     user: {
       type: mongoose.Types.ObjectId,
       ref: 'User',

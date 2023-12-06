@@ -7,10 +7,11 @@ import Link from 'next/link';
 import TopicContext from '@/components/TopicContext';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { useSelectedLabel } from '@/components/SelectedLabelContext';
 
 const getTopics = async () => {
   try {
-    const res = await fetch('api/topics', {
+    const res = await fetch('/api/topics', {
       cache: 'no-store',
     });
 
@@ -33,12 +34,14 @@ const fetchData = async (setDataFunction: any) => {
   }
 };
 
-export default function TopicList(props: { label: any }) {
+export default function TopicList() {
   const [topics, setProfiles] = useState([]);
   const [userId, setUserId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const topicContext = useContext(TopicContext);
-  console.log('hellos label', props.label);
+  const { selectedLabel, setSelectedLabel } = useSelectedLabel();
+
+  console.log('hellos label', selectedLabel);
 
   useEffect(() => {
     fetchData(setProfiles);
@@ -78,10 +81,14 @@ export default function TopicList(props: { label: any }) {
             title: ReactNode;
             topic: ReactNode;
             user: ReactNode;
+            tag: ReactNode;
             image: any;
             _id: Key | null | undefined;
           }) => {
-            if (topic.user == userId) {
+            if (
+              topic.user === userId &&
+              (!selectedLabel || topic.tag === selectedLabel)
+            ) {
               return (
                 <div
                   key={`${topic._id}`}

@@ -5,9 +5,9 @@ import { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { ThemeContext } from '@/components/ThemeProvider';
 
-const getNoteById = async (id: string) => {
+const getAttachmentById = async (id: string) => {
   try {
-    const res = await fetch(`/api/note/${id}`, {
+    const res = await fetch(`/api/attachment/${id}`, {
       method: 'GET',
       cache: 'no-store',
     });
@@ -21,10 +21,9 @@ const getNoteById = async (id: string) => {
   }
 };
 
-export default function EditTopicNotes() {
+export default function EditTopicAttachments() {
   const searchParams = usePathname();
   const id = searchParams?.split('/').pop();
-  const [description, setDescription] = useState('');
   const [title, setTitle] = useState('');
   const [topic, setTopic] = useState('');
   const [borderTheme, setBordeTtheme] = useState('');
@@ -36,9 +35,8 @@ export default function EditTopicNotes() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const note = await getNoteById(id || '');
+        const note = await getAttachmentById(id || '');
         if (note) {
-          setDescription(note.description);
           setTitle(note.title);
           setTopic(note.topic);
         }
@@ -69,19 +67,16 @@ export default function EditTopicNotes() {
   }, [theme]);
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
-    console.log('handleSubmit called');
     e.preventDefault();
-    console.log('preventDefault called');
 
     try {
-      const res = await fetch(`/api/note/${id}`, {
+      const res = await fetch(`/api/attachment/${id}`, {
         method: 'PUT',
         headers: {
           'Content-type': 'application/json',
         },
         body: JSON.stringify({
           title,
-          description,
         }),
       });
 
@@ -102,38 +97,22 @@ export default function EditTopicNotes() {
           className="block text-gray-700 text-sm font-bold mb-2"
           htmlFor="title"
         >
-          <h3 className="text-xl font-medium">Note Title</h3>
+          <h3 className="text-xl font-medium">Attachment Title</h3>
         </label>
         <input
           className="border border-black rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           id="title"
           type="text"
-          placeholder="Enter title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-      </div>
-      <div>
-        <p className="text-xl mt-8">Note Description</p>
-        <div className="mt-2">
-          <label
-            className="block text-gray-700 text-sm font-bold"
-            htmlFor="title"
-          ></label>
-          <textarea
-            className=" border  border-black rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline md:h-40"
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </div>
       </div>
       <div className="mt-12">
         <button
           className={`${borderTheme} ${textTheme} block mx-auto border-2 py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
           type="submit"
         >
-          Edit Note
+          Edit Attachment
         </button>
       </div>
     </form>

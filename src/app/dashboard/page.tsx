@@ -2,16 +2,71 @@
 import TopicList from '@/components/TopicList';
 import Link from 'next/link';
 import { ThemeContext } from '@/components/ThemeProvider';
-import { useContext, useEffect, useState, Suspense } from 'react';
+import {
+  useContext,
+  useEffect,
+  useState,
+  Suspense,
+  ReactNode,
+  Key,
+} from 'react';
+
+import { useSelectedLabel } from '@/components/SelectedLabelContext';
+const getTopics = async () => {
+  try {
+    const res = await fetch('/api/topics', {
+      cache: 'no-store',
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to fetch topics');
+    }
+
+    return res.json();
+  } catch (error) {
+    console.log('Error: ', error);
+  }
+};
+
+const fetchData = async (setDataFunction: any) => {
+  try {
+    const profilesData = await getTopics();
+
+    if (profilesData) {
+      const uniqueTagsSet = new Set(
+        profilesData
+          .filter((topic: any) => topic.tag)
+          .map((topic: any) => {
+            const lowercasedTag = topic.tag.toLowerCase();
+
+            return lowercasedTag;
+          })
+      );
+
+      const uniqueTagsArray = Array.from(uniqueTagsSet);
+
+      setDataFunction(uniqueTagsArray);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 export default function DashBoard() {
+  const { selectedLabel, setSelectedLabel } = useSelectedLabel();
+
   const { theme, setTheme }: any = useContext(ThemeContext);
   const [textTheme, setTextTheme] = useState('');
-  const [label, setLabel] = useState('asdasdadsasd');
+  const [topics, setProfiles] = useState([]);
 
-  const handleOptionChange = (event: any) => {
-    setLabel(event.target.value);
+  const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedValue = event.target.value;
+    setSelectedLabel(selectedValue);
+    localStorage.setItem('selectedLabel', selectedValue);
   };
+  useEffect(() => {
+    fetchData(setProfiles);
+  }, []);
 
   useEffect(() => {
     if (theme === 'bg-red-plum') {
@@ -25,14 +80,30 @@ export default function DashBoard() {
     }
   }, [theme]);
 
+  // const { title, image, tag } = data || {};
+
   return (
     <div>
       <div className="flex items-center justify-between mt-8 mb-5 px-6 md:px-20">
         <h1 className={`text-4xl ${textTheme}`}>Dashboard</h1>
         <label htmlFor="dropdown">Select an option:</label>
-        <select id="dropdown" value={label} onChange={handleOptionChange}>
-          <option value="option1">Religion</option>
-          <option value="option2">Mathematics</option>
+        <select
+          id="dropdown"
+          value={selectedLabel || ''}
+          onChange={handleOptionChange}
+        >
+          <option value="" disabled>
+            Select one Option
+          </option>
+          <option value=""> -- Default Option --</option>
+
+          {Array.isArray(topics) &&
+            topics.length > 0 &&
+            topics.map((tag: string, index: number) => (
+              <option key={index} value={tag}>
+                {tag}
+              </option>
+            ))}
         </select>{' '}
         <Link href={'/addTopic'}>
           <button className=" bg-white shadow-md rounded-full hover:bg-gray-100 focus:outline-none">
@@ -52,7 +123,7 @@ export default function DashBoard() {
       <div className="w-full">
         <div className="flex-col pb-24 md:flex-row md:px-20">
           <Suspense fallback={<p>Loading feed...</p>}>
-            <TopicList label={label} />
+            <TopicList />
           </Suspense>
         </div>
       </div>

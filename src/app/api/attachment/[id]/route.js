@@ -7,14 +7,13 @@ import Attachment from '../../../../../models/attachment';
 export async function PUT(req, { params }) {
   try {
     const { id } = params;
-    const {
-      newTitle: title,
-      newTopic: topic,
-      newImage: image,
-    } = await req.json();
+    const { title } = await req.json();
     await connectMongoDB();
-    await Topic.findByIdAndUpdate(id, { title, topic, image });
-    return NextResponse.json({ message: 'Topic Updated' }, { status: 200 });
+    await Attachment.findByIdAndUpdate(id, { title });
+    return NextResponse.json(
+      { message: 'Attachment Updated' },
+      { status: 200 }
+    );
   } catch (error) {
     console.log(error);
   }
@@ -24,8 +23,8 @@ export async function GET(req, { params }) {
   try {
     const { id } = params;
     await connectMongoDB();
-    const topic = await Topic.findOne({ _id: id });
-    return NextResponse.json({ topic }, { status: 200 });
+    const attachment = await Attachment.findOne({ _id: id });
+    return NextResponse.json(attachment, { status: 200 });
   } catch (error) {
     console.log(error);
   }

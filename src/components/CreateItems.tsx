@@ -6,12 +6,14 @@ import { ThemeContext } from '@/components/ThemeProvider';
 
 interface CreateItemsProps {
   name: string;
+  tag?: string;
   showAlert: boolean;
   title: string;
   url?: string;
   description?: string;
   setTitle: (title: string) => void;
   setDescription?: (description: string) => void;
+  setTag?: (description: string) => void;
   setUrl?: (url: string) => void;
   image?: File | null;
   handleSubmit: (e: React.FormEvent) => void;
@@ -21,14 +23,16 @@ interface CreateItemsProps {
 
 function CreateItems({
   name,
+  tag,
   showAlert,
   title,
   url,
   description,
+  image,
   setTitle,
   setUrl,
   setDescription,
-  image,
+  setTag,
   handleSubmit,
   handleImageUpload,
   handleCloseAlert,
@@ -43,6 +47,7 @@ function CreateItems({
   const isTopicImage =
     page === 'addTopicImage' || page === 'addTopic' ? true : false;
 
+  const isAddTopic = page === 'addTopic';
   const showDescription = page === 'addTopicNotes' ? true : false;
   const showDescription2 = page === 'addTopicImage' ? true : false;
 
@@ -91,7 +96,7 @@ function CreateItems({
         className="block mx-auto"
       />
       <form onSubmit={handleSubmit}>
-        <div className="mt-10">
+        <div className="mt-10 ">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="title"
@@ -106,6 +111,26 @@ function CreateItems({
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
+        </div>
+        <div>
+          {isAddTopic && (
+            <div className="mt-10 ">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="title"
+              >
+                <h3 className="text-xl font-medium">{name} Tag</h3>
+              </label>
+              <input
+                className="border border-black rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="title"
+                type="text"
+                placeholder="Enter title"
+                value={tag}
+                onChange={(e) => setTag && setTag(e.target.value)}
+              />
+            </div>
+          )}
         </div>
         {(showDescription || showDescription2) && (
           <div className="mb-4">
