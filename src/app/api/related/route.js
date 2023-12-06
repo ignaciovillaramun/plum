@@ -25,9 +25,7 @@ export async function DELETE(req) {
 
 export async function POST(req) {
   try {
-    console.log('hello');
     const { title, image, user, parentTopic, topicId } = await req.json();
-    console.log(topicId);
     await connectMongoDB();
     const data = await Related.create({
       title,

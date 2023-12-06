@@ -11,8 +11,6 @@ export default function Profile() {
   const router = useRouter(); // Initialize the router
   const { theme, setTheme }: any = useContext(ThemeContext);
 
-  // const { data: session } = useSession();
-
   const signOut = async () => {
     try {
       localStorage.removeItem('userId');
@@ -29,9 +27,6 @@ export default function Profile() {
     router.push('/profile');
   };
 
-  // const navigateToProfile = () => {
-  //   router.push('/profile');
-  // };
   return (
     <div className="bg-zinc-100 pb-40">
       <UserInfo />

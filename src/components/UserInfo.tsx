@@ -24,7 +24,6 @@ const getCurrentUser = async (email: any, setCurrentUser: any) => {
     }
 
     const userData = await res.json();
-    console.log(userData);
 
     setCurrentUser(userData);
   } catch (error) {
@@ -50,7 +49,6 @@ const updateColorTheme = async (userId: String, themeColor: string) => {
 
     if (typeof window !== 'undefined') {
       localStorage.setItem('theme', themeColor);
-      // document.documentElement.style.setProperty('--theme-color', themeColor || 'default-color');
     }
 
     return updatedUser;
@@ -64,7 +62,7 @@ export default function UserInfo() {
   const { theme, setTheme }: any = useContext(ThemeContext);
   const { status, data: session } = useSession();
   const [currentUser, setCurrentUser] = useState({ _id: '', theme: '' });
-  const { setUserId, setthemeColor } = useUser();
+  const { setUserId, setThemeColor } = useUser();
   const [isLoading, setIsLoading] = useState(true);
   const email = session?.user?.email;
 
@@ -94,7 +92,7 @@ export default function UserInfo() {
       '_id' in currentUser
     ) {
       setUserId(currentUser._id as string);
-      setthemeColor(currentUser.theme as string);
+      setThemeColor(currentUser.theme as string);
     }
 
     if (
@@ -104,7 +102,7 @@ export default function UserInfo() {
     ) {
       setTheme(currentUser.theme as string);
     }
-  }, [currentUser, setUserId, setTheme, setthemeColor]);
+  }, [currentUser, setUserId, setTheme, setThemeColor]);
 
   let userImage = session?.user?.image
     ? session?.user?.image
@@ -115,7 +113,6 @@ export default function UserInfo() {
     const firstChar = name.charAt(0).toUpperCase();
     const restOfStr = name.slice(1);
     name = firstChar + restOfStr;
-    console.log(name);
   }
 
   const colorOptions = [
@@ -184,13 +181,3 @@ export default function UserInfo() {
     return <SignInBtn />;
   }
 }
-
-// export function AuthenticatedUserInfo() {
-//   const { status } = useSession();
-
-//   if (status === 'authenticated') {
-//     return <UserInfo />;
-//   } else {
-//     return <SignInBtn />;
-//   }
-// }

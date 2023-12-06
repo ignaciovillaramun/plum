@@ -10,6 +10,7 @@ import { usePathname, useRouter } from 'next/navigation';
 const getTopics = async () => {
   try {
     const res = await fetch('/api/topics', {
+      method: 'GET',
       cache: 'no-store',
     });
 
@@ -77,7 +78,6 @@ export default function RelatedTopics() {
       `Do you want to add the related topic: ${topic.title}?`
     );
     if (shouldAddTopic) {
-      console.log('Data about the topic:', topic);
       try {
         const res = await fetch(`/api/related`, {
           method: 'POST',

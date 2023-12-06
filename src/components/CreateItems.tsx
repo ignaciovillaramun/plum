@@ -37,7 +37,7 @@ function CreateItems({
   handleImageUpload,
   handleCloseAlert,
 }: CreateItemsProps) {
-  const [borderTheme, setBordeTtheme] = useState('');
+  const [borderTheme, setBorderTheme] = useState('');
   const [textTheme, setTextTheme] = useState('');
   const { theme, setTheme }: any = useContext(ThemeContext);
 
@@ -54,21 +54,20 @@ function CreateItems({
   const pdfFormat = isTopicImage ? 'image/*' : 'application/*';
   const isTopicNotes = page === 'addTopicNotes' ? true : false;
   const urlPage = page === 'addTopicUrls' ? true : false;
-  console.log(urlPage);
 
   useEffect(() => {
     if (theme === 'bg-red-plum') {
       setTextTheme('text-red-plum');
-      setBordeTtheme('border-red-plum');
+      setBorderTheme('border-red-plum');
     } else if (theme === 'bg-theme-color1') {
       setTextTheme('text-theme-color1');
-      setBordeTtheme('border-theme-color1');
+      setBorderTheme('border-theme-color1');
     } else if (theme === 'bg-theme-color2') {
       setTextTheme('text-theme-color2');
-      setBordeTtheme('border-theme-color2');
+      setBorderTheme('border-theme-color2');
     } else if (theme === 'bg-theme-color3') {
       setTextTheme('text-theme-color3');
-      setBordeTtheme('border-theme-color3');
+      setBorderTheme('border-theme-color3');
     }
   }, [theme]);
 

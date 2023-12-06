@@ -1,14 +1,6 @@
 'use client';
 
-import { Document, Page } from 'react-pdf';
-import React, {
-  useEffect,
-  useState,
-  Key,
-  ReactNode,
-  Component,
-  useContext,
-} from 'react';
+import React, { useEffect, useState, Key, ReactNode, useContext } from 'react';
 import Image from 'next/image';
 import AddData from '@/components/AddData';
 import { usePathname } from 'next/navigation';
@@ -16,7 +8,6 @@ import Link from 'next/link';
 import SingleViewImg from '@/components/SingleViewImg';
 import { pdfjs } from 'react-pdf';
 import { ThemeContext } from '@/components/ThemeProvider';
-import { Suspense } from 'react';
 import OptionsBtn from '@/components/OptionsBtn';
 
 //BACKEND HOOKS
@@ -74,7 +65,6 @@ const getImages = async () => {
       throw new Error('Failed to fetch images');
     }
     const imagesData = await res.json();
-    console.log('Images data:', imagesData);
 
     return imagesData;
   } catch (error) {
@@ -93,7 +83,6 @@ const getAttachments = async () => {
       throw new Error('Failed to fetch attachments');
     }
     const attachmentData = await res.json();
-    console.log('Attachment data:', attachmentData);
 
     return attachmentData;
   } catch (error) {
@@ -112,7 +101,6 @@ const getNotes = async () => {
       throw new Error('Failed to fetch attachments');
     }
     const attachmentData = await res.json();
-    console.log('Attachment data:', attachmentData);
 
     return attachmentData;
   } catch (error) {
@@ -131,7 +119,6 @@ const getUrls = async () => {
       throw new Error('Failed to fetch images');
     }
     const urlsData = await res.json();
-    console.log('Images data:', urlsData);
 
     return urlsData;
   } catch (error) {
@@ -150,7 +137,6 @@ const getTopicRelated = async () => {
       throw new Error('Failed to fetch related topics');
     }
     const relatedTopicsData = await res.json();
-    console.log('Related Topics data:', relatedTopicsData);
 
     return relatedTopicsData;
   } catch (error) {
@@ -281,7 +267,7 @@ export default function Course() {
   const searchParams = usePathname();
   const id = searchParams?.split('/').pop();
 
-  // CHange text colore based in color theme
+  // CHange text color based in color theme
   useEffect(() => {
     if (theme === 'bg-red-plum') {
       setTextTheme('text-red-plum');
@@ -295,31 +281,25 @@ export default function Course() {
   }, [theme]);
 
   useEffect(() => {
-    fetchImagesData(setImages);
-    fetchRelatedTopicsData(setRelatedTopics);
-    fetchAttachmentsData(setAttachments);
-    fetchNotesData(setNotes);
-    getHeaderImages(id, setHeaderImage);
-    fetchUrlsData(setUrls);
-    if (typeof window !== 'undefined') {
-      setTopicId(id || null);
-    }
-  }, [id]);
+    const fetchData = async () => {
+      await Promise.all([
+        fetchImagesData(setImages),
+        fetchRelatedTopicsData(setRelatedTopics),
+        fetchAttachmentsData(setAttachments),
+        fetchNotesData(setNotes),
+        getHeaderImages(id, setHeaderImage),
+        fetchUrlsData(setUrls),
+      ]);
 
-  useEffect(() => {
-    if (
-      Array.isArray(images) &&
-      images.length >= 0 &&
-      Array.isArray(attachments) &&
-      attachments.length >= 0 &&
-      Array.isArray(notes) &&
-      notes.length >= 0 &&
-      Array.isArray(relatedTopics) &&
-      relatedTopics.length >= 0
-    ) {
+      if (typeof window !== 'undefined') {
+        setTopicId(id || null);
+      }
+
       setIsLoading(false);
-    }
-  }, [images, attachments, notes, relatedTopics]);
+    };
+
+    fetchData();
+  }, [id]);
 
   if (isLoading) {
     return (
@@ -329,14 +309,14 @@ export default function Course() {
     );
   }
 
-  const closeLightbox = () => {
+  const closeLightBox = () => {
     setIsOpen(false);
   };
 
-  const openLightbox = (index: number) => {
+  const openLightBox = (index: number) => {
     setPhotoIndex(index);
     setIsOpen(true);
-    setLightBoxKey((prevKey) => prevKey + 1); // Trigger a re-render of Lightbox // not working
+    setLightBoxKey((prevKey) => prevKey + 1);
   };
 
   const openNewWindow = (url: any) => {
@@ -378,11 +358,11 @@ export default function Course() {
     <div className="pb-40">
       {/* Attachments Section */}
       <Image
+        src={headerImage}
         className="w-full max-h-56 object-cover md:max-h-[320px]"
         width={100}
         height={100}
         alt="course Picture"
-        src={headerImage}
       />
       <h1 className="text-2xl text-center font-bold mb-6 px-8 pt-8 md:text-4xl md:mb-10">
         Topic Information
@@ -430,7 +410,7 @@ export default function Course() {
                           key={image._id}
                           className="inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
                         >
-                          <div onClick={() => openLightbox(image.index)}>
+                          <div onClick={() => openLightBox(image.index)}>
                             <Image
                               src={image.image}
                               alt={`Image ${image._id}`}
@@ -466,7 +446,7 @@ export default function Course() {
       {/* Pictures SIgle View */}
       {isOpen && images.length > 0 && (
         <div
-          onClick={closeLightbox}
+          onClick={closeLightBox}
           className="absolute top-0 w-full h-full bg-black bg-opacity-90 p-10 flex justify-center z-50"
         >
           <SingleViewImg
@@ -518,7 +498,6 @@ export default function Course() {
                           <div
                             key={attachment._id}
                             className=" inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-4 transform transition-transform hover:scale-105"
-                            // onClick={() => openLightbox(attachment.index)}
                           >
                             {isPDF(attachment.attachment) ? (
                               <Image
@@ -686,7 +665,6 @@ export default function Course() {
                     key={url._id}
                     data-aos="fade-up"
                     className="inline-block bg-white shadow-md rounded-lg my-8 mx-5 w-52 md:mr-5"
-                    // className="relative overflow-hidden inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
                   >
                     <a
                       href={url.url?.toString() ?? '#'}
@@ -750,18 +728,20 @@ export default function Course() {
                   return (
                     <div
                       key={relatedTopic._id}
-                      className="inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
+                      className="block bg-white shadow-md rounded-lg my-8 mx-auto w-72 md:inline-block md:mr-5"
                     >
-                      <Link href={`/topics/${relatedTopic.topicId}`}>
-                        <Image
-                          src={relatedTopic.image}
-                          alt={`Related Topic ${relatedTopic._id}`}
-                          width={200}
-                          height={200}
-                          className="rounded-lg"
-                          loading="lazy"
-                        />
-                      </Link>
+                      <div className="relative h-36 overflow-hidden rounded-t-lg">
+                        <Link href={`/topics/${relatedTopic.topicId}`}>
+                          <Image
+                            src={relatedTopic.image}
+                            alt={`Related Topic ${relatedTopic._id}`}
+                            layout="fill"
+                            objectFit="cover"
+                            objectPosition="center top"
+                            loading="lazy"
+                          />
+                        </Link>
+                      </div>
                       <div className="mt-2 text-center font-semibold text-gray-700">
                         <div className=" flex p-4 justify-between items-center ">
                           {relatedTopic.title || 'No Title'}{' '}

@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { connectMongoDB } from '../../../../../lib/mongo/index';
 import Topic from '../../../../../models/topic';
-// import Image from '../../../../../models/image';
 import Note from '../../../../../models/notes';
 
 export async function PUT(req, { params }) {

@@ -15,7 +15,6 @@ const authOptions = {
       if (account.provider === 'google') {
         const { name, email, image } = user;
         const theme = 'bg-red-plum';
-        // console.log(name, email, image, theme);
         try {
           await connectMongoDB();
           const userExists = await User.findOne({ email });
@@ -33,7 +32,6 @@ const authOptions = {
                 theme,
               }),
             });
-            console.log(res);
 
             if (res.ok) {
               return user;

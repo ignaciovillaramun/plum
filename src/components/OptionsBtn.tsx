@@ -20,9 +20,6 @@ export default function OptionsBtn(props: {
 
   const removeTopic = async () => {
     try {
-      // const confirmed = confirm('Are you sure');
-
-      // if (confirmed) {
       const res = await fetch(`${props.api}`, {
         method: 'DELETE',
       });
@@ -32,7 +29,6 @@ export default function OptionsBtn(props: {
       } else {
         console.error('Error deleting the topic:', res.status, res.statusText);
       }
-      // }
     } catch (error) {
       console.error('An error occurred:', error);
     }

@@ -12,6 +12,7 @@ import { useSelectedLabel } from '@/components/SelectedLabelContext';
 const getTopics = async () => {
   try {
     const res = await fetch('/api/topics', {
+      method: 'GET',
       cache: 'no-store',
     });
 

@@ -4,7 +4,6 @@ import { usePathname } from 'next/navigation';
 import EditTopicForm from '@/components/EditTopicForm';
 import { useEffect, useState } from 'react';
 
-// Define a type for the topic data
 type TopicData = {
   title: any;
   topic: any;
@@ -49,7 +48,6 @@ export default function EditTopicPage() {
     }
   }, [id]);
 
-  // const { topic } = data || {};
   const { title, image } = data || {};
 
   return (

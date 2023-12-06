@@ -2,19 +2,13 @@
 import TopicList from '@/components/TopicList';
 import Link from 'next/link';
 import { ThemeContext } from '@/components/ThemeProvider';
-import {
-  useContext,
-  useEffect,
-  useState,
-  Suspense,
-  ReactNode,
-  Key,
-} from 'react';
+import { useContext, useEffect, useState, Suspense } from 'react';
 
 import { useSelectedLabel } from '@/components/SelectedLabelContext';
 const getTopics = async () => {
   try {
     const res = await fetch('/api/topics', {
+      method: 'GET',
       cache: 'no-store',
     });
 
@@ -30,15 +24,12 @@ const getTopics = async () => {
 
 const fetchData = async (setDataFunction: any, userId: any) => {
   try {
-    console.log(userId);
-
     const profilesData = await getTopics();
 
     if (profilesData) {
       const userTopics = profilesData.filter(
         (topic: any) => topic.user === userId
       );
-      // console.log(userTopics);
       const uniqueTagsSet = new Set(
         userTopics
           .filter((topic: any) => topic.tag)
@@ -48,7 +39,6 @@ const fetchData = async (setDataFunction: any, userId: any) => {
             return lowercasedTag;
           })
       );
-      console.log(uniqueTagsSet);
 
       const uniqueTagsArray = Array.from(uniqueTagsSet);
 
