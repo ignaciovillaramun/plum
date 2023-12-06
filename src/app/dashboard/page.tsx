@@ -91,26 +91,8 @@ export default function DashBoard() {
   return (
     <div className="bg-[url('/bgsmall.png')] h-[800px] md:bg-[url('/bglarge.png')] md:h-[800px] md:bg-cover">
       <div className="flex items-center justify-between mt-8 mb-5 px-6 md:px-20">
-        <h1 className={`text-4xl ${textTheme}`}>Dashboard</h1>
-        <label htmlFor="dropdown">Select an option:</label>
-        <select
-          id="dropdown"
-          value={selectedLabel || ''}
-          onChange={handleOptionChange}
-        >
-          <option value="" disabled>
-            Select one Option
-          </option>
-          <option value=""> -- Default Option --</option>
+        <h1 className={`text-4xl ${textTheme}`}>Dashboard</h1> 
 
-          {Array.isArray(topics) &&
-            topics.length > 0 &&
-            topics.map((tag: string, index: number) => (
-              <option key={index} value={tag}>
-                {tag}
-              </option>
-            ))}
-        </select>{' '}
         <Link href={'/addTopic'}>
           <button className=" bg-white shadow-md rounded-full hover:bg-gray-100 focus:outline-none">
             <svg
@@ -125,6 +107,28 @@ export default function DashBoard() {
             </svg>
           </button>
         </Link>
+      </div>
+      <div className='flex justify-center items-center md:mt-[-65px] mb-10'>
+      <label htmlFor="dropdown" className='mr-3 text-lg'>Filter by Category:</label>
+        <select
+          className={`p-2` + ` ${textTheme}`}
+          id="dropdown"
+          value={selectedLabel || ''}
+          onChange={handleOptionChange}
+        >
+          <option value="" disabled>
+            Select an Option
+          </option>
+          <option value=""> -- Default Option --</option>
+
+          {Array.isArray(topics) &&
+            topics.length > 0 &&
+            topics.map((tag: string, index: number) => (
+              <option key={index} value={tag}>
+                {tag}
+              </option>
+            ))}
+        </select>{' '}
       </div>
       <div className="w-full">
         <div className="flex-col pb-24 md:flex-row md:px-20">
