@@ -89,7 +89,7 @@ export default function DashBoard() {
   }, [theme]);
 
   return (
-    <div>
+    <div className="bg-[url('/bgsmall.png')] h-[800px] md:bg-[url('/bglarge.png')] md:h-[800px] md:bg-cover">
       <div className="flex items-center justify-between mt-8 mb-5 px-6 md:px-20">
         <h1 className={`text-4xl ${textTheme}`}>Dashboard</h1>
         <label htmlFor="dropdown">Select an option:</label>

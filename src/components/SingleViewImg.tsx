@@ -8,11 +8,11 @@ export default function SingleViewImg(props: {
   description: any;
 }) {
   return (
-    <div className="w-full">
-      <div className="w-full flex justify-center ">
-        <div className="h-auto sm:w-6/12">
+    <div className="">
+      <div className=" ">
+        <div className="">
           <Image
-            className="w-full mt-20"
+            className=""
             src={props.imgPath}
             alt={props.altText}
             width={1000}
@@ -20,8 +20,8 @@ export default function SingleViewImg(props: {
           />
         </div>
       </div>
-      <div className="overflow-y-auto mt-5 my-auto flex justify-center h-[160px] sm:h-20">
-        <p className="text-white text-center w-full sm:w-3/4">
+      <div className="">
+        <p className="text-white break-words">
           {props.description}
         </p>
       </div>
