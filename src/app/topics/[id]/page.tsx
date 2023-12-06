@@ -410,15 +410,17 @@ export default function Course() {
                           key={image._id}
                           className="inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
                         >
-                          <div onClick={() => openLightBox(image.index)}>
-                            <Image
-                              src={image.image}
-                              alt={`Image ${image._id}`}
-                              width={200}
-                              height={200}
-                              className="rounded-lg"
-                              loading="lazy"
-                            />
+                          <div className="relative h-36 w-72 overflow-hidden rounded-t-lg">
+                            <div onClick={() => openLightBox(image.index)}>
+                              <Image
+                                src={image.image}
+                                alt={`Image ${image._id}`}
+                                layout="fill"
+                                objectFit="cover"
+                                className="rounded-lg"
+                                loading="lazy"
+                              />
+                            </div>
                           </div>
                           <div className=" flex p-4 justify-between items-center ">
                             {image.title}
