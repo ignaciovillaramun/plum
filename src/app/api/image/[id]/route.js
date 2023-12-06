@@ -4,27 +4,19 @@ import Topic from '../../../../../models/topic';
 import Image from '../../../../../models/image';
 
 export async function PUT(req, { params }) {
-  try {
-    const { id } = params;
-    const {
-      newTitle: title,
-      newTopic: topic,
-      newImage: image,
-    } = await req.json();
-    await connectMongoDB();
-    await Topic.findByIdAndUpdate(id, { title, topic, image });
-    return NextResponse.json({ message: 'Topic Updated' }, { status: 200 });
-  } catch (error) {
-    console.log(error);
-  }
+  const { id } = params;
+  const { title, description } = await req.json();
+  await connectMongoDB();
+  await Image.findByIdAndUpdate(id, { title, description });
+  return NextResponse.json({ message: 'Topic Updated' }, { status: 200 });
 }
 
 export async function GET(req, { params }) {
   try {
     const { id } = params;
     await connectMongoDB();
-    const topic = await Topic.findOne({ _id: id });
-    return NextResponse.json({ topic }, { status: 200 });
+    const image = await Image.findOne({ _id: id });
+    return NextResponse.json(image, { status: 200 });
   } catch (error) {
     console.log(error);
   }

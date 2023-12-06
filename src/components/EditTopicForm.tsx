@@ -52,7 +52,6 @@ export default function EditTopicForm(props: {
         throw new Error('Fail to update a topic');
       } else {
         router.push('/dashboard');
-        // Redirect to Dashboard not working
       }
     } catch (error) {
       console.log(error);

@@ -5,15 +5,15 @@ import { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { ThemeContext } from '@/components/ThemeProvider';
 
-const getUrlById = async (id: string) => {
+const getAttachmentById = async (id: string) => {
   try {
-    const res = await fetch(`/api/url/${id}`, {
+    const res = await fetch(`/api/attachment/${id}`, {
       method: 'GET',
       cache: 'no-store',
     });
 
     if (!res.ok) {
-      throw new Error('Failed to fetch topic');
+      throw new Error('Failed to fetch note');
     }
     return res.json();
   } catch (error) {
@@ -21,10 +21,9 @@ const getUrlById = async (id: string) => {
   }
 };
 
-export default function EditTopicUrl() {
+export default function EditTopicAttachments() {
   const searchParams = usePathname();
   const id = searchParams?.split('/').pop();
-  const [url, setUrl] = useState('');
   const [title, setTitle] = useState('');
   const [topic, setTopic] = useState('');
   const [borderTheme, setBorderTheme] = useState('');
@@ -36,11 +35,10 @@ export default function EditTopicUrl() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const url = await getUrlById(id || '');
-        if (url) {
-          setUrl(url.url);
-          setTitle(url.title);
-          setTopic(url.topic);
+        const note = await getAttachmentById(id || '');
+        if (note) {
+          setTitle(note.title);
+          setTopic(note.topic);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -70,15 +68,15 @@ export default function EditTopicUrl() {
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
+
     try {
-      const res = await fetch(`/api/url/${id}`, {
+      const res = await fetch(`/api/attachment/${id}`, {
         method: 'PUT',
         headers: {
           'Content-type': 'application/json',
         },
         body: JSON.stringify({
           title,
-          url,
         }),
       });
 
@@ -99,40 +97,22 @@ export default function EditTopicUrl() {
           className="block text-gray-700 text-sm font-bold mb-2"
           htmlFor="title"
         >
-          <h3 className="text-xl font-medium">Edit Url Title</h3>
+          <h3 className="text-xl font-medium">Attachment Title</h3>
         </label>
         <input
           className="border border-black rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           id="title"
           type="text"
-          placeholder="Enter title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-      </div>
-      <div>
-        <p className="text-xl mt-8">Website Reference</p>
-        <div className="mt-2">
-          <label
-            className="block text-gray-700 text-sm font-bold"
-            htmlFor="title"
-          ></label>
-          <input
-            className="border border-black rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="url"
-            type="text"
-            placeholder="Enter url"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-          />
-        </div>
       </div>
       <div className="mt-12">
         <button
           className={`${borderTheme} ${textTheme} block mx-auto border-2 py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
           type="submit"
         >
-          Edit Url
+          Edit Attachment
         </button>
       </div>
     </form>

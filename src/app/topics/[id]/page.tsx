@@ -1,23 +1,13 @@
 'use client';
 
-import { Document, Page } from 'react-pdf';
-import React, {
-  useEffect,
-  useState,
-  Key,
-  ReactNode,
-  Component,
-  useContext,
-} from 'react';
+import React, { useEffect, useState, Key, ReactNode, useContext } from 'react';
 import Image from 'next/image';
 import AddData from '@/components/AddData';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import SingleViewImg from '@/components/SingleViewImg';
-import { useRouter } from 'next/navigation';
 import { pdfjs } from 'react-pdf';
 import { ThemeContext } from '@/components/ThemeProvider';
-import { Suspense } from 'react';
 import OptionsBtn from '@/components/OptionsBtn';
 
 //BACKEND HOOKS
@@ -30,6 +20,16 @@ type Note = {
   title: string | undefined;
   topic: ReactNode;
   description: string | undefined;
+  index: any;
+  _id: Key | null | undefined;
+};
+
+type RelatedTopics = {
+  title: ReactNode;
+  parentTopic: ReactNode;
+  topicId: ReactNode;
+  image: any;
+  user: ReactNode;
   index: any;
   _id: Key | null | undefined;
 };
@@ -65,7 +65,6 @@ const getImages = async () => {
       throw new Error('Failed to fetch images');
     }
     const imagesData = await res.json();
-    console.log('Images data:', imagesData);
 
     return imagesData;
   } catch (error) {
@@ -84,7 +83,6 @@ const getAttachments = async () => {
       throw new Error('Failed to fetch attachments');
     }
     const attachmentData = await res.json();
-    console.log('Attachment data:', attachmentData);
 
     return attachmentData;
   } catch (error) {
@@ -103,7 +101,6 @@ const getNotes = async () => {
       throw new Error('Failed to fetch attachments');
     }
     const attachmentData = await res.json();
-    console.log('Attachment data:', attachmentData);
 
     return attachmentData;
   } catch (error) {
@@ -122,11 +119,44 @@ const getUrls = async () => {
       throw new Error('Failed to fetch images');
     }
     const urlsData = await res.json();
-    console.log('Images data:', urlsData);
 
     return urlsData;
   } catch (error) {
     console.log('Error: ', error);
+  }
+};
+
+const getTopicRelated = async () => {
+  try {
+    const res = await fetch('/api/related', {
+      method: 'GET',
+      cache: 'no-store',
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to fetch related topics');
+    }
+    const relatedTopicsData = await res.json();
+
+    return relatedTopicsData;
+  } catch (error) {
+    console.log('Error: ', error);
+  }
+};
+
+const fetchRelatedTopicsData = async (setDataFunction: any) => {
+  try {
+    const relatedTopicsData = await getTopicRelated();
+    const relatedTopicsWithIndex = relatedTopicsData.map(
+      (relatedTopics: any, index: string) => ({
+        ...relatedTopics,
+        index,
+      })
+    );
+
+    setDataFunction(relatedTopicsWithIndex);
+  } catch (error) {
+    console.error(error);
   }
 };
 
@@ -218,6 +248,7 @@ export default function Course() {
     }[]
   >([]);
   const [notes, setNotes] = useState<Note[]>([]);
+  const [relatedTopics, setRelatedTopics] = useState<RelatedTopics[]>([]);
   const { theme, setTheme }: any = useContext(ThemeContext);
   const [textTheme, setTextTheme] = useState('');
   const [topicId, setTopicId] = useState<string | null>(null);
@@ -225,9 +256,7 @@ export default function Course() {
   const [photoIndex, setPhotoIndex] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [lightBoxKey, setLightBoxKey] = useState(0);
-  const [numPages, setNumPages] = useState<number>();
   const [headerImage, setHeaderImage] = useState('');
-  const [pageNumber, setPageNumber] = useState<number>(1);
 
   //UI HOOKS
   const [openImage, setOpenImage] = useState([false, 'rotate-0']);
@@ -235,7 +264,10 @@ export default function Course() {
   const [openNotes, setOpenNotes] = useState([false, 'rotate-0']);
   const [openUrls, setOpenUrls] = useState([false, 'rotate-0']);
 
-  // CHange text colore based in color theme
+  const searchParams = usePathname();
+  const id = searchParams?.split('/').pop();
+
+  // CHange text color based in color theme
   useEffect(() => {
     if (theme === 'bg-red-plum') {
       setTextTheme('text-red-plum');
@@ -248,31 +280,26 @@ export default function Course() {
     }
   }, [theme]);
 
-  const router = useRouter();
-
-  function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
-    setNumPages(numPages);
-  }
-
-  const searchParams = usePathname();
-  const id = searchParams?.split('/').pop();
-
   useEffect(() => {
-    fetchImagesData(setImages);
-    fetchAttachmentsData(setAttachments);
-    fetchNotesData(setNotes);
-    getHeaderImages(id, setHeaderImage);
-    fetchUrlsData(setUrls);
-    if (typeof window !== 'undefined') {
-      setTopicId(id || null);
-    }
-  }, [id]);
+    const fetchData = async () => {
+      await Promise.all([
+        fetchImagesData(setImages),
+        fetchRelatedTopicsData(setRelatedTopics),
+        fetchAttachmentsData(setAttachments),
+        fetchNotesData(setNotes),
+        getHeaderImages(id, setHeaderImage),
+        fetchUrlsData(setUrls),
+      ]);
 
-  useEffect(() => {
-    if (Array.isArray(images) && images.length > 0) {
+      if (typeof window !== 'undefined') {
+        setTopicId(id || null);
+      }
+
       setIsLoading(false);
-    }
-  }, [images]);
+    };
+
+    fetchData();
+  }, [id]);
 
   if (isLoading) {
     return (
@@ -282,14 +309,14 @@ export default function Course() {
     );
   }
 
-  const closeLightbox = () => {
+  const closeLightBox = () => {
     setIsOpen(false);
   };
 
-  const openLightbox = (index: number) => {
+  const openLightBox = (index: number) => {
     setPhotoIndex(index);
     setIsOpen(true);
-    setLightBoxKey((prevKey) => prevKey + 1); // Trigger a re-render of Lightbox // not working
+    setLightBoxKey((prevKey) => prevKey + 1);
   };
 
   const openNewWindow = (url: any) => {
@@ -318,15 +345,13 @@ export default function Course() {
     }
   }
 
-  // Sample data for demonstration purposes
-  const courseData = {
-    urls: [
-      { name: 'Node Js', url: 'https://nodejs.org/en/' },
-      {
-        name: 'Stack Overflow',
-        url: 'https://stackoverflow.com/questions/5119041/how-can-i-get-a-web-sites-favicon',
-      },
-    ],
+  const handleDataRefresh = () => {
+    fetchImagesData(setImages);
+    fetchRelatedTopicsData(setRelatedTopics);
+    fetchAttachmentsData(setAttachments);
+    fetchNotesData(setNotes);
+    getHeaderImages(id, setHeaderImage);
+    fetchUrlsData(setUrls);
   };
 
   const scrollToTop = () => {
@@ -341,11 +366,11 @@ export default function Course() {
     <div className="pb-40">
       {/* Attachments Section */}
       <Image
+        src={headerImage}
         className="w-full max-h-56 object-cover md:max-h-[320px]"
         width={100}
         height={100}
         alt="course Picture"
-        src={headerImage}
       />
       <h1 className="text-2xl text-center font-bold mb-6 px-8 pt-8 md:text-4xl md:mb-10">
         Topic Information
@@ -376,7 +401,7 @@ export default function Course() {
 
       {openImage[0] && (
         <section className="relative pl-8 py-5 scrollbar-hide min-h-[150px]">
-          <div className="mb-4 overflow-x-auto whitespace-nowrap scrollbar-hide">
+          <div className="mb-4 overflow-x-auto whitespace-nowrap scrollbar-hide py-[20px]">
             {Array.isArray(images) && images.length > 0
               ? images.map(
                   (image: {
@@ -393,22 +418,24 @@ export default function Course() {
                           key={image._id}
                           className="inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
                         >
-                          <div onClick={() => openLightbox(image.index)}>
-                            <Image
-                              src={image.image}
-                              alt={`Image ${image._id}`}
-                              width={200}
-                              height={200}
-                              className="rounded-lg"
-                              loading="lazy"
-                            />
+                          <div className="relative h-36 w-72 overflow-hidden rounded-t-lg">
+                            <div onClick={() => openLightBox(image.index)}>
+                              <Image
+                                src={image.image}
+                                alt={`Image ${image._id}`}
+                                layout="fill"
+                                objectFit="cover"
+                                className="rounded-lg"
+                                loading="lazy"
+                              />
+                            </div>
                           </div>
                           <div className=" flex p-4 justify-between items-center ">
                             {image.title}
                             <OptionsBtn
-                              //create editTopicImage page
                               link={`/editTopicImage/${image._id}`}
                               api={`/api/image?id=${image._id}`}
+                              onDataRefresh={handleDataRefresh}
                             />
                           </div>
                         </div>
@@ -466,7 +493,7 @@ export default function Course() {
       </div>
       {openAttachments[0] && (
         <section className="relative pl-8 py-5 min-h-[150px]">
-          <div className="mb- overflow-x-auto whitespace-nowrap scrollbar-hide">
+          <div className="mb- overflow-x-auto whitespace-nowrap scrollbar-hide py-[20px]">
             {Array.isArray(attachments) && attachments.length > 0
               ? attachments.map(
                   (attachment: {
@@ -482,13 +509,12 @@ export default function Course() {
                           <div
                             key={attachment._id}
                             className=" inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-4 transform transition-transform hover:scale-105"
-                            // onClick={() => openLightbox(attachment.index)}
                           >
                             {isPDF(attachment.attachment) ? (
                               <Image
                                 src="/pdf.png"
                                 alt={`Attachment ${attachment._id}`}
-                                width={200}
+                                width={150}
                                 height={200}
                                 className="rounded-lg"
                                 loading="lazy"
@@ -500,7 +526,7 @@ export default function Course() {
                               <Image
                                 src="/word.png"
                                 alt={`Attachment ${attachment._id}`}
-                                width={200}
+                                width={195}
                                 height={200}
                                 className="rounded-lg"
                                 loading="lazy"
@@ -520,9 +546,9 @@ export default function Course() {
                                 Download File
                               </a>
                               <OptionsBtn
-                                //create editTopicAttachment page
                                 link={`/editTopicAttachment/${attachment._id}`}
                                 api={`/api/attachment?id=${attachment._id}`}
+                                onDataRefresh={handleDataRefresh}
                               />
                             </div>
                           </div>
@@ -566,7 +592,7 @@ export default function Course() {
       </div>
       {openNotes[0] && (
         <section className="relative pl-8 py-5 min-h-[150px]">
-          <div className="mb- overflow-x-auto whitespace-nowrap scrollbar-hide">
+          <div className="mb- overflow-x-auto whitespace-nowrap scrollbar-hide py-[20px]">
             {Array.isArray(notes) && notes.length > 0
               ? notes.map((note) => {
                   if (note.topic === topicId) {
@@ -597,12 +623,11 @@ export default function Course() {
                           <div className=" flex p-4 justify-between items-center ">
                             {note.title || 'No Title'}{' '}
                             <OptionsBtn
-                              //create editTopicNotes page
                               link={`/editTopicNotes/${note._id}`}
                               api={`/api/note?id=${note._id}`}
+                              onDataRefresh={handleDataRefresh}
                             />
                           </div>
-                          {/* Handle undefined title with a default */}
                         </div>
                       </div>
                     );
@@ -643,7 +668,7 @@ export default function Course() {
       </div>
       {openUrls[0] && (
         <section className="relative overflow-hidden pl-8 py-5 scrollbar-hide min-h-[150px]">
-          <ul className=" overflow-x-auto whitespace-nowrap scrollbar-hide">
+          <ul className=" overflow-x-auto whitespace-nowrap scrollbar-hide py-[20px]">
             {urls.map((url) => {
               if (url.topic == topicId) {
                 return (
@@ -651,7 +676,6 @@ export default function Course() {
                     key={url._id}
                     data-aos="fade-up"
                     className="inline-block bg-white shadow-md rounded-lg my-8 mx-5 w-52 md:mr-5"
-                    // className="relative overflow-hidden inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
                   >
                     <a
                       href={url.url?.toString() ?? '#'}
@@ -660,7 +684,7 @@ export default function Course() {
                       className="text-blue-500 hover:underline"
                     >
                       <Image
-                        src="/notes.png"
+                        src="/url.png"
                         alt={`Attachment ${''}`}
                         width={200}
                         height={200}
@@ -673,6 +697,7 @@ export default function Course() {
                       <OptionsBtn
                         link={`/editTopicUrls/${url._id}`}
                         api={`/api/url?id=${url._id}`}
+                        onDataRefresh={handleDataRefresh}
                       />
                     </div>
                   </li>
@@ -688,6 +713,63 @@ export default function Course() {
           </div>
         </section>
       )}
+
+      <div className="  mt-20 px-8 py-5 justify-between md:px-16">
+        <p>Add topic related:</p>
+
+        <Link href={`/addTopicRelated/${id}`}>
+          <button className=" bg-white shadow-md rounded-full hover:bg-gray-100 focus:outline-none">
+            <svg
+              className={`w-10 ${textTheme}`}
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 1200 1200"
+            >
+              <path
+                fill="currentColor"
+                d="M600 0C268.629 0 0 268.629 0 600s268.629 600 600 600s600-268.629 600-600S931.371 0 600 0zm-95.801 261.841h191.602v242.358h242.358v191.602H695.801v242.358H504.199V695.801H261.841V504.199h242.358V261.841z"
+              />
+            </svg>
+          </button>
+        </Link>
+
+        <div className="mb- overflow-x-auto whitespace-nowrap scrollbar-hide py-[20px]">
+          {Array.isArray(relatedTopics) && relatedTopics.length > 0
+            ? relatedTopics.map((relatedTopic) => {
+                if (relatedTopic.parentTopic === topicId) {
+                  return (
+                    <div
+                      key={relatedTopic._id}
+                      className="block bg-white shadow-md rounded-lg my-8 mx-auto w-72 md:inline-block md:mr-5"
+                    >
+                      <div className="relative h-36 overflow-hidden rounded-t-lg">
+                        <Link href={`/topics/${relatedTopic.topicId}`}>
+                          <Image
+                            src={relatedTopic.image}
+                            alt={`Related Topic ${relatedTopic._id}`}
+                            layout="fill"
+                            objectFit="cover"
+                            objectPosition="center top"
+                            loading="lazy"
+                          />
+                        </Link>
+                      </div>
+                      <div className="mt-2 text-center font-semibold text-gray-700">
+                        <div className=" flex p-4 justify-between items-center ">
+                          {relatedTopic.title || 'No Title'}{' '}
+                          <OptionsBtn
+                            onlyDelete={true}
+                            api={`/api/related?id=${relatedTopic._id}`}
+                            onDataRefresh={handleDataRefresh}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
+              })
+            : null}
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,20 +1,23 @@
 import { NextResponse } from 'next/server';
 import { connectMongoDB } from '../../../../lib/mongo/index';
-import Topic from '../../../../models/topic';
+import Related from '../../../../models/relatedTopics';
 import User from '../../../../models/user';
 
 export async function GET() {
   await connectMongoDB();
-  const topics = await Topic.find();
-  return NextResponse.json(topics);
+  const relatedTopics = await Related.find();
+  return NextResponse.json(relatedTopics);
 }
 
 export async function DELETE(req) {
   try {
     const id = req.nextUrl.searchParams.get('id');
     await connectMongoDB();
-    await Topic.findByIdAndDelete(id);
-    return NextResponse.json({ message: 'Topic Deleted' }, { status: 200 });
+    await Related.findByIdAndDelete(id);
+    return NextResponse.json(
+      { message: 'Related Topic Deleted' },
+      { status: 200 }
+    );
   } catch (error) {
     console.log(error);
   }
@@ -22,15 +25,15 @@ export async function DELETE(req) {
 
 export async function POST(req) {
   try {
-    const { title, image, user, tag } = await req.json();
+    const { title, image, user, parentTopic, topicId } = await req.json();
     await connectMongoDB();
-    const userExists = await User.findById({ _id: user });
-
-    if (!userExists) {
-      return NextResponse.json({ message: 'User not found' }, { status: 404 });
-    }
-
-    const data = await Topic.create({ title, image, user, tag });
+    const data = await Related.create({
+      title,
+      image,
+      user,
+      topicId,
+      parentTopic,
+    });
     return NextResponse.json({ data }, { status: 201 });
   } catch (error) {
     console.error(error);

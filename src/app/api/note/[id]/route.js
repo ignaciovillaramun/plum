@@ -1,28 +1,22 @@
 import { NextResponse } from 'next/server';
 import { connectMongoDB } from '../../../../../lib/mongo/index';
 import Topic from '../../../../../models/topic';
-// import Image from '../../../../../models/image';
 import Note from '../../../../../models/notes';
 
-// export async function PUT(req, { params }) {
-//   const { id } = params;
-//   const {
-//     newTitle: title,
-//     newTopic: topic,
-//     newImage: image,
-//   } = await req.json();
-//   await connectMongoDB();
-//   await Topic.findByIdAndUpdate(id, { title, topic, image });
-//   return NextResponse.json({ message: 'Topic Updated' }, { status: 200 });
-// }
+export async function PUT(req, { params }) {
+  const { id } = params;
+  const { title, description } = await req.json();
+  await connectMongoDB();
+  await Note.findByIdAndUpdate(id, { title, description });
+  return NextResponse.json({ message: 'Topic Updated' }, { status: 200 });
+}
 
 export async function GET(req, { params }) {
   try {
     const { id } = params;
-    console.log(id);
     await connectMongoDB();
     const note = await Note.findOne({ _id: id });
-    return NextResponse.json({ note }, { status: 200 });
+    return NextResponse.json(note, { status: 200 });
   } catch (error) {
     console.log(error);
   }

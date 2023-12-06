@@ -13,7 +13,7 @@ export default function TopicForm({}) {
   const [imageBase64, setImage64] = useState<any | null>(null);
   const [showAlert, setShowAlert] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [description, setDescription] = useState('');
+  const [tag, setTag] = useState('');
   const { user } = useUser();
 
   const router = useRouter();
@@ -37,7 +37,7 @@ export default function TopicForm({}) {
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    if (!title.trim() || !image) {
+    if (!title.trim() || !tag.trim() || !image) {
       if (!formSubmitted) {
         setShowAlert(true);
       }
@@ -50,7 +50,12 @@ export default function TopicForm({}) {
         headers: {
           'Content-type': 'application/json',
         },
-        body: JSON.stringify({ title, image: imageBase64, user }),
+        body: JSON.stringify({
+          title,
+          image: imageBase64,
+          user,
+          tag: tag.toLowerCase(),
+        }),
       });
 
       if (res.ok) {
@@ -64,6 +69,7 @@ export default function TopicForm({}) {
 
     // Clear the form inputs
     setTitle('');
+    setTag('');
     setImage(null);
     setShowAlert(false);
     setFormSubmitted(true);
@@ -75,8 +81,8 @@ export default function TopicForm({}) {
       showAlert={showAlert}
       title={title}
       setTitle={setTitle}
-      // description={''}
-      // setDescription={setDescription}
+      tag={tag}
+      setTag={setTag}
       image={image}
       handleSubmit={handleSubmit}
       handleImageUpload={handleImageUpload}

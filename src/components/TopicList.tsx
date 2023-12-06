@@ -7,10 +7,12 @@ import Link from 'next/link';
 import TopicContext from '@/components/TopicContext';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { useSelectedLabel } from '@/components/SelectedLabelContext';
 
 const getTopics = async () => {
   try {
-    const res = await fetch('api/topics', {
+    const res = await fetch('/api/topics', {
+      method: 'GET',
       cache: 'no-store',
     });
 
@@ -33,12 +35,12 @@ const fetchData = async (setDataFunction: any) => {
   }
 };
 
-export default function TopicList(props: { label: any }) {
+export default function TopicList() {
   const [topics, setProfiles] = useState([]);
   const [userId, setUserId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const topicContext = useContext(TopicContext);
-  console.log('hellos label', props.label);
+  const { selectedLabel, setSelectedLabel } = useSelectedLabel();
 
   useEffect(() => {
     fetchData(setProfiles);
@@ -60,6 +62,11 @@ export default function TopicList(props: { label: any }) {
     if (Array.isArray(topics) && topics.length > 0) {
       setIsLoading(false);
     }
+    if (Array.isArray(topics) && topics.length === 0) {
+      setTimeout(function () {
+        setIsLoading(false);
+      }, 10000);
+    }
   }, [topics]);
 
   if (isLoading) {
@@ -70,6 +77,10 @@ export default function TopicList(props: { label: any }) {
     );
   }
 
+  const handleDataRefresh = () => {
+    fetchData(setProfiles);
+  };
+
   if (Array.isArray(topics) && topics.length > 0) {
     return (
       <>
@@ -78,10 +89,14 @@ export default function TopicList(props: { label: any }) {
             title: ReactNode;
             topic: ReactNode;
             user: ReactNode;
+            tag: ReactNode;
             image: any;
             _id: Key | null | undefined;
           }) => {
-            if (topic.user == userId) {
+            if (
+              topic.user === userId &&
+              (!selectedLabel || topic.tag === selectedLabel)
+            ) {
               return (
                 <div
                   key={`${topic._id}`}
@@ -113,6 +128,7 @@ export default function TopicList(props: { label: any }) {
                       link={`/editTopic/${topic._id}`}
                       fetchData={() => fetchData}
                       profiles={setProfiles}
+                      onDataRefresh={handleDataRefresh}
                     />
                   </div>
                 </div>

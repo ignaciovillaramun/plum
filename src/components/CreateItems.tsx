@@ -6,12 +6,14 @@ import { ThemeContext } from '@/components/ThemeProvider';
 
 interface CreateItemsProps {
   name: string;
+  tag?: string;
   showAlert: boolean;
   title: string;
   url?: string;
   description?: string;
   setTitle: (title: string) => void;
   setDescription?: (description: string) => void;
+  setTag?: (description: string) => void;
   setUrl?: (url: string) => void;
   image?: File | null;
   handleSubmit: (e: React.FormEvent) => void;
@@ -21,19 +23,21 @@ interface CreateItemsProps {
 
 function CreateItems({
   name,
+  tag,
   showAlert,
   title,
   url,
   description,
+  image,
   setTitle,
   setUrl,
   setDescription,
-  image,
+  setTag,
   handleSubmit,
   handleImageUpload,
   handleCloseAlert,
 }: CreateItemsProps) {
-  const [borderTheme, setBordeTtheme] = useState('');
+  const [borderTheme, setBorderTheme] = useState('');
   const [textTheme, setTextTheme] = useState('');
   const { theme, setTheme }: any = useContext(ThemeContext);
 
@@ -43,27 +47,27 @@ function CreateItems({
   const isTopicImage =
     page === 'addTopicImage' || page === 'addTopic' ? true : false;
 
+  const isAddTopic = page === 'addTopic';
   const showDescription = page === 'addTopicNotes' ? true : false;
   const showDescription2 = page === 'addTopicImage' ? true : false;
 
   const pdfFormat = isTopicImage ? 'image/*' : 'application/*';
   const isTopicNotes = page === 'addTopicNotes' ? true : false;
   const urlPage = page === 'addTopicUrls' ? true : false;
-  console.log(urlPage);
 
   useEffect(() => {
     if (theme === 'bg-red-plum') {
       setTextTheme('text-red-plum');
-      setBordeTtheme('border-red-plum');
+      setBorderTheme('border-red-plum');
     } else if (theme === 'bg-theme-color1') {
       setTextTheme('text-theme-color1');
-      setBordeTtheme('border-theme-color1');
+      setBorderTheme('border-theme-color1');
     } else if (theme === 'bg-theme-color2') {
       setTextTheme('text-theme-color2');
-      setBordeTtheme('border-theme-color2');
+      setBorderTheme('border-theme-color2');
     } else if (theme === 'bg-theme-color3') {
       setTextTheme('text-theme-color3');
-      setBordeTtheme('border-theme-color3');
+      setBorderTheme('border-theme-color3');
     }
   }, [theme]);
 
@@ -91,7 +95,7 @@ function CreateItems({
         className="block mx-auto"
       />
       <form onSubmit={handleSubmit}>
-        <div className="mt-10">
+        <div className="mt-10 ">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="title"
@@ -107,26 +111,43 @@ function CreateItems({
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
-        {showDescription ||
-          (showDescription2 && ( // Conditionally render the "Description" input based on isTopicImage
-            <div className="mb-4">
+        <div>
+          {isAddTopic && (
+            <div className="mt-10 ">
               <label
-                className="text-xl block text-gray-700 font-bold mb-2 mt-5"
-                htmlFor="description"
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="title"
               >
-                Description
+                <h3 className="text-xl font-medium">{name} Tag</h3>
               </label>
-              <textarea
-                className=" border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline md:h-40"
-                id="description"
-                placeholder="Enter description"
-                value={description}
-                onChange={(e) =>
-                  setDescription && setDescription(e.target.value)
-                }
+              <input
+                className="border border-black rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="title"
+                type="text"
+                placeholder="Enter title"
+                value={tag}
+                onChange={(e) => setTag && setTag(e.target.value)}
               />
             </div>
-          ))}
+          )}
+        </div>
+        {(showDescription || showDescription2) && (
+          <div className="mb-4">
+            <label
+              className="text-xl block  text-gray-700 font-bold mb-2 mt-5"
+              htmlFor="description"
+            >
+              Description
+            </label>
+            <textarea
+              className=" border  border-black rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline md:h-40"
+              id="description"
+              placeholder="Enter description"
+              value={description}
+              onChange={(e) => setDescription && setDescription(e.target.value)}
+            />
+          </div>
+        )}
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
