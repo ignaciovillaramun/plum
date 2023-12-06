@@ -457,7 +457,7 @@ export default function Course() {
          {isOpen && images.length > 0 && (
         scrollToTop(),
         <div
-          onClick={closeLightbox}
+          onClick={closeLightBox}
           className={`absolute top-0 w-full h-[1300px] bg-black bg-opacity-90 p-10  z-50`}
         >
           <SingleViewImg
