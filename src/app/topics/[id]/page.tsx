@@ -34,6 +34,16 @@ type Note = {
   _id: Key | null | undefined;
 };
 
+type RelatedTopics = {
+  title: ReactNode;
+  parentTopic: ReactNode;
+  topicId: ReactNode;
+  image: any;
+  user: ReactNode;
+  index: any;
+  _id: Key | null | undefined;
+};
+
 const getHeaderImages = async (id: any, setHeaderImage: any) => {
   try {
     const res = await fetch(`/api/topics/${id}`, {
@@ -130,6 +140,41 @@ const getUrls = async () => {
   }
 };
 
+const getTopicRelated = async () => {
+  try {
+    const res = await fetch('/api/related', {
+      method: 'GET',
+      cache: 'no-store',
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to fetch related topics');
+    }
+    const relatedTopicsData = await res.json();
+    console.log('Related Topics data:', relatedTopicsData);
+
+    return relatedTopicsData;
+  } catch (error) {
+    console.log('Error: ', error);
+  }
+};
+
+const fetchRelatedTopicsData = async (setDataFunction: any) => {
+  try {
+    const relatedTopicsData = await getTopicRelated();
+    const relatedTopicsWithIndex = relatedTopicsData.map(
+      (relatedTopics: any, index: string) => ({
+        ...relatedTopics,
+        index,
+      })
+    );
+
+    setDataFunction(relatedTopicsWithIndex);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const fetchImagesData = async (setDataFunction: any) => {
   try {
     const imagesData = await getImages();
@@ -218,6 +263,7 @@ export default function Course() {
     }[]
   >([]);
   const [notes, setNotes] = useState<Note[]>([]);
+  const [relatedTopics, setRelatedTopics] = useState<RelatedTopics[]>([]);
   const { theme, setTheme }: any = useContext(ThemeContext);
   const [textTheme, setTextTheme] = useState('');
   const [topicId, setTopicId] = useState<string | null>(null);
@@ -259,6 +305,7 @@ export default function Course() {
 
   useEffect(() => {
     fetchImagesData(setImages);
+    fetchRelatedTopicsData(setRelatedTopics);
     fetchAttachmentsData(setAttachments);
     fetchNotesData(setNotes);
     getHeaderImages(id, setHeaderImage);
@@ -679,6 +726,61 @@ export default function Course() {
           </div>
         </section>
       )}
+
+      <div className="  mt-20 px-8 py-5 justify-between md:px-16">
+        <p>Add topic related:</p>
+
+        <Link href={`/addTopicRelated/${id}`}>
+          <button className=" bg-white shadow-md rounded-full hover:bg-gray-100 focus:outline-none">
+            <svg
+              className={`w-10 ${textTheme}`}
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 1200 1200"
+            >
+              <path
+                fill="currentColor"
+                d="M600 0C268.629 0 0 268.629 0 600s268.629 600 600 600s600-268.629 600-600S931.371 0 600 0zm-95.801 261.841h191.602v242.358h242.358v191.602H695.801v242.358H504.199V695.801H261.841V504.199h242.358V261.841z"
+              />
+            </svg>
+          </button>
+        </Link>
+
+        <div className="mb- overflow-x-auto whitespace-nowrap scrollbar-hide py-[20px]">
+          {Array.isArray(notes) && notes.length > 0
+            ? relatedTopics.map((relatedTopic) => {
+                if (relatedTopic.parentTopic === topicId) {
+                  return (
+                    <div
+                      key={relatedTopic._id}
+                      className="inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
+                    >
+                      <Link href={`/topics/${relatedTopic.topicId}`}>
+                        <Image
+                          src={relatedTopic.image}
+                          alt={`Related Topic ${relatedTopic._id}`}
+                          width={200}
+                          height={200}
+                          className="rounded-lg"
+                          loading="lazy"
+                        />
+                      </Link>
+                      <div className="mt-2 text-center font-semibold text-gray-700">
+                        <div className=" flex p-4 justify-between items-center ">
+                          {relatedTopic.title || 'No Title'}{' '}
+                          <OptionsBtn
+                            onlyDelete={true}
+                            api={`/api/related?id=${relatedTopic._id}`}
+                          />
+                        </div>
+                        {/* Handle undefined title with a default */}
+                      </div>
+                    </div>
+                  );
+                }
+              })
+            : null}
+        </div>
+      </div>
     </div>
   );
 }

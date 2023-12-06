@@ -10,6 +10,7 @@ export default function OptionsBtn(props: {
   fetchData?: ((props: any) => (event: any) => void) | undefined;
   profiles?: any;
   link?: any;
+  onlyDelete?: Boolean;
 }) {
   const { theme, setTheme }: any = useContext(ThemeContext);
   const [textTheme, setTextTheme] = useState('');
@@ -83,16 +84,18 @@ export default function OptionsBtn(props: {
       {isOpen && (
         <div className="absolute right-0 top-[-115px] mt-2 w-40 bg-white border rounded-lg shadow-lg z-10 options-menu">
           <ul className="py-2">
-            <li>
-              <Link href={`${props.link}`}>
-                <button
-                  type="button"
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                >
-                  Edit
-                </button>
-              </Link>
-            </li>
+            {!props.onlyDelete && (
+              <li>
+                <Link href={`${props.link}`}>
+                  <button
+                    type="button"
+                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
+                  >
+                    Edit
+                  </button>
+                </Link>
+              </li>
+            )}
             <li>
               <button
                 onClick={removeTopic}
