@@ -10,6 +10,23 @@ import { ThemeContext } from '@/components/ThemeProvider';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
+const getTopics = async () => {
+  try {
+    const res = await fetch('/api/topics', {
+      method: 'GET',
+      cache: 'no-store',
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to fetch topics');
+    }
+
+    return res.json();
+  } catch (error) {
+    console.log('Error: ', error);
+  }
+};
+
 const getCurrentUser = async (email: any, setCurrentUser: any) => {
   try {
     const res = await fetch(`/api/user/${email}`, {
@@ -58,12 +75,32 @@ const updateColorTheme = async (userId: String, themeColor: string) => {
   }
 };
 
+const fetchData = async (setDataFunction: any, userId: any) => {
+  try {
+    const profilesData = await getTopics();
+
+    if (profilesData) {
+      const userTopics = profilesData.filter(
+        (topic: any) => topic.user === userId
+      );
+
+      const uniqueTagsArray = Array.from(userTopics);
+
+      const newProfiles = [...uniqueTagsArray];
+      setDataFunction(newProfiles);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export default function UserInfo() {
   const { theme, setTheme }: any = useContext(ThemeContext);
   const { status, data: session } = useSession();
   const [currentUser, setCurrentUser] = useState({ _id: '', theme: '' });
   const { setUserId, setThemeColor } = useUser();
   const [isLoading, setIsLoading] = useState(true);
+  const [topics, setProfiles] = useState([]);
   const email = session?.user?.email;
 
   useEffect(() => {
@@ -103,6 +140,12 @@ export default function UserInfo() {
       setTheme(currentUser.theme as string);
     }
   }, [currentUser, setUserId, setTheme, setThemeColor]);
+
+  useEffect(() => {
+    if (currentUser && currentUser._id) {
+      fetchData(setProfiles, currentUser._id);
+    }
+  }, [currentUser, setProfiles]);
 
   let userImage = session?.user?.image
     ? session?.user?.image
@@ -147,14 +190,15 @@ export default function UserInfo() {
 
         <div className="bg-white mt-24 w-4/5 block mx-auto drop-shadow-md rounded-xl p-6 md:w-2/4">
           <div className="mb-5">
-            <p className="text-lg font-medium">Topics:</p> <span></span>
+            <p className="text-lg font-medium">Total Topics: {topics.length}</p>{' '}
+            <span></span>
           </div>
           <div className="flex align-middle">
-            <p className="text-lg mr-4 font-medium">Color Theme</p>
+            <p className="text-lg mr-4 font-medium">Color Theme:</p>
             <div className={`${theme} w-6 h-6 rounded-full`}></div>
           </div>
           <div className="flex space-x-4 mt-5">
-            <p className="text-lg mr-3 font-medium">Pick a color</p>
+            <p className="text-lg mr-3 font-medium">Pick a color:</p>
             {colorOptions.map((colorOption) => (
               <div
                 key={colorOption.value}
