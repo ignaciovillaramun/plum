@@ -29,12 +29,18 @@ export default function DashBoard() {
   const { theme, setTheme }: any = useContext(ThemeContext);
   const [textTheme, setTextTheme] = useState('');
   const [headerImage, setHeaderImage] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   const searchParams = usePathname();
   const id = searchParams?.split('/').pop();
 
   useEffect(() => {
-    getHeaderImages(id, setHeaderImage);
+    const fetchData = async () => {
+      await getHeaderImages(id, setHeaderImage);
+      setIsLoading(false);
+    };
+
+    fetchData();
   }, [id]);
 
   useEffect(() => {
@@ -48,6 +54,14 @@ export default function DashBoard() {
       setTextTheme('text-theme-color3');
     }
   }, [theme]);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+      </div>
+    );
+  }
 
   return (
     <div>
