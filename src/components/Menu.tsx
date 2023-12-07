@@ -4,6 +4,8 @@ import React, { useContext } from 'react';
 import { ThemeContext } from '@/components/ThemeProvider';
 import TopicContext from '@/components/TopicContext';
 import Link from 'next/link';
+import Logosvg from './Logosvg';
+
 
 function Menu() {
   const { theme, setTheme }: any = useContext(ThemeContext);
@@ -17,6 +19,10 @@ function Menu() {
       className={`${theme} flex justify-between py-3 px-4 w-full fixed bottom-0 
             md:fixed md:flex-col md:w-20 md:h-full md:justify-normal z-10`}
     >
+      <Link href={'/'}>
+        <Logosvg/>
+      </Link>
+      
       <Link href={'/dashboard'}>
         <svg
           className={`text-white w-9

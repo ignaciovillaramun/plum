@@ -9,6 +9,7 @@ import Login from '@/app/login/page';
 import { ThemeContext } from '@/components/ThemeProvider';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import LogoSVG from './Logosvg';
 
 const getTopics = async () => {
   try {
@@ -174,8 +175,8 @@ export default function UserInfo() {
   } else if (name) {
     return (
       <div className="bg-zinc-100 h-full">
-        <div className="bg-[url('/bg-gradient.jpeg')] bg-no-repeat bg-center bg-cover h-52 px-5 pt-12 drop-shadow-lg md:h-70">
-          <p className="font-bold text-center text-2xl text-white md:text-3xl">
+        <div className="bg-[url('/bgplumbs.png')] bg-no-repeat bg-center bg-cover h-52 px-5 pt-12 drop-shadow-lg md:h-70">
+          <p className="font-bold text-center text-2xl text-black md:text-3xl">
             {name}
           </p>
           <Image

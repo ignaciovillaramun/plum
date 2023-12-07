@@ -8,11 +8,11 @@ export default function SingleViewImg(props: {
   description: any;
 }) {
   return (
-    <div className="">
-      <div className=" ">
+    <div className="md:flex items-center justify-center">
+      <div className=" md:w-[500px] md:mr-10 ">
         <div className="">
           <Image
-            className=""
+            className="mb-10"
             src={props.imgPath}
             alt={props.altText}
             width={1000}
@@ -20,8 +20,8 @@ export default function SingleViewImg(props: {
           />
         </div>
       </div>
-      <div className="">
-        <p className="text-white break-words">
+      <div className="md:w-1/2">
+        <p className="text-white break-words md:text-2xl md:leading-10">
           {props.description}
         </p>
       </div>

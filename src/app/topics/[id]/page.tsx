@@ -9,6 +9,8 @@ import SingleViewImg from '@/components/SingleViewImg';
 import { pdfjs } from 'react-pdf';
 import { ThemeContext } from '@/components/ThemeProvider';
 import OptionsBtn from '@/components/OptionsBtn';
+import 'aos/dist/aos.css';
+import AOS from 'aos';
 
 //BACKEND HOOKS
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
@@ -299,7 +301,10 @@ export default function Course() {
     };
 
     fetchData();
-  }, [id]);
+    AOS.init({
+      once: true,
+    });
+  }, []);
 
   if (isLoading) {
     return (
@@ -362,6 +367,7 @@ export default function Course() {
     })
   }
 
+ 
   return (
     <div className="pb-40">
       {/* Attachments Section */}
@@ -401,7 +407,7 @@ export default function Course() {
 
       {openImage[0] && (
         <section className="relative pl-8 py-5 scrollbar-hide min-h-[150px]">
-          <div className="mb-4 overflow-x-auto whitespace-nowrap scrollbar-hide py-[20px]">
+          <div className="mb-4 overflow-x-auto whitespace-nowrap scrollbar-hide py-[20px] pr-10">
             {Array.isArray(images) && images.length > 0
               ? images.map(
                   (image: {
@@ -415,6 +421,7 @@ export default function Course() {
                     if (image.topic == topicId) {
                       return (
                         <div
+                          data-aos="fade-left"
                           key={image._id}
                           className="inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
                         >
@@ -458,7 +465,7 @@ export default function Course() {
         scrollToTop(),
         <div
           onClick={closeLightBox}
-          className={`absolute top-0 w-full h-[1300px] bg-black bg-opacity-90 p-10  z-50`}
+          className={`absolute top-0 w-full h-[1300px] bg-black bg-opacity-90 p-10 z-50 md:fixed`}
         >
           <SingleViewImg
             imgPath={images[photoIndex]?.image}
