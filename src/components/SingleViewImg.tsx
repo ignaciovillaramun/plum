@@ -20,7 +20,7 @@ export default function SingleViewImg(props: {
           />
         </div>
       </div>
-      <div className="md:w-1/2">
+      <div className="md:w-1/2 h-[600px] overflow-x-scroll">
         <p className="text-white break-words md:text-2xl md:leading-10">
           {props.description}
         </p>

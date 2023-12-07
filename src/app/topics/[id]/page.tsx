@@ -608,7 +608,7 @@ export default function Course() {
                   if (note.topic === topicId) {
                     return (
                       <div
-                      data-aos="fade-left"
+                        data-aos="fade-left"
                         key={note._id}
                         className="inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
                       >
@@ -752,7 +752,7 @@ export default function Course() {
         <section className="relative pl-8 py-5 min-h-[150px]">
           <div className=" overflow-x-auto scrollbar-hide">
             <div className=" px-8 py-5 justify-between md:px-16">
-              <p className='text-2xl text-center mb-5'>Add topic related:</p>
+              <p className="text-2xl text-center mb-5">Add topic related:</p>
               <Link href={`/addTopicRelated/${id}`}>
                 <button className=" bg-white shadow-md rounded-full hover:bg-gray-100 focus:outline-none m-auto block">
                   <svg
