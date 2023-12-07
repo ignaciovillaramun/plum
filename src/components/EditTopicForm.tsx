@@ -1,8 +1,9 @@
 'use client';
 
 import Image from 'next/image';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/navigation';
+import { ThemeContext } from '@/components/ThemeProvider';
 
 export default function EditTopicForm(props: {
   id: any;
@@ -13,6 +14,9 @@ export default function EditTopicForm(props: {
   const [newImage, setNewImage] = useState(props.image);
   const [newImageBase64, setImage64] = useState<any | null>(null);
   const [selectedImage, setSelectedImage] = useState<any | null>(null);
+  const [borderTheme, setBorderTheme] = useState('');
+  const [textTheme, setTextTheme] = useState('');
+  const { theme, setTheme }: any = useContext(ThemeContext);
 
   const router = useRouter();
 
@@ -21,6 +25,22 @@ export default function EditTopicForm(props: {
     setNewImage(props.image);
     setImage64(props.image);
   }, [props.title, props.image]);
+
+  useEffect(() => {
+    if (theme === 'bg-red-plum') {
+      setTextTheme('text-red-plum');
+      setBorderTheme('border-red-plum');
+    } else if (theme === 'bg-theme-color1') {
+      setTextTheme('text-theme-color1');
+      setBorderTheme('border-theme-color1');
+    } else if (theme === 'bg-theme-color2') {
+      setTextTheme('text-theme-color2');
+      setBorderTheme('border-theme-color2');
+    } else if (theme === 'bg-theme-color3') {
+      setTextTheme('text-theme-color3');
+      setBorderTheme('border-theme-color3');
+    }
+  }, [theme]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files && e.target.files[0];
@@ -59,17 +79,24 @@ export default function EditTopicForm(props: {
   };
 
   return (
-    <div className="flex">
+    <div className="p-5 md:w-2/3 md:mx-auto">
+      <Image
+        src="/createTopic/letter.png"
+        alt="Selected"
+        width={150}
+        height={150}
+        className="block mx-auto"
+      />
       <form onSubmit={handleSubmit}>
-        <div className="mb-4 flex w-8/10 mx-auto">
+        <div>
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="block text-gray-700 font-bold mb-5 md:text-2xl"
             htmlFor="title"
           >
             Title
           </label>
           <input
-            className="border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="w-full mb-5 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="title"
             type="text"
             placeholder="Enter title"
@@ -79,7 +106,7 @@ export default function EditTopicForm(props: {
         </div>
         <div className="mb-4">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="block text-gray-700 font-bold mb-2 md:text-2xl"
             htmlFor="image"
           >
             Image
@@ -121,7 +148,7 @@ export default function EditTopicForm(props: {
         </div>
         <div className="mb-4">
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className={`${theme} text-white py-2 px-4 rounded mx-auto block w-1/3`}
             type="submit"
           >
             Edit Topic

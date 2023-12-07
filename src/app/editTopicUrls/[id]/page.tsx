@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { ThemeContext } from '@/components/ThemeProvider';
+import Image from 'next/image';
 
 const getUrlById = async (id: string) => {
   try {
@@ -93,6 +94,14 @@ export default function EditTopicUrl() {
   };
 
   return (
+    <div className='p-5 md:py-10 md:w-2/3 md:mx-auto'>
+    <Image
+      src="/createTopic/letter.png"
+      alt="Selected"
+      width={150}
+      height={150}
+      className="block mx-auto"
+    />
     <form onSubmit={handleSubmit}>
       <div className="mt-10">
         <label
@@ -136,5 +145,6 @@ export default function EditTopicUrl() {
         </button>
       </div>
     </form>
+    </div>
   );
 }

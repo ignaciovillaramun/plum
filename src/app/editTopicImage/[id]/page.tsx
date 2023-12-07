@@ -95,7 +95,7 @@ export default function EditTopicImages() {
   };
 
   return (
-    <div className='md:w-2/3 md:mx-auto'>
+    <div className='p-5 md:py-10 md:w-2/3 md:mx-auto'>
       <Image
         src="/createTopic/letter.png"
         alt="Selected"
