@@ -55,12 +55,12 @@ export default function Login({ children }: { children: React.ReactNode }) {
 
       {/* website tour  */}
       <div
-        className="fixed bottom-10 right-[65px] bg-gray-700 w-[55px] text-center rounded-full p-2 font-serif"
+        className="md:fixed md:bottom-10 md:right-[65px] md:bg-gray-700 md:w-[55px] md:text-center md:rounded-full md:p-2 md:font-serif"
         onClick={() => {
           setEnabled(true);
         }}
       >
-        <p className="text-4xl text-white">i</p>
+        <p className="md:text-4xl md:text-white">i</p>
       </div>
     </>
   );
