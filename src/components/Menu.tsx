@@ -6,7 +6,6 @@ import TopicContext from '@/components/TopicContext';
 import Link from 'next/link';
 import Logosvg from './Logosvg';
 
-
 function Menu() {
   const { theme, setTheme }: any = useContext(ThemeContext);
 
@@ -17,16 +16,15 @@ function Menu() {
     <div
       id="menu"
       className={`${theme} flex justify-between py-3 px-4 w-full fixed bottom-0 
-            md:fixed md:flex-col md:w-20 md:h-full md:justify-normal z-10`}
+            md:fixed md:flex-col md:w-24 md:h-full md:justify-normal z-10`}
     >
       <Link href={'/'}>
-        <Logosvg/>
+        <Logosvg />
       </Link>
-      
+
       <Link href={'/dashboard'}>
         <svg
-          className={`text-white w-9
-        md:mb-5`}
+          className={`text-white w-9 md:mb-5 md:mx-auto`}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
         >
@@ -37,7 +35,7 @@ function Menu() {
       <Link href={lastTopicUrl || '/dashboard'}>
         <svg
           className={`text-white w-9
-        md:mb-5`}
+        md:mb-5 md:mx-auto`}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
         >
@@ -50,7 +48,7 @@ function Menu() {
       <Link href={'/profile'}>
         <svg
           className={`text-white w-9
-        md:mb-5`}
+        md:mb-5 md:mx-auto`}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
         >

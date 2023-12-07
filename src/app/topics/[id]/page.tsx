@@ -265,6 +265,7 @@ export default function Course() {
   const [openAttachments, setOpenAttachments] = useState([false, 'rotate-0']);
   const [openNotes, setOpenNotes] = useState([false, 'rotate-0']);
   const [openUrls, setOpenUrls] = useState([false, 'rotate-0']);
+  const [openRelated, setOpenRelated] = useState([true, 'rotate-180']);
 
   const searchParams = usePathname();
   const id = searchParams?.split('/').pop();
@@ -364,10 +365,9 @@ export default function Course() {
     window.scrollTo({
       top: 0,
       behavior: 'smooth', // Optional: Add smooth scrolling behavior
-    })
-  }
+    });
+  };
 
- 
   return (
     <div className="pb-40">
       {/* Attachments Section */}
@@ -460,20 +460,22 @@ export default function Course() {
         </section>
       )}
 
-         {/* Pictures SIgle View */}
-         {isOpen && images.length > 0 && (
-        scrollToTop(),
-        <div
-          onClick={closeLightBox}
-          className={`absolute top-0 w-full h-[1300px] bg-black bg-opacity-90 p-10 z-50 md:fixed`}
-        >
-          <SingleViewImg
-            imgPath={images[photoIndex]?.image}
-            altText={`picture ${photoIndex}`}
-            description={images[photoIndex]?.description}
-          />
-        </div>
-      )}
+      {/* Pictures SIgle View */}
+      {isOpen &&
+        images.length > 0 &&
+        (scrollToTop(),
+        (
+          <div
+            onClick={closeLightBox}
+            className={`absolute top-0 w-full h-[1300px] bg-black bg-opacity-90 p-10 z-50 md:fixed`}
+          >
+            <SingleViewImg
+              imgPath={images[photoIndex]?.image}
+              altText={`picture ${photoIndex}`}
+              description={images[photoIndex]?.description}
+            />
+          </div>
+        ))}
 
       {/* Attachments Section */}
       <div
@@ -514,6 +516,7 @@ export default function Course() {
                       return (
                         <>
                           <div
+                            data-aos="fade-left"
                             key={attachment._id}
                             className=" inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-4 transform transition-transform hover:scale-105"
                           >
@@ -521,9 +524,9 @@ export default function Course() {
                               <Image
                                 src="/pdf.png"
                                 alt={`Attachment ${attachment._id}`}
-                                width={150}
+                                width={100}
                                 height={200}
-                                className="rounded-lg"
+                                className="block mx-auto"
                                 loading="lazy"
                                 onClick={() =>
                                   openNewWindow(attachment.attachment)
@@ -533,9 +536,9 @@ export default function Course() {
                               <Image
                                 src="/word.png"
                                 alt={`Attachment ${attachment._id}`}
-                                width={195}
+                                width={130}
                                 height={200}
-                                className="rounded-lg"
+                                className="block mx-auto"
                                 loading="lazy"
                                 onClick={wordAlert}
                               />
@@ -605,6 +608,7 @@ export default function Course() {
                   if (note.topic === topicId) {
                     return (
                       <div
+                      data-aos="fade-left"
                         key={note._id}
                         className="inline-block mr-4 rounded-2xl shadow-lg border border-gray-200 p-2 transform transition-transform hover:scale-105"
                       >
@@ -681,7 +685,7 @@ export default function Course() {
                 return (
                   <li
                     key={url._id}
-                    data-aos="fade-up"
+                    data-aos="fade-left"
                     className="inline-block bg-white shadow-md rounded-lg my-8 mx-5 w-52 md:mr-5"
                   >
                     <a
@@ -693,9 +697,9 @@ export default function Course() {
                       <Image
                         src="/url.png"
                         alt={`Attachment ${''}`}
-                        width={200}
+                        width={150}
                         height={200}
-                        className="rounded-lg"
+                        className="rounded-lg py-10 mx-auto"
                         loading="lazy"
                       />
                     </a>
@@ -721,62 +725,90 @@ export default function Course() {
         </section>
       )}
 
-      <div className="  mt-20 px-8 py-5 justify-between md:px-16">
-        <p>Add topic related:</p>
-
-        <Link href={`/addTopicRelated/${id}`}>
-          <button className=" bg-white shadow-md rounded-full hover:bg-gray-100 focus:outline-none">
-            <svg
-              className={`w-10 ${textTheme}`}
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 1200 1200"
-            >
-              <path
-                fill="currentColor"
-                d="M600 0C268.629 0 0 268.629 0 600s268.629 600 600 600s600-268.629 600-600S931.371 0 600 0zm-95.801 261.841h191.602v242.358h242.358v191.602H695.801v242.358H504.199V695.801H261.841V504.199h242.358V261.841z"
-              />
-            </svg>
-          </button>
-        </Link>
-
-        <div className="mb- overflow-x-auto whitespace-nowrap scrollbar-hide py-[20px]">
-          {Array.isArray(relatedTopics) && relatedTopics.length > 0
-            ? relatedTopics.map((relatedTopic) => {
-                if (relatedTopic.parentTopic === topicId) {
-                  return (
-                    <div
-                      key={relatedTopic._id}
-                      className="block bg-white shadow-md rounded-lg my-8 mx-auto w-72 md:inline-block md:mr-5"
-                    >
-                      <div className="relative h-36 overflow-hidden rounded-t-lg">
-                        <Link href={`/topics/${relatedTopic.topicId}`}>
-                          <Image
-                            src={relatedTopic.image}
-                            alt={`Related Topic ${relatedTopic._id}`}
-                            layout="fill"
-                            objectFit="cover"
-                            objectPosition="center top"
-                            loading="lazy"
-                          />
-                        </Link>
-                      </div>
-                      <div className="mt-2 text-center font-semibold text-gray-700">
-                        <div className=" flex p-4 justify-between items-center ">
-                          {relatedTopic.title || 'No Title'}{' '}
-                          <OptionsBtn
-                            onlyDelete={true}
-                            api={`/api/related?id=${relatedTopic._id}`}
-                            onDataRefresh={handleDataRefresh}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  );
-                }
-              })
-            : null}
-        </div>
+      {/* // Related Topics Section */}
+      <div
+        className="flex mb-2 px-8 py-5 bg-zinc-200 justify-between md:px-16"
+        onClick={() => {
+          openRelated[0]
+            ? setOpenRelated([false, 'rotate-0'])
+            : setOpenRelated([true, 'rotate-180']);
+        }}
+      >
+        <h2 className="text-xl font-semibold">Related Topics</h2>
+        <svg
+          className={`${textTheme} w-6 text-theme-color ${openRelated[1]}`}
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1024 1024"
+        >
+          <g transform="translate(0 1024) scale(1 -1)">
+            <path
+              fill="currentColor"
+              d="M104.704 685.248a64 64 0 0 0 90.496 0l316.8-316.8l316.8 316.8a64 64 0 0 0 90.496-90.496L557.248 232.704a64 64 0 0 0-90.496 0L104.704 594.752a64 64 0 0 0 0 90.496z"
+            />
+          </g>
+        </svg>
       </div>
+      {openRelated[0] && (
+        <section className="relative pl-8 py-5 min-h-[150px]">
+          <div className=" overflow-x-auto scrollbar-hide">
+            <div className=" px-8 py-5 justify-between md:px-16">
+              <p className='text-2xl text-center mb-5'>Add topic related:</p>
+              <Link href={`/addTopicRelated/${id}`}>
+                <button className=" bg-white shadow-md rounded-full hover:bg-gray-100 focus:outline-none m-auto block">
+                  <svg
+                    className={`w-10 ${textTheme}`}
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 1200 1200"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M600 0C268.629 0 0 268.629 0 600s268.629 600 600 600s600-268.629 600-600S931.371 0 600 0zm-95.801 261.841h191.602v242.358h242.358v191.602H695.801v242.358H504.199V695.801H261.841V504.199h242.358V261.841z"
+                    />
+                  </svg>
+                </button>
+              </Link>
+
+              <div className="mb- overflow-x-auto whitespace-nowrap scrollbar-hide py-[20px]">
+                {Array.isArray(relatedTopics) && relatedTopics.length > 0
+                  ? relatedTopics.map((relatedTopic) => {
+                      if (relatedTopic.parentTopic === topicId) {
+                        return (
+                          <div
+                            key={relatedTopic._id}
+                            className="block bg-white shadow-md rounded-lg my-8 mx-auto w-72 md:inline-block md:mr-5"
+                          >
+                            <div className="relative h-36 overflow-hidden rounded-t-lg">
+                              <Link href={`/topics/${relatedTopic.topicId}`}>
+                                <Image
+                                  src={relatedTopic.image}
+                                  alt={`Related Topic ${relatedTopic._id}`}
+                                  layout="fill"
+                                  objectFit="cover"
+                                  objectPosition="center top"
+                                  loading="lazy"
+                                />
+                              </Link>
+                            </div>
+                            <div className="mt-2 text-center font-semibold text-gray-700">
+                              <div className=" flex p-4 justify-between items-center ">
+                                {relatedTopic.title || 'No Title'}{' '}
+                                <OptionsBtn
+                                  onlyDelete={true}
+                                  api={`/api/related?id=${relatedTopic._id}`}
+                                  onDataRefresh={handleDataRefresh}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      }
+                    })
+                  : null}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 }

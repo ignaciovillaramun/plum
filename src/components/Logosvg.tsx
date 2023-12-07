@@ -18,7 +18,9 @@ const LogoSVG = () => {
   `;
 
   return (
-    <div className="w-10 mb-4" dangerouslySetInnerHTML={{ __html: svgMarkup }} />
+    <div className='md:border-2 md:rounded-full md:p-3 md:my-4 md:flex md:justify-center md:items-center'>
+      <div className="w-[28px]" dangerouslySetInnerHTML={{ __html: svgMarkup }} />
+    </div>
   );
 };
 
