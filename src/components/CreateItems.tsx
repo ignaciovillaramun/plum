@@ -3,6 +3,8 @@ import Alert from './Alert'; // Assuming you have an Alert component
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { ThemeContext } from '@/components/ThemeProvider';
+import Logosvg from './Logosvg';
+
 
 interface CreateItemsProps {
   name: string;
@@ -40,6 +42,7 @@ function CreateItems({
   const [borderTheme, setBorderTheme] = useState('');
   const [textTheme, setTextTheme] = useState('');
   const { theme, setTheme }: any = useContext(ThemeContext);
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   const searchParams = usePathname();
   const params = searchParams.split('/');
@@ -90,8 +93,8 @@ function CreateItems({
       <Image
         src="/createTopic/letter.png"
         alt="Selected"
-        width={100}
-        height={100}
+        width={150}
+        height={150}
         className="block mx-auto"
       />
       <form onSubmit={handleSubmit}>
@@ -183,7 +186,7 @@ function CreateItems({
             )}
           </div>
           {!isTopicNotes && !urlPage && (
-            <div className="flex items-center justify-center bg-grey-lighter mt-10">
+            <div className="flex items-center justify-center bg-white mt-10">
               <label
                 htmlFor="image"
                 className="w-full flex flex-col items-center px-4 py-3 bg-theme-color text-white rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-white hover:text-theme-color"

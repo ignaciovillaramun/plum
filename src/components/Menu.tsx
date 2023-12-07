@@ -18,9 +18,9 @@ function Menu() {
       className={`${theme} flex justify-between py-3 px-4 w-full fixed bottom-0 
             md:fixed md:flex-col md:w-24 md:h-full md:justify-normal z-10`}
     >
-      <Link href={'/'}>
-        <Logosvg />
-      </Link>
+      <div className='w-[28px] md:w-[58px] md:mx-auto'>
+        <Logosvg color='#fff'/>
+      </div>
 
       <Link href={'/dashboard'}>
         <svg

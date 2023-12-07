@@ -1,13 +1,13 @@
 import React from 'react';
 
-const LogoSVG = () => {
+const LogoSVG = (props:{color:string}) => {
   const svgMarkup = `
   <?xml version="1.0" encoding="UTF-8"?>
   <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 145.93 165.8">
     <defs>
       <style>
         .cls-1 {
-          fill: #fff;
+          fill: ${props.color};
           stroke-width: 0px;
         }
       </style>
@@ -19,7 +19,7 @@ const LogoSVG = () => {
 
   return (
     <div className='md:border-2 md:rounded-full md:p-3 md:my-4 md:flex md:justify-center md:items-center'>
-      <div className="w-[28px]" dangerouslySetInnerHTML={{ __html: svgMarkup }} />
+      <div className="w-full" dangerouslySetInnerHTML={{ __html: svgMarkup }} />
     </div>
   );
 };

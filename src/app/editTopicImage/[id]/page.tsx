@@ -94,7 +94,9 @@ export default function EditTopicImages() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div className='md:w-2/3 md:mx-auto'>
+    <form onSubmit={handleSubmit} className='p-5'>
+      
       <div className="mt-10">
         <label
           className="block text-gray-700 text-sm font-bold mb-2"
@@ -135,5 +137,6 @@ export default function EditTopicImages() {
         </button>
       </div>
     </form>
+    </div>
   );
 }
