@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { ThemeContext } from '@/components/ThemeProvider';
+import Image from 'next/image';
 
 const getAttachmentById = async (id: string) => {
   try {
@@ -91,6 +92,14 @@ export default function EditTopicAttachments() {
   };
 
   return (
+  <div className=' py-10 md:w-1/3 mx-auto'>
+         <Image
+        src="/createTopic/letter.png"
+        alt="Selected"
+        width={150}
+        height={150}
+        className="block mx-auto"
+      />
     <form onSubmit={handleSubmit}>
       <div className="mt-10">
         <label
@@ -116,5 +125,6 @@ export default function EditTopicAttachments() {
         </button>
       </div>
     </form>
+    </div>
   );
 }

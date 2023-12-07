@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { ThemeContext } from '@/components/ThemeProvider';
+import Image from 'next/image';
 
 const getImageById = async (id: string) => {
   try {
@@ -95,6 +96,13 @@ export default function EditTopicImages() {
 
   return (
     <div className='md:w-2/3 md:mx-auto'>
+      <Image
+        src="/createTopic/letter.png"
+        alt="Selected"
+        width={150}
+        height={150}
+        className="block mx-auto"
+      />
     <form onSubmit={handleSubmit} className='p-5'>
       
       <div className="mt-10">
