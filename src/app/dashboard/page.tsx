@@ -3,8 +3,8 @@ import TopicList from '@/components/TopicList';
 import Link from 'next/link';
 import { ThemeContext } from '@/components/ThemeProvider';
 import { useContext, useEffect, useState, Suspense } from 'react';
-
 import { useSelectedLabel } from '@/components/SelectedLabelContext';
+
 const getTopics = async () => {
   try {
     const res = await fetch('/api/topics', {
@@ -57,11 +57,13 @@ export default function DashBoard() {
   const [topics, setProfiles] = useState([]);
   const [userId, setUserId] = useState<string | null>(null);
 
+
   const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = event.target.value;
     setSelectedLabel(selectedValue);
     localStorage.setItem('selectedLabel', selectedValue);
   };
+
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -91,11 +93,12 @@ export default function DashBoard() {
   return (
     <div className="bg-[url('/bgsmall.png')] h-[800px] md:bg-[url('/bglarge.png')] md:h-[800px] md:bg-cover">
       <div className="flex items-center justify-between mt-8 mb-5 px-6 md:px-20">
-        <h1 className={`text-4xl ${textTheme}`}>Dashboard</h1> 
+        <h1 className={`text-4xl ${textTheme}`}>Dashboard</h1>
 
         <Link href={'/addTopic'}>
           <button className=" bg-white shadow-md rounded-full hover:bg-gray-100 focus:outline-none">
             <svg
+              id="plus"
               className={`w-10 ${textTheme}`}
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 1200 1200"
@@ -108,8 +111,10 @@ export default function DashBoard() {
           </button>
         </Link>
       </div>
-      <div className='flex justify-center items-center md:mt-[-65px] mb-10'>
-      <label htmlFor="dropdown" className='mr-3 text-lg'>Filter by Category:</label>
+      <div className="flex justify-center items-center md:mt-[-65px] mb-10">
+        <label htmlFor="dropdown" className="mr-3 text-lg">
+          Filter by Category:
+        </label>
         <select
           className={`p-2` + ` ${textTheme}`}
           id="dropdown"
@@ -138,5 +143,7 @@ export default function DashBoard() {
         </div>
       </div>
     </div>
+
+    
   );
 }

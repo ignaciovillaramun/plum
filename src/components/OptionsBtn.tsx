@@ -67,13 +67,13 @@ export default function OptionsBtn(props: {
   };
 
   return (
-    <div className="relative inline-block text-left">
+    <div id='optionsBtn' className="relative inline-block text-left">
       <button
         type="button"
         className=" text-gray-600 focus:outline-none"
         onClick={toggleOptions}
       >
-        <span className={`text-4xl ${textTheme}`}>&#8942;</span>
+        <span id='optionsBtn'className={`text-4xl ${textTheme}`}>&#8942;</span>
       </button>
       {isOpen && (
         <div className="absolute right-0 top-[-115px] mt-2 w-40 bg-white border rounded-lg shadow-lg z-10 options-menu">

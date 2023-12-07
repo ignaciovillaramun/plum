@@ -34,6 +34,7 @@ function Menu() {
 
       <Link href={lastTopicUrl || '/dashboard'}>
         <svg
+          id='PreviousTopic'
           className={`text-white w-9
         md:mb-5 md:mx-auto`}
           xmlns="http://www.w3.org/2000/svg"
